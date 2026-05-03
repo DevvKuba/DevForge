@@ -39,7 +39,17 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, 
             .HasDefaultValueSql("GETUTCDATE()")
             .ValueGeneratedOnAdd();
 
-       
+        builder.Entity<BlogLike>()
+            .Property(b => b.CreatedAt)
+            .HasDefaultValueSql("GETUTCDATE()")
+            .ValueGeneratedOnAdd();
+
+        builder.Entity<BlogComment>()
+            .Property(b => b.CreatedAt)
+            .HasDefaultValueSql("GETUTCDATE()")
+            .ValueGeneratedOnAdd();
+
+
         builder.Entity<AppUser>()
             .HasMany(ur => ur.UserRoles)
             .WithOne(u => u.User)

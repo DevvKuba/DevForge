@@ -8,6 +8,8 @@
 
         public DateTime PublishedAt { get; private set; }
 
+        public DateTime UpdatedAt { get; set; }
+
         public bool IsDeleted { get; set; } = false;
 
         public int UserId { get; set; }

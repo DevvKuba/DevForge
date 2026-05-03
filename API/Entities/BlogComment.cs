@@ -4,6 +4,10 @@
     {
         public int Id { get; set; }
 
+        public DateTime CreatedAt { get; private set; }
+
+        public DateTime UpdatedAt { get; set; }
+
         public required string Content { get; set; }
 
         public int UserId { get; set; }

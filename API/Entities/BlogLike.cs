@@ -6,6 +6,10 @@ namespace API.Entities
     {
         public int Id { get; set; }
 
+        public DateTime CreatedAt { get; private set; }
+
+        public DateTime UpdatedAt { get; set; }
+
         public int UserId { get; set; }
 
         public AppUser User { get; set; } = null!;
