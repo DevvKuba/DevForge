@@ -10,6 +10,12 @@
 
         IPhotoRepository PhotoRepository { get; }
 
+        IBlogRepository BlogRepository { get; }
+
+        IBlogLikeRepository BlogLikeRepository { get; }
+
+        IBlogCommentRepository BlogCommentRepository { get; }
+
         Task<bool> Complete();
 
         bool HasChanges();
