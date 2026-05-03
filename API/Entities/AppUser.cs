@@ -39,7 +39,11 @@ public class AppUser : IdentityUser<int>
 
     public List<Message> MessagesRecieved { get; set; } = [];
 
-    public List<Blog> Blogs { get; set; } = []; 
+    public List<Blog> Blogs { get; set; } = [];
+
+    public List<BlogLike> BlogLikes { get; set; } = [];
+
+    public List<BlogComment> BlogComments { get; set; } = [];
 
     // join 
     public ICollection<AppUserRole> UserRoles { get; set; } = [];

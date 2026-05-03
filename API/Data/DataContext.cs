@@ -49,6 +49,10 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, 
             .HasDefaultValueSql("GETUTCDATE()")
             .ValueGeneratedOnAdd();
 
+        builder.Entity<BlogLike>()
+            .HasIndex(l => new { l.UserId, l.BlogId })
+            .IsUnique();
+
 
         builder.Entity<AppUser>()
             .HasMany(ur => ur.UserRoles)
