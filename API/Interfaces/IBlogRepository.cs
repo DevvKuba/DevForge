@@ -4,11 +4,11 @@ namespace API.Interfaces
 {
     public interface IBlogRepository
     {
-        Task<Blog> GetBlogByIdAsync(int id);
+        Task<Blog?> GetBlogByIdAsync(int id);
 
-        Task<Blog> GetBlogByUserIdAsync(int userId);
+        Task<Blog?> GetLatestBlogByUserIdAsync(int userId);
 
-        Task<Blog[]> GetAllUserBlogsAsync { get; set; }
+        Task<List<Blog>> GetAllUserBlogsAsync(AppUser user);
 
         Task UpdateBlogAsync(Blog blog);
 
