@@ -14,5 +14,9 @@
 
         public AppUser User { get; set; } = null!;
 
+        public List<BlogLike> BlogLikes { get; set; } = [];
+
+        public List<BlogComment> BlogComments { get; set; } = [];
+
     }
 }

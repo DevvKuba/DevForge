@@ -39,6 +39,8 @@ public class AppUser : IdentityUser<int>
 
     public List<Message> MessagesRecieved { get; set; } = [];
 
+    public List<Blog> Blogs { get; set; } = []; 
+
     // join 
     public ICollection<AppUserRole> UserRoles { get; set; } = [];
 

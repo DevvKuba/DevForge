@@ -20,6 +20,12 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, 
 
     public DbSet<Photo> Photos { get; set; }
 
+    public DbSet<Blog> Blogs { get; set; }
+
+    public DbSet<BlogLike> BlogLikes { get; set; }
+
+    public DbSet<BlogComment> BlogComments { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -28,6 +34,12 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, 
         builder.Entity<Photo>()
             .HasQueryFilter(p => p.IsApproved);
 
+        builder.Entity<Blog>()
+            .Property(b => b.PublishedAt)
+            .HasDefaultValueSql("GETUTCDATE()")
+            .ValueGeneratedOnAdd();
+
+       
         builder.Entity<AppUser>()
             .HasMany(ur => ur.UserRoles)
             .WithOne(u => u.User)
@@ -40,10 +52,9 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, 
             .HasForeignKey(ur => ur.RoleId)
             .IsRequired();
 
+       
         builder.Entity<UserLike>()
-            .HasKey(k => new { k.SourceUserId, k.TargetUserId });
-
-        // links message & likes entities properties to AppUser properties
+           .HasKey(k => new { k.SourceUserId, k.TargetUserId });
 
         builder.Entity<UserLike>()
             .HasOne(s => s.SourceUser)
@@ -56,6 +67,7 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, 
             .WithMany(l => l.LikedByUsers)
             .HasForeignKey(x => x.TargetUserId)
             .OnDelete(DeleteBehavior.NoAction);
+
 
         builder.Entity<Message>()
             .HasOne(x => x.Recipient)
