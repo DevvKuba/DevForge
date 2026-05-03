@@ -79,6 +79,24 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, 
             .WithMany(x => x.MessagesSent)
             .OnDelete(DeleteBehavior.Restrict);
 
+
+        builder.Entity<Blog>()
+            .HasOne(b => b.User)
+            .WithMany(u => u.Blogs)
+            .HasForeignKey(b => b.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<BlogLike>()
+            .HasOne(l => l.Blog)
+            .WithMany(b => b.BlogLikes)
+            .HasForeignKey(l => l.BlogId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<BlogComment>()
+            .HasOne(c => c.Blog)
+            .WithMany(b => b.BlogComments)
+            .HasForeignKey(c => c.BlogId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
 }
