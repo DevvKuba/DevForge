@@ -49,10 +49,6 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, 
             .HasDefaultValueSql("GETUTCDATE()")
             .ValueGeneratedOnAdd();
 
-        builder.Entity<BlogLike>()
-            .HasIndex(l => new { l.UserId, l.BlogId })
-            .IsUnique();
-
 
         builder.Entity<AppUser>()
             .HasMany(ur => ur.UserRoles)
@@ -98,8 +94,7 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, 
             .HasOne(b => b.User)
             .WithMany(u => u.Blogs)
             .HasForeignKey(b => b.UserId)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<BlogLike>()
             .HasOne(l => l.Blog)
@@ -107,25 +102,12 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, 
             .HasForeignKey(l => l.BlogId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Entity<BlogLike>()
-            .HasOne(l => l.User)
-            .WithMany(u => u.BlogLikes)
-            .HasForeignKey(l => l.UserId)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.SetNull);
-
         builder.Entity<BlogComment>()
             .HasOne(c => c.Blog)
             .WithMany(b => b.BlogComments)
             .HasForeignKey(c => c.BlogId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Entity<BlogComment>()
-            .HasOne(c => c.User)
-            .WithMany(u => u.BlogComments)
-            .HasForeignKey(c => c.UserId)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.SetNull);
     }
 
 }
