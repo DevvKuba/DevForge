@@ -98,7 +98,8 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, 
             .HasOne(b => b.User)
             .WithMany(u => u.Blogs)
             .HasForeignKey(b => b.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder.Entity<BlogLike>()
             .HasOne(l => l.Blog)
