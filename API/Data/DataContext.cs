@@ -110,7 +110,8 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, 
             .HasOne(l => l.User)
             .WithMany(u => u.BlogLikes)
             .HasForeignKey(l => l.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder.Entity<BlogComment>()
             .HasOne(c => c.Blog)
@@ -122,7 +123,8 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, 
             .HasOne(c => c.User)
             .WithMany(u => u.BlogComments)
             .HasForeignKey(c => c.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 
 }
