@@ -106,10 +106,22 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, 
             .HasForeignKey(l => l.BlogId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.Entity<BlogLike>()
+            .HasOne(l => l.User)
+            .WithMany(u => u.BlogLikes)
+            .HasForeignKey(l => l.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.Entity<BlogComment>()
             .HasOne(c => c.Blog)
             .WithMany(b => b.BlogComments)
             .HasForeignKey(c => c.BlogId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<BlogComment>()
+            .HasOne(c => c.User)
+            .WithMany(u => u.BlogComments)
+            .HasForeignKey(c => c.UserId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 
