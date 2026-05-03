@@ -21,19 +21,21 @@ namespace API.Data
         {
             return await context.Blogs.Where(b => b.UserId == user.Id).ToListAsync();
         }
-        public Task UpdateBlogAsync(Blog blog)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task AddBlogAsync(AppUser user, string description)
+        public async Task AddBlogAsync(AppUser user, string description)
         {
-            throw new NotImplementedException();
+            var blog = new Blog
+            {
+                Description = description,
+                UserId = user.Id,
+            };
+
+            await context.Blogs.AddAsync(blog);
         }
 
         public void RemoveBlog(Blog blog)
         {
-            throw new NotImplementedException();
+            context.Remove(blog);
         }
     }
 }

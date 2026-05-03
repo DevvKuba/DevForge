@@ -10,8 +10,6 @@ namespace API.Interfaces
 
         Task<List<Blog>> GetAllUserBlogsAsync(AppUser user);
 
-        Task UpdateBlogAsync(Blog blog);
-
         Task AddBlogAsync(AppUser user, string description);
 
         void RemoveBlog(Blog blog);
