@@ -1,20 +1,19 @@
-using API.DTO_s;
 using API.Entities;
 
 namespace API.Interfaces
 {
     public interface IBlogRepository
     {
-        Task<BlogDto?> GetBlogByIdAsync(int id);
+        Task<Blog?> GetBlogByIdAsync(int id);
 
-        Task<BlogDto?> GetLatestBlogByUserIdAsync(int userId);
+        Task<Blog?> GetLatestBlogByUserIdAsync(int userId);
 
-        Task<List<BlogDto>> GetAllBlogsAsync();
+        Task<List<Blog>> GetAllBlogsAsync();
 
-        Task<List<BlogDto>> GetAllUserBlogsAsync(AppUser user);
+        Task<List<Blog>> GetAllUserBlogsAsync(AppUser user);
 
         Task AddBlogAsync(AppUser user, string description);
 
-        void RemoveBlog(BlogDto blog);
+        void RemoveBlog(Blog blog);
     }
 }

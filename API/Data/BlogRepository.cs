@@ -22,8 +22,6 @@ namespace API.Data
             var query = context.Blogs
                 .OrderByDescending(b => b.PublishedAt)
                 .AsQueryable();
-
-
         }
 
         public async Task<List<Blog>> GetAllUserBlogsAsync(AppUser user)
