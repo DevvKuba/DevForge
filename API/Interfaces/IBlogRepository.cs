@@ -1,4 +1,6 @@
+using API.DTO_s;
 using API.Entities;
+using API.Helpers;
 
 namespace API.Interfaces
 {
@@ -8,7 +10,7 @@ namespace API.Interfaces
 
         Task<Blog?> GetLatestBlogByUserIdAsync(int userId);
 
-        Task<List<Blog>> GetAllBlogsAsync();
+        Task<List<BlogDto>> GetAllBlogsAsync(BlogParams blogParams);
 
         Task<List<Blog>> GetAllUserBlogsAsync(AppUser user);
 

@@ -1,6 +1,9 @@
+using API.DTO_s;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
@@ -17,11 +20,15 @@ namespace API.Data
                 .OrderByDescending(b => b.PublishedAt)
                 .Where(b => b.UserId == userId).FirstOrDefaultAsync();
         }
-        public Task<List<Blog>> GetAllBlogsAsync()
+        public async Task<List<BlogDto>> GetAllBlogsAsync(BlogParams blogParams)
         {
             var query = context.Blogs
                 .OrderByDescending(b => b.PublishedAt)
                 .AsQueryable();
+
+            var blogs = query.ProjectTo<BlogDto>(mapper.ConfigurationProvider);
+
+            return await PagedList<BlogDto>.CreateAsync(blogs, blogParams.PageNumber, blogParams.PageSize);
         }
 
         public async Task<List<Blog>> GetAllUserBlogsAsync(AppUser user)
