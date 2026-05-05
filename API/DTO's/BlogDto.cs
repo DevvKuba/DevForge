@@ -1,4 +1,6 @@
-﻿namespace API.DTO_s
+﻿using API.Entities;
+
+namespace API.DTO_s
 {
     public class BlogDto
     {
@@ -13,5 +15,9 @@
         public bool IsDeleted { get; set; } = false;
 
         public int UserId { get; set; }
+
+        public List<BlogLikeDto> BlogLikes { get; set; } = [];
+
+        public List<BlogCommentDto> BlogComment { get; set; } = [];
     }
 }
