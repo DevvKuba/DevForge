@@ -23,6 +23,8 @@ namespace API.Data
         public async Task<List<BlogDto>> GetAllBlogsAsync(BlogParams blogParams)
         {
             var query = context.Blogs
+                .Include(b => b.BlogComments)
+                .Include(b => b.BlogLikes)
                 .OrderByDescending(b => b.PublishedAt)
                 .AsQueryable();
 
@@ -35,6 +37,8 @@ namespace API.Data
         {
             var query = context.Blogs
                 .Where(b => b.UserId == blogParams.UserId)
+                .Include(b => b.BlogComments)
+                .Include(b => b.BlogLikes)
                 .OrderByDescending(b => b.PublishedAt)
                 .AsQueryable();
 

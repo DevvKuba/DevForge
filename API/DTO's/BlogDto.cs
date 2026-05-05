@@ -18,6 +18,6 @@ namespace API.DTO_s
 
         public List<BlogLikeDto> BlogLikes { get; set; } = [];
 
-        public List<BlogCommentDto> BlogComment { get; set; } = [];
+        public List<BlogCommentDto> BlogComments { get; set; } = [];
     }
 }

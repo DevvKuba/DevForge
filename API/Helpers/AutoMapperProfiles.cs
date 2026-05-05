@@ -18,6 +18,8 @@ namespace API.Helpers
                 o.MapFrom(s => s.Photos.FirstOrDefault(x => x.IsMain)!.Url));
 
             CreateMap<Blog, BlogDto>();
+            CreateMap<BlogComment, BlogCommentDto>();
+            CreateMap<BlogLike, BlogLikeDto>();
             CreateMap<Photo, PhotoDto>();
             CreateMap<Photo, PhotoForApprovalDto>();
             CreateMap<MemberUpdateDto, AppUser>();
