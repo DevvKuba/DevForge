@@ -11,7 +11,6 @@ namespace API.Helpers
             PageSize = pageSize;
             TotalCount = count;
             AddRange(items);
-
         }
 
         public int CurrentPage { get; set; }

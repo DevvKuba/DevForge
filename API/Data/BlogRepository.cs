@@ -17,6 +17,15 @@ namespace API.Data
                 .OrderByDescending(b => b.PublishedAt)
                 .Where(b => b.UserId == userId).FirstOrDefaultAsync();
         }
+        public Task<List<Blog>> GetAllBlogsAsync()
+        {
+            var query = context.Blogs
+                .OrderByDescending(b => b.PublishedAt)
+                .AsQueryable();
+
+
+        }
+
         public async Task<List<Blog>> GetAllUserBlogsAsync(AppUser user)
         {
             return await context.Blogs.Where(b => b.UserId == user.Id).ToListAsync();
@@ -37,5 +46,6 @@ namespace API.Data
         {
             context.Remove(blog);
         }
+
     }
 }
