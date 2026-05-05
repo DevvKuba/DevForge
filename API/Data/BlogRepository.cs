@@ -31,9 +31,16 @@ namespace API.Data
             return await PagedList<BlogDto>.CreateAsync(blogs, blogParams.PageNumber, blogParams.PageSize);
         }
 
-        public async Task<List<Blog>> GetAllUserBlogsAsync(AppUser user)
+        public async Task<List<BlogDto>> GetAllUserBlogsAsync(BlogParams blogParams)
         {
-            return await context.Blogs.Where(b => b.UserId == user.Id).ToListAsync();
+            var query = context.Blogs
+                .Where(b => b.UserId == blogParams.UserId)
+                .OrderByDescending(b => b.PublishedAt)
+                .AsQueryable();
+
+            var userBlogs = query.ProjectTo<BlogDto>(mapper.ConfigurationProvider);
+
+            return await PagedList<BlogDto>.CreateAsync(userBlogs, blogParams.PageNumber, blogParams.PageSize);
         }
 
         public async Task AddBlogAsync(AppUser user, string description)

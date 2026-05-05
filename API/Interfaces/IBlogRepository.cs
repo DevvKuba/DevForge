@@ -12,7 +12,7 @@ namespace API.Interfaces
 
         Task<List<BlogDto>> GetAllBlogsAsync(BlogParams blogParams);
 
-        Task<List<Blog>> GetAllUserBlogsAsync(AppUser user);
+        Task<List<BlogDto>> GetAllUserBlogsAsync(BlogParams blogParams);
 
         Task AddBlogAsync(AppUser user, string description);
 
