@@ -3,6 +3,7 @@ using API.Entities;
 using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
+using Azure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,6 +36,16 @@ namespace API.Controllers
             }
 
             return Ok(blogs);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> LikeUserBlogAsync(BlogDto userBlog)
+        {
+            var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(userBlog.Id);
+
+            if (blog == null) return NotFound("User blog not found");
+
+            return Ok("User blog has been liked");
         }
     }
 }
