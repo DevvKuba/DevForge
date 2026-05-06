@@ -1,5 +1,6 @@
 ﻿using API.DTO_s;
 using API.Entities;
+using API.Extensions;
 using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
@@ -43,9 +44,12 @@ namespace API.Controllers
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(updateBlog.Id);
 
-            mapper.Map(updateBlog, blog);
+            if (blog == null) return NotFound("Blog to updage had not been found");
 
-            if(!await unitOfWork.Complete())
+            mapper.Map(updateBlog, blog);
+            blog.UpdatedAt = DateTime.UtcNow;
+
+            if (!await unitOfWork.Complete())
             {
                 return BadRequest("Not able to update user blog");
             }
@@ -86,7 +90,24 @@ namespace API.Controllers
                 return BadRequest("Not able to undo the like of the blog post");
             }
             return Ok("Successfully deleted the like for the blog post");
+        }
 
+        [HttpPost]
+        public async Task<ActionResult> AddNewBlogAsync(BlogDto newBlog)
+        {
+            var userId = User.GetUserId();
+
+            var postingUser = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
+
+            if (postingUser == null) return NotFound("Blog posting user was not found");
+                
+            await unitOfWork.BlogRepository.AddBlogAsync(postingUser, newBlog.Title, newBlog.Description);
+
+            if(!await unitOfWork.Complete())
+            {
+                return BadRequest("Blog was not added successfully");
+            }
+            return Ok($"New blog titled: '{newBlog.Title}', has been published");
         }
     }
 }
