@@ -38,6 +38,12 @@ namespace API.Controllers
             return Ok(blogs);
         }
 
+        //[HttpPut]
+        //public async Task<ActionResult> UpdateCurrentBlogPostAsync(BlogDto blog)
+        //{
+
+        //}
+
         [HttpPost]
         public async Task<ActionResult> LikeUserBlogAsync(BlogDto userBlog)
         {

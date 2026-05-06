@@ -64,10 +64,11 @@ namespace API.Data
             return await PagedList<BlogDto>.CreateAsync(userBlogs, blogParams.PageNumber, blogParams.PageSize);
         }
 
-        public async Task AddBlogAsync(AppUser user, string description)
+        public async Task AddBlogAsync(AppUser user, string title, string description)
         {
             var blog = new Blog
             {
+                Title = title,
                 Description = description,
                 UserId = user.Id,
             };

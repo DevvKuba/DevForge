@@ -18,7 +18,7 @@ namespace API.Interfaces
 
         Task<List<BlogDto>> GetAllUserBlogsAsync(BlogParams blogParams);
 
-        Task AddBlogAsync(AppUser user, string description);
+        Task AddBlogAsync(AppUser user, string title, string description);
 
         void RemoveBlog(Blog blog);
     }
