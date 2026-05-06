@@ -38,11 +38,19 @@ namespace API.Controllers
             return Ok(blogs);
         }
 
-        //[HttpPut]
-        //public async Task<ActionResult> UpdateCurrentBlogPostAsync(BlogDto blog)
-        //{
+        [HttpPut]
+        public async Task<ActionResult> UpdateCurrentBlogPostAsync(BlogDto updateBlog)
+        {
+            var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(updateBlog.Id);
 
-        //}
+            mapper.Map(updateBlog, blog);
+
+            if(!await unitOfWork.Complete())
+            {
+                return BadRequest("Not able to update user blog");
+            }
+            return Ok("Correctly updated user blog");
+        }
 
         [HttpPost]
         public async Task<ActionResult> LikeUserBlogAsync(BlogDto userBlog)

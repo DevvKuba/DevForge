@@ -6,6 +6,8 @@ namespace API.DTO_s
     {
         public int Id { get; set; }
 
+        public required string Title { get; set; }
+
         public required string Description { get; set; }
 
         public DateTime PublishedAt { get; private set; }
