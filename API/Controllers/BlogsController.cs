@@ -50,5 +50,29 @@ namespace API.Controllers
             return Ok("User blog has been liked");
         }
 
+        [HttpDelete]
+        public async Task<ActionResult> DeleteUserBlogLikeAsync(BlogDto userBlog)
+        {
+            var blog = await unitOfWork.BlogRepository.GetBlogByIdWithLikesAsync(userBlog.Id);
+
+            if (blog == null) return NotFound("User blog not found");
+
+            var user = await unitOfWork.UserRepository.GetUserByIdAsync(userBlog.Id);
+
+            if (user == null) return NotFound("User not found");
+
+            var userBlogLike = unitOfWork.BlogLikeRepository.GetUserBlogLike(user, blog);
+
+            if (userBlogLike == null) return NotFound("User has not liked this blog post");
+
+            unitOfWork.BlogLikeRepository.DeleteUserBlogLike(userBlogLike);
+
+            if(!await unitOfWork.Complete())
+            {
+                return BadRequest("Not able to undo the like of the blog post");
+            }
+            return Ok("Successfully deleted the like for the blog post");
+
+        }
     }
 }
