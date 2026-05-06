@@ -6,6 +6,11 @@ namespace API.Data
 {
     public class BlogLikeRepository(DataContext context, IMapper mapper) : IBlogLikeRepository
     {
+        public BlogLike? GetUserBlogLike(AppUser targetUser, Blog targetBlog)
+        {
+            return targetBlog.BlogLikes.Where(l => l.Blog.UserId == targetUser.Id).FirstOrDefault();
+        }
+
         public async Task LikeUserBlogAsync(Blog blog)
         {
             var blogLike = new BlogLike
@@ -14,6 +19,11 @@ namespace API.Data
             };
 
             await context.BlogLikes.AddAsync(blogLike);
+        }
+
+        public void DeleteUserBlogLike(BlogLike blogLike)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -8,6 +8,10 @@ namespace API.Interfaces
     {
         Task<Blog?> GetBlogByIdAsync(int id);
 
+        Task<Blog?> GetBlogByIdWithLikesAsync(int id);
+
+        Task<Blog?> GetBlogByIdWithCommentsAsync(int id);
+
         Task<Blog?> GetLatestBlogByUserIdAsync(int userId);
 
         Task<List<BlogDto>> GetAllBlogsAsync(BlogParams blogParams);

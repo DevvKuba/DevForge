@@ -45,7 +45,10 @@ namespace API.Controllers
 
             if (blog == null) return NotFound("User blog not found");
 
+            await unitOfWork.BlogLikeRepository.LikeUserBlogAsync(blog);
+
             return Ok("User blog has been liked");
         }
+
     }
 }

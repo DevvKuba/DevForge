@@ -14,6 +14,23 @@ namespace API.Data
         {
             return await context.Blogs.Where(b => b.Id == id).FirstOrDefaultAsync();
         }
+
+        public async Task<Blog?> GetBlogByIdWithLikesAsync(int id)
+        {
+            return await context.Blogs
+                .Include(b => b.BlogLikes)
+                .Where(b => b.Id == id)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<Blog?> GetBlogByIdWithCommentsAsync(int id)
+        {
+            return await context.Blogs
+                .Include(b => b.BlogComments)
+                .Where(b => b.Id == id)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<Blog?> GetLatestBlogByUserIdAsync(int userId)
         {
             return await context.Blogs
@@ -62,6 +79,5 @@ namespace API.Data
         {
             context.Remove(blog);
         }
-
     }
 }

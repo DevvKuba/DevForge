@@ -4,6 +4,11 @@ namespace API.Interfaces
 {
     public interface IBlogLikeRepository
     {
+
+        BlogLike? GetUserBlogLike(AppUser targetUser, Blog targetBlog);
+
         Task LikeUserBlogAsync(Blog blog);
+
+        void DeleteUserBlogLike(BlogLike blogLike);
     }
 }
