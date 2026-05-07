@@ -68,6 +68,24 @@ namespace API.Controllers
             return Ok("User blog has been liked");
         }
 
+        [HttpPost]
+        public async Task<ActionResult> AddNewBlogAsync(BlogDto newBlog)
+        {
+            var userId = User.GetUserId();
+
+            var postingUser = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
+
+            if (postingUser == null) return NotFound("Blog posting user was not found");
+
+            await unitOfWork.BlogRepository.AddBlogAsync(postingUser, newBlog.Title, newBlog.Description);
+
+            if (!await unitOfWork.Complete())
+            {
+                return BadRequest("Blog was not added successfully");
+            }
+            return Ok($"New blog titled: '{newBlog.Title}', has been published");
+        }
+
         [HttpDelete]
         public async Task<ActionResult> DeleteUserBlogLikeAsync(BlogDto userBlog)
         {
@@ -92,22 +110,20 @@ namespace API.Controllers
             return Ok("Successfully deleted the like for the blog post");
         }
 
-        [HttpPost]
-        public async Task<ActionResult> AddNewBlogAsync(BlogDto newBlog)
+        [HttpDelete]
+        public async Task<ActionResult> DeleteUserBlogAsync(BlogDto userBlog)
         {
-            var userId = User.GetUserId();
+            var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(userBlog.Id);
 
-            var postingUser = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
+            if (blog == null) return NotFound("Blog for deletion was not found");
 
-            if (postingUser == null) return NotFound("Blog posting user was not found");
-                
-            await unitOfWork.BlogRepository.AddBlogAsync(postingUser, newBlog.Title, newBlog.Description);
+            unitOfWork.BlogRepository.RemoveBlog(blog);
 
-            if(!await unitOfWork.Complete())
+            if (!await unitOfWork.Complete())
             {
-                return BadRequest("Blog was not added successfully");
+                return BadRequest("Not able to delete the blog post");
             }
-            return Ok($"New blog titled: '{newBlog.Title}', has been published");
+            return Ok("Successfully deleted the blog post");
         }
     }
 }
