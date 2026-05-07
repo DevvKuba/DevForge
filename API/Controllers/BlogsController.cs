@@ -68,17 +68,21 @@ namespace API.Controllers
             return Ok("User blog has been liked");
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult> AddBlogCommentAsync(BlogCommentDto blogComment)
-        //{
-        //    var blog = await unitOfWork.BlogRepository.GetBlogByIdWithLikesAsync(blogComment.BlogId);
+        [HttpPost]
+        public async Task<ActionResult> AddBlogCommentAsync(BlogCommentDto blogComment)
+        {
+            var blog = await unitOfWork.BlogRepository.GetBlogByIdWithLikesAsync(blogComment.BlogId);
 
-        //    if (blog == null) return NotFound("User blog not found");
+            if (blog == null) return NotFound("User blog not found");
 
+            await unitOfWork.BlogCommentRepository.AddBlogCommentAsync(blog, blogComment.Content);
 
-
-
-        //}
+            if (!await unitOfWork.Complete())
+            {
+                return BadRequest("Blog comment was not added successfully");
+            }
+            return Ok("New blog comment was successfully added");
+        }
 
         [HttpPost]
         public async Task<ActionResult> AddNewBlogAsync(BlogDto newBlog)
