@@ -40,13 +40,30 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> UpdateCurrentBlogPostAsync(BlogDto updateBlog)
+        public async Task<ActionResult> UpdateCurrentBlogComment(BlogCommentDto updatedBlogComment)
         {
-            var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(updateBlog.Id);
+            var blogComment = await unitOfWork.BlogCommentRepository.GetBlogCommentByIdAsync(updatedBlogComment.Id);
+
+            if (blogComment == null) return NotFound("Blog comment to updage had not been found");
+
+            mapper.Map(updatedBlogComment, blogComment);
+            blogComment.UpdatedAt = DateTime.UtcNow;
+
+            if (!await unitOfWork.Complete())
+            {
+                return BadRequest("Not able to update user blog comment");
+            }
+            return Ok("Correctly updated user blog comment");
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateCurrentBlogPostAsync(BlogDto updatedBlog)
+        {
+            var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(updatedBlog.Id);
 
             if (blog == null) return NotFound("Blog to updage had not been found");
 
-            mapper.Map(updateBlog, blog);
+            mapper.Map(updatedBlog, blog);
             blog.UpdatedAt = DateTime.UtcNow;
 
             if (!await unitOfWork.Complete())
