@@ -1,3 +1,5 @@
+import { BlogComment } from "./blogComment";
+import { BlogLike } from "./blogLike";
 
 export interface Blog {
   id: number,
@@ -7,4 +9,6 @@ export interface Blog {
   updatedAt: Date,
   isDeleted: boolean,
   userId: number,
+  blogLikes: BlogLike[],
+  blogComments: BlogComment[]
 }
