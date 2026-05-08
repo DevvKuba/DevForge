@@ -120,6 +120,22 @@ namespace API.Controllers
         }
 
         [HttpDelete]
+        public async Task<ActionResult> DeleteUserBlogAsync(BlogDto userBlog)
+        {
+            var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(userBlog.Id);
+
+            if (blog == null) return NotFound("Blog for deletion was not found");
+
+            unitOfWork.BlogRepository.RemoveBlog(blog);
+
+            if (!await unitOfWork.Complete())
+            {
+                return BadRequest("Not able to delete the blog post");
+            }
+            return Ok("Successfully deleted the blog post");
+        }
+
+        [HttpDelete]
         public async Task<ActionResult> DeleteUserBlogLikeAsync(BlogDto userBlog)
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdWithLikesAsync(userBlog.Id);
@@ -144,19 +160,19 @@ namespace API.Controllers
         }
 
         [HttpDelete]
-        public async Task<ActionResult> DeleteUserBlogAsync(BlogDto userBlog)
+        public async Task<ActionResult> DeleteUserBlogCommentAsync(BlogCommentDto deletionBlogComment)
         {
-            var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(userBlog.Id);
+            var blogComment = await unitOfWork.BlogCommentRepository.GetBlogCommentByIdAsync(deletionBlogComment.Id);
 
-            if (blog == null) return NotFound("Blog for deletion was not found");
+            if (blogComment == null) return NotFound("Blog comment for deletion not found");
 
-            unitOfWork.BlogRepository.RemoveBlog(blog);
+            unitOfWork.BlogCommentRepository.DeleteBlogCommentAsync(blogComment);
 
-            if (!await unitOfWork.Complete())
+            if(!await unitOfWork.Complete())
             {
-                return BadRequest("Not able to delete the blog post");
+                return BadRequest("Blog comment was not removed successfully");
             }
-            return Ok("Successfully deleted the blog post");
+            return Ok("Blog comment was removed successfully");
         }
     }
 }
