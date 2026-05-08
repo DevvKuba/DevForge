@@ -27,8 +27,10 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<BlogDto>>> GatherAllUserBlogsAsync(BlogParams blogParams)
+        public async Task<ActionResult<List<BlogDto>>> GatherAllSpecificUserBlogsAsync(BlogParams blogParams)
         {
+            if (blogParams.UserId == null) return NotFound("");
+
             var blogs = await unitOfWork.BlogRepository.GetAllUserBlogsAsync(blogParams);
 
             if (blogs.Count == 0 | blogs == null)
