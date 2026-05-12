@@ -18,14 +18,14 @@ export class BlogService {
   gatherAllBlogs(pageNumber: number, pageSize: number) : Observable<any> {
     let params = setPaginationHeaders(pageNumber, pageSize);
 
-    return this.http.get<Blog[]>(`${this.baseUrl}blogs/GatherAllBlogs?`, {observe: 'response', params});
+    return this.http.get<Blog[]>(`${this.baseUrl}blogs/GatherAllBlogs`, {observe: 'response', params});
   }
 
-  gatherSpecificUserBLogs(userId: number, pageNumber: number, pageSize: number) : Observable<any> {
+  gatherSpecificUserBlogs(userId: number, pageNumber: number, pageSize: number) : Observable<any> {
     let params = setPaginationHeaders(pageNumber, pageSize);
     params.append("UserId", userId);
 
-    return this.http.get<Blog[]>(`${this.baseUrl}blogs/GatherUserBlogs?`, {observe: 'response', params});
+    return this.http.get<Blog[]>(`${this.baseUrl}blogs/GatherUserBlogs`, {observe: 'response', params});
   }
 
   updateBlogComment(newBlogComment: BlogComment) : Observable<any> {

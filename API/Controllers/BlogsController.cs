@@ -122,7 +122,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("DeleteBlog")]
-        public async Task<ActionResult> DeleteUserBlogAsync(BlogDto userBlog)
+        public async Task<ActionResult> DeleteUserBlogAsync([FromBody] BlogDto userBlog)
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(userBlog.Id);
 
@@ -138,7 +138,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("UndoBlogLike")]
-        public async Task<ActionResult> DeleteUserBlogLikeAsync(BlogDto userBlog)
+        public async Task<ActionResult> DeleteUserBlogLikeAsync([FromBody] BlogDto userBlog)
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdWithLikesAsync(userBlog.Id);
 
@@ -162,7 +162,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("DeleteBlogComment")]
-        public async Task<ActionResult> DeleteUserBlogCommentAsync(BlogCommentDto deletionBlogComment)
+        public async Task<ActionResult> DeleteUserBlogCommentAsync([FromBody] BlogCommentDto deletionBlogComment)
         {
             var blogComment = await unitOfWork.BlogCommentRepository.GetBlogCommentByIdAsync(deletionBlogComment.Id);
 
