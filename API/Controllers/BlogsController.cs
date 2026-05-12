@@ -87,7 +87,7 @@ namespace API.Controllers
             return Ok("User blog has been liked");
         }
 
-        [HttpPost("AddBLogComment")]
+        [HttpPost("AddBlogComment")]
         public async Task<ActionResult> AddBlogCommentAsync(BlogCommentDto blogComment)
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdWithLikesAsync(blogComment.BlogId);
@@ -103,7 +103,7 @@ namespace API.Controllers
             return Ok("New blog comment was successfully added");
         }
 
-        [HttpPost("AddBLog")]
+        [HttpPost("AddBlog")]
         public async Task<ActionResult> AddNewBlogAsync(BlogDto newBlog)
         {
             var userId = User.GetUserId();
