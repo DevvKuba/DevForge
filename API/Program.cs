@@ -23,6 +23,17 @@ namespace API
 
             app.UseMiddleware<ExceptionMiddleware>();
 
+            // Enable Swagger/OpenAPI
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "SWE Networking Platform API v1");
+                    c.RoutePrefix = string.Empty;
+                });
+            }
+
             // Configure the HTTP request pipeline.
             // specifying what can be shared and with who
             app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:4200", "https://localhost:4200"));
