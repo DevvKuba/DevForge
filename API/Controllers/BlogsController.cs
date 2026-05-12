@@ -13,7 +13,7 @@ namespace API.Controllers
     [Authorize]
     public class BlogsController(IUnitOfWork unitOfWork, IMapper mapper) : BaseApiController
     {
-        [HttpGet]
+        [HttpGet("GatherAllBlogs")]
         public async Task<ActionResult<List<BlogDto>>> GatherAllBlogsAsync(BlogParams blogParams)
         {
             var blogs = await unitOfWork.BlogRepository.GetAllBlogsAsync(blogParams);
@@ -26,7 +26,7 @@ namespace API.Controllers
             return Ok(blogs);
         }
 
-        [HttpGet]
+        [HttpGet("GatherUserBlogs")]
         public async Task<ActionResult<List<BlogDto>>> GatherAllSpecificUserBlogsAsync(BlogParams blogParams)
         {
             if (blogParams.UserId == null) return NotFound("");
@@ -41,8 +41,8 @@ namespace API.Controllers
             return Ok(blogs);
         }
 
-        [HttpPut]
-        public async Task<ActionResult> UpdateCurrentBlogComment(BlogCommentDto updatedBlogComment)
+        [HttpPut("UpdateBlogComment")]
+        public async Task<ActionResult> UpdateCurrentBlogCommentAsync(BlogCommentDto updatedBlogComment)
         {
             var blogComment = await unitOfWork.BlogCommentRepository.GetBlogCommentByIdAsync(updatedBlogComment.Id);
 
@@ -58,7 +58,7 @@ namespace API.Controllers
             return Ok("Correctly updated user blog comment");
         }
 
-        [HttpPut]
+        [HttpPut("UpdateBlogPost")]
         public async Task<ActionResult> UpdateCurrentBlogPostAsync(BlogDto updatedBlog)
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(updatedBlog.Id);
@@ -75,7 +75,7 @@ namespace API.Controllers
             return Ok("Correctly updated user blog");
         }
 
-        [HttpPost]
+        [HttpPost("AddBlogLike")]
         public async Task<ActionResult> LikeUserBlogAsync(BlogDto userBlog)
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(userBlog.Id);
@@ -87,7 +87,7 @@ namespace API.Controllers
             return Ok("User blog has been liked");
         }
 
-        [HttpPost]
+        [HttpPost("AddBLogComment")]
         public async Task<ActionResult> AddBlogCommentAsync(BlogCommentDto blogComment)
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdWithLikesAsync(blogComment.BlogId);
@@ -103,7 +103,7 @@ namespace API.Controllers
             return Ok("New blog comment was successfully added");
         }
 
-        [HttpPost]
+        [HttpPost("AddBLog")]
         public async Task<ActionResult> AddNewBlogAsync(BlogDto newBlog)
         {
             var userId = User.GetUserId();
@@ -121,7 +121,7 @@ namespace API.Controllers
             return Ok($"New blog titled: '{newBlog.Title}', has been published");
         }
 
-        [HttpDelete]
+        [HttpDelete("DeleteBlog")]
         public async Task<ActionResult> DeleteUserBlogAsync(BlogDto userBlog)
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(userBlog.Id);
@@ -137,7 +137,7 @@ namespace API.Controllers
             return Ok("Successfully deleted the blog post");
         }
 
-        [HttpDelete]
+        [HttpDelete("UndoBlogLike")]
         public async Task<ActionResult> DeleteUserBlogLikeAsync(BlogDto userBlog)
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdWithLikesAsync(userBlog.Id);
@@ -161,7 +161,7 @@ namespace API.Controllers
             return Ok("Successfully deleted the like for the blog post");
         }
 
-        [HttpDelete]
+        [HttpDelete("DeleteBlogComment")]
         public async Task<ActionResult> DeleteUserBlogCommentAsync(BlogCommentDto deletionBlogComment)
         {
             var blogComment = await unitOfWork.BlogCommentRepository.GetBlogCommentByIdAsync(deletionBlogComment.Id);
