@@ -16,10 +16,12 @@
       <!-- Filter by Member -->
       <div class="filter-item">
         <label for="memberFilter">Filter by Author:</label>
-        <p-dropdown 
-          id="memberFilter"
-          [options]="members" 
-          optionLabel="username"
+        <p-auto-complete 
+          [(ngModel)]="selectedMember"
+          [suggestions]="filteredMembers"
+          (completeMethod)="searchMembers($event)"
+          field="username"
+          [dropdown]="true"
           placeholder="Select a member"
           class="member-dropdown"
         >
@@ -45,7 +47,7 @@
               <span class="member-name">{{option.username}}</span>
             </div>
           </ng-template>
-        </p-dropdown>
+        </p-auto-complete>
       </div>
 
       <!-- Clear Filters Button -->
