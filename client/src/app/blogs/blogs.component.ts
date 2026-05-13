@@ -60,4 +60,25 @@ export class BlogsComponent implements OnInit {
         );
   }
 
+  // applicable for both published blogs and corresponding blog comments
+  isCurrentUserAuthor(userId: number) : boolean{
+
+  }
+
+  isCommentsSectionOpen(blog: Blog) : boolean {
+
+  }
+
+  toggleComments(blog: Blog){
+
+  }
+
+  updateCommentInput(blog: Blog, $event : any) {
+
+  }
+
+  saveComment(blog: Blog) {
+
+  }
+
 }

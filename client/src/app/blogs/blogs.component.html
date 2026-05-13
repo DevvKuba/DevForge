@@ -112,14 +112,14 @@
               icon="pi pi-comments" 
               class="p-button-rounded p-button-text comment-btn"
               [title]="'View comments'"
-              (click)="toggleComments(blog.id)"
+              (click)="toggleComments(blog)"
             ></button>
             <span class="action-count">{{blog.blogComments?.length || 0}}</span>
           </div>
         </div>
 
         <!-- Comments Section (Collapsible) -->
-        @if (isCommentsSectionOpen(blog.id)) {
+        @if (isCommentsSectionOpen(blog)) {
           <div class="comments-section">
             <!-- Existing Comments -->
             @if (blog.blogComments && blog.blogComments.length > 0) {
@@ -156,7 +156,7 @@
               <textarea 
                 placeholder="Write a comment..." 
                 class="comment-input"
-                (keyup)="updateCommentInput(blog.id, $event)"
+                (keyup)="updateCommentInput(blog, $event)"
               ></textarea>
               <button 
                 pButton 
@@ -164,7 +164,7 @@
                 label="Save Comment" 
                 icon="pi pi-check"
                 class="p-button-sm"
-                (click)="saveComment(blog.id)"
+                (click)="saveComment(blog)"
               ></button>
             </div>
           </div>
