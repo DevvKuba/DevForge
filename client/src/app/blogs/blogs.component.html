@@ -20,7 +20,6 @@
           [(ngModel)]="selectedMember"
           [suggestions]="filteredMembers"
           (completeMethod)="searchMembers($event)"
-          field="username"
           [dropdown]="true"
           placeholder="Select a member"
           class="member-dropdown"
@@ -37,15 +36,17 @@
             </div>
           </ng-template>
           <ng-template pTemplate="selectedItem" let-option>
-            <div *ngIf="option" class="member-option">
-              <img 
-                [src]="option.photoUrl" 
-                alt="{{option.username}}" 
-                class="member-thumbnail"
-                [title]="option.specialization"
-              />
-              <span class="member-name">{{option.username}}</span>
-            </div>
+            @if (option) {
+              <div class="member-option">
+                <img 
+                  [src]="option.photoUrl" 
+                  alt="{{option.username}}" 
+                  class="member-thumbnail"
+                  [title]="option.specialization"
+                />
+                <span class="member-name">{{option.username}}</span>
+              </div>
+            }
           </ng-template>
         </p-auto-complete>
       </div>
@@ -65,103 +66,117 @@
 
   <!-- Blog Cards -->
   <div class="blogs-grid">
-    <p-card *ngFor="let blog of blogs" class="blog-card">
-      <!-- Header with Title and Delete Button -->
-      <ng-template pTemplate="header">
-        <div class="blog-header">
-          <h3 class="blog-title">{{blog.title}}</h3>
-          <button 
-            *ngIf="isCurrentUserAuthor(blog.userId)"
-            pButton 
-            type="button" 
-            icon="pi pi-trash" 
-            class="p-button-rounded p-button-danger p-button-text delete-btn"
-            [title]="'Delete blog'"
-          ></button>
-        </div>
-      </ng-template>
-
-      <!-- Blog Content -->
-      <div class="blog-content">
-        <p class="blog-description">{{blog.description}}</p>
-        <p class="blog-date">Published: {{blog.publishedAt | date:'short'}}</p>
-      </div>
-
-      <!-- Blog Actions (Likes, Comments, etc) -->
-      <div class="blog-actions">
-        <!-- Likes Section -->
-        <div class="action-group likes">
-          <button 
-            pButton 
-            type="button" 
-            icon="pi pi-heart-fill" 
-            class="p-button-rounded p-button-text like-btn"
-            [title]="'Like this blog'"
-          ></button>
-          <span class="action-count">{{blog.blogLikes?.length || 0}}</span>
-        </div>
-
-        <!-- Comments Section -->
-        <div class="action-group comments">
-          <button 
-            pButton 
-            type="button" 
-            icon="pi pi-comments" 
-            class="p-button-rounded p-button-text comment-btn"
-            [title]="'View comments'"
-            (click)="toggleComments(blog.id)"
-          ></button>
-          <span class="action-count">{{blog.blogComments?.length || 0}}</span>
-        </div>
-      </div>
-
-      <!-- Comments Section (Collapsible) -->
-      <div class="comments-section" *ngIf="isCommentsSectionOpen(blog.id)">
-        <!-- Existing Comments -->
-        <div class="existing-comments" *ngIf="blog.blogComments && blog.blogComments.length > 0">
-          <div class="comment-item" *ngFor="let comment of blog.blogComments">
-            <div class="comment-header">
-              <p class="comment-content">{{comment.content}}</p>
+    @for (blog of blogs; track blog.id) {
+      <p-card class="blog-card">
+        <!-- Header with Title and Delete Button -->
+        <ng-template pTemplate="header">
+          <div class="blog-header">
+            <h3 class="blog-title">{{blog.title}}</h3>
+            @if (isCurrentUserAuthor(blog.userId)) {
               <button 
-                *ngIf="isCurrentUserAuthor(comment.userId)"
                 pButton 
                 type="button" 
                 icon="pi pi-trash" 
-                class="p-button-rounded p-button-danger p-button-text p-button-sm delete-comment-btn"
-                [title]="'Delete comment'"
+                class="p-button-rounded p-button-danger p-button-text delete-btn"
+                [title]="'Delete blog'"
               ></button>
-            </div>
-            <p class="comment-date">{{comment.createdAt | date:'short'}}</p>
+            }
+          </div>
+        </ng-template>
+
+        <!-- Blog Content -->
+        <div class="blog-content">
+          <p class="blog-description">{{blog.description}}</p>
+          <p class="blog-date">Published: {{blog.publishedAt | date:'short'}}</p>
+        </div>
+
+        <!-- Blog Actions (Likes, Comments, etc) -->
+        <div class="blog-actions">
+          <!-- Likes Section -->
+          <div class="action-group likes">
+            <button 
+              pButton 
+              type="button" 
+              icon="pi pi-heart-fill" 
+              class="p-button-rounded p-button-text like-btn"
+              [title]="'Like this blog'"
+            ></button>
+            <span class="action-count">{{blog.blogLikes?.length || 0}}</span>
+          </div>
+
+          <!-- Comments Section -->
+          <div class="action-group comments">
+            <button 
+              pButton 
+              type="button" 
+              icon="pi pi-comments" 
+              class="p-button-rounded p-button-text comment-btn"
+              [title]="'View comments'"
+              (click)="toggleComments(blog.id)"
+            ></button>
+            <span class="action-count">{{blog.blogComments?.length || 0}}</span>
           </div>
         </div>
 
-        <!-- No Comments Message -->
-        <p *ngIf="!blog.blogComments || blog.blogComments.length === 0" class="no-comments">
-          No comments yet. Be the first to comment!
-        </p>
+        <!-- Comments Section (Collapsible) -->
+        @if (isCommentsSectionOpen(blog.id)) {
+          <div class="comments-section">
+            <!-- Existing Comments -->
+            @if (blog.blogComments && blog.blogComments.length > 0) {
+              <div class="existing-comments">
+                @for (comment of blog.blogComments; track comment.id) {
+                  <div class="comment-item">
+                    <div class="comment-header">
+                      <p class="comment-content">{{comment.content}}</p>
+                      @if (isCurrentUserAuthor(comment.userId)) {
+                        <button 
+                          pButton 
+                          type="button" 
+                          icon="pi pi-trash" 
+                          class="p-button-rounded p-button-danger p-button-text p-button-sm delete-comment-btn"
+                          [title]="'Delete comment'"
+                        ></button>
+                      }
+                    </div>
+                    <p class="comment-date">{{comment.createdAt | date:'short'}}</p>
+                  </div>
+                }
+              </div>
+            }
 
-        <!-- Add New Comment Section -->
-        <div class="add-comment-section">
-          <textarea 
-            placeholder="Write a comment..." 
-            class="comment-input"
-            (keyup)="updateCommentInput(blog.id, $event)"
-          ></textarea>
-          <button 
-            pButton 
-            type="button" 
-            label="Save Comment" 
-            icon="pi pi-check"
-            class="p-button-sm"
-            (click)="saveComment(blog.id)"
-          ></button>
-        </div>
-      </div>
-    </p-card>
+            <!-- No Comments Message -->
+            @if (!blog.blogComments || blog.blogComments.length === 0) {
+              <p class="no-comments">
+                No comments yet. Be the first to comment!
+              </p>
+            }
+
+            <!-- Add New Comment Section -->
+            <div class="add-comment-section">
+              <textarea 
+                placeholder="Write a comment..." 
+                class="comment-input"
+                (keyup)="updateCommentInput(blog.id, $event)"
+              ></textarea>
+              <button 
+                pButton 
+                type="button" 
+                label="Save Comment" 
+                icon="pi pi-check"
+                class="p-button-sm"
+                (click)="saveComment(blog.id)"
+              ></button>
+            </div>
+          </div>
+        }
+      </p-card>
+    }
   </div>
 
   <!-- No Blogs Message -->
-  <div *ngIf="blogs.length === 0" class="no-blogs-message">
-    <p>No blogs found. Check back later!</p>
-  </div>
+  @if (blogs.length === 0) {
+    <div class="no-blogs-message">
+      <p>No blogs found. Check back later!</p>
+    </div>
+  }
 </div>
