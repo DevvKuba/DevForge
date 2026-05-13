@@ -9,6 +9,7 @@ import { Member } from '../_models/member';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MembersService } from '../_services/members.service';
 import { AccountService } from '../_services/account.service';
+import { BlogComment } from '../_models/blogComment';
 
 @Component({
   selector: 'app-blogs',
@@ -32,7 +33,8 @@ export class BlogsComponent implements OnInit {
   blogs: Blog[] = [];
   members: Member[] = [];
   filteredMembers: Member[] = [];
-  openBlogComments: Blog[] = [];
+  openBlogComments: BlogComment[] = [];
+  openCommentsBlogId: number | null = null;
   selectedMember: Member | null = null;
   blogCommentsOpen: boolean = false;
 
@@ -73,11 +75,13 @@ export class BlogsComponent implements OnInit {
   }
 
   isCommentsSectionOpen(blog: Blog) : boolean {
-
+    return this.openCommentsBlogId == blog.id;
   }
 
   toggleComments(blog: Blog){
-    // this.blogCommentsOpen = true;
+    this.openBlogComments = blog.blogComments;
+    this.openCommentsBlogId = blog.id;
+    this.blogCommentsOpen = true;
 
   }
 
