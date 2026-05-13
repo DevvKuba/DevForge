@@ -3,5 +3,6 @@ export interface BlogComment {
   createdAt: Date,
   updatedAt: Date,
   content: string,
+  userId: number,
   blogId: number
 }

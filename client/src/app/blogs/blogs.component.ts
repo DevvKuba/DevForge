@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { Member } from '../_models/member';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MembersService } from '../_services/members.service';
+import { AccountService } from '../_services/account.service';
 
 @Component({
   selector: 'app-blogs',
@@ -24,12 +25,16 @@ import { MembersService } from '../_services/members.service';
 export class BlogsComponent implements OnInit {
   private blogService = inject(BlogService);
   private memberService = inject(MembersService);
+  private accountService = inject(AccountService);
+
   pageNumber : number = 1;
   pageSize : number = 5;
   blogs: Blog[] = [];
   members: Member[] = [];
   filteredMembers: Member[] = [];
+  openBlogComments: Blog[] = [];
   selectedMember: Member | null = null;
+  blogCommentsOpen: boolean = false;
 
   private memberResultsSync = effect(() => {
     const paginatedMembers = this.memberService.paginatedResult();
@@ -60,9 +65,11 @@ export class BlogsComponent implements OnInit {
         );
   }
 
-  // applicable for both published blogs and corresponding blog comments
-  isCurrentUserAuthor(userId: number) : boolean{
-
+  isOwner(userId : number) : boolean {
+    if(userId == this.accountService.currentUser()?.id){
+      return true;
+    }
+    return false;
   }
 
   isCommentsSectionOpen(blog: Blog) : boolean {
@@ -70,6 +77,7 @@ export class BlogsComponent implements OnInit {
   }
 
   toggleComments(blog: Blog){
+    // this.blogCommentsOpen = true;
 
   }
 
