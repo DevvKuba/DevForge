@@ -36,6 +36,8 @@ export class BlogsComponent implements OnInit {
   openBlogComments: BlogComment[] = [];
   openCommentsBlogId: number | null = null;
   selectedMember: Member | null = null;
+  commentContent = '';
+  context = '';
   blogCommentsOpen: boolean = false;
 
   private memberResultsSync = effect(() => {
@@ -79,14 +81,19 @@ export class BlogsComponent implements OnInit {
   }
 
   toggleComments(blog: Blog){
+    if(this.openCommentsBlogId == blog.id){
+      this.openCommentsBlogId = null;
+      this.openBlogComments = [];
+      return;
+    }
     this.openBlogComments = blog.blogComments;
     this.openCommentsBlogId = blog.id;
     this.blogCommentsOpen = true;
 
   }
 
-  updateCommentInput(blog: Blog, $event : any) {
-
+  addBlogComment(blogId: number, content: string) {
+    
   }
 
   saveComment(blog: Blog) {
