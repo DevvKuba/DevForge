@@ -17,7 +17,6 @@ export class BlogService {
 
   gatherAllBlogs(pageNumber: number, pageSize: number) : Observable<any> {
     let params = setPaginationHeaders(pageNumber, pageSize);
-
     return this.http.get<Blog[]>(`${this.baseUrl}blogs/GatherAllBlogs`, {observe: 'response', params});
   }
 

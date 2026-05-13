@@ -14,7 +14,7 @@ namespace API.Controllers
     public class BlogsController(IUnitOfWork unitOfWork, IMapper mapper) : BaseApiController
     {
         [HttpGet("GatherAllBlogs")]
-        public async Task<ActionResult<List<BlogDto>>> GatherAllBlogsAsync(BlogParams blogParams)
+        public async Task<ActionResult<List<BlogDto>>> GatherAllBlogsAsync([FromQuery] BlogParams blogParams)
         {
             var blogs = await unitOfWork.BlogRepository.GetAllBlogsAsync(blogParams);
 
@@ -27,7 +27,7 @@ namespace API.Controllers
         }
 
         [HttpGet("GatherUserBlogs")]
-        public async Task<ActionResult<List<BlogDto>>> GatherAllSpecificUserBlogsAsync(BlogParams blogParams)
+        public async Task<ActionResult<List<BlogDto>>> GatherAllSpecificUserBlogsAsync([FromQuery] BlogParams blogParams)
         {
             if (blogParams.UserId == null) return NotFound("");
 
