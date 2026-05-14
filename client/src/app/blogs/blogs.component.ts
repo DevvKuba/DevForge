@@ -10,7 +10,6 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MembersService } from '../_services/members.service';
 import { AccountService } from '../_services/account.service';
 import { BlogComment } from '../_models/blogComment';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-blogs',
@@ -28,7 +27,6 @@ export class BlogsComponent implements OnInit {
   private blogService = inject(BlogService);
   private memberService = inject(MembersService);
   private accountService = inject(AccountService);
-  private toastr = inject(ToastrService);
 
   pageNumber : number = 1;
   pageSize : number = 5;
@@ -78,13 +76,11 @@ export class BlogsComponent implements OnInit {
     const description = this.newBlogDescription.trim();
 
     if(!title || !description){
-      this.toastr.warning('Title and description are required.');
       return;
     }
 
     const currentUserId = this.accountService.currentUser()?.id;
     if(currentUserId === null || currentUserId === undefined){
-      this.toastr.error('You must be logged in to create a blog.');
       return;
     }
 
@@ -106,9 +102,7 @@ export class BlogsComponent implements OnInit {
         this.newBlogTitle = '';
         this.newBlogDescription = '';
         this.isCreatingBlog = false;
-        this.toastr.success('Blog created.');
-      },
-      error: () => this.toastr.error('Failed to create blog.')
+      }
     });
   }
 
@@ -129,7 +123,6 @@ export class BlogsComponent implements OnInit {
     const description = this.editBlogDescription.trim();
 
     if(!title || !description){
-      this.toastr.warning('Title and description are required.');
       return;
     }
 
@@ -144,9 +137,7 @@ export class BlogsComponent implements OnInit {
       next: () => {
         this.blogs = this.blogs.map(b => b.id === blog.id ? payload : b);
         this.cancelEditBlog();
-        this.toastr.success('Blog updated.');
-      },
-      error: () => this.toastr.error('Failed to update blog.')
+      }
     });
   }
 
