@@ -20,7 +20,7 @@ namespace API.Controllers
 
             if (blogs.Count == 0 | blogs == null)
             {
-                return NotFound("No blogs found");
+                return NotFound(false);
             }
 
             return Ok(blogs);
@@ -29,13 +29,13 @@ namespace API.Controllers
         [HttpGet("GatherUserBlogs")]
         public async Task<ActionResult<List<BlogDto>>> GatherAllSpecificUserBlogsAsync([FromQuery] BlogParams blogParams)
         {
-            if (blogParams.UserId == null) return NotFound("");
+            if (blogParams.UserId == null) return NotFound(false);
 
             var blogs = await unitOfWork.BlogRepository.GetAllUserBlogsAsync(blogParams);
 
             if (blogs.Count == 0 | blogs == null)
             {
-                return NotFound("This user has not posted any blogs");
+                return NotFound(false);
             }
 
             return Ok(blogs);
@@ -53,9 +53,9 @@ namespace API.Controllers
 
             if (!await unitOfWork.Complete())
             {
-                return BadRequest("Not able to update user blog comment");
+                return BadRequest(false);
             }
-            return Ok("Correctly updated user blog comment");
+            return Ok(true);
         }
 
         [HttpPut("UpdateBlogPost")]
@@ -63,16 +63,16 @@ namespace API.Controllers
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(updatedBlog.Id);
 
-            if (blog == null) return NotFound("Blog to updage had not been found");
+            if (blog == null) return NotFound(false);
 
             mapper.Map(updatedBlog, blog);
             blog.UpdatedAt = DateTime.UtcNow;
 
             if (!await unitOfWork.Complete())
             {
-                return BadRequest("Not able to update user blog");
+                return BadRequest(false);
             }
-            return Ok("Correctly updated user blog");
+            return Ok(true);
         }
 
         [HttpPost("AddBlogLike")]
@@ -80,11 +80,11 @@ namespace API.Controllers
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(userBlog.Id);
 
-            if (blog == null) return NotFound("User blog not found");
+            if (blog == null) return NotFound(false);
 
             await unitOfWork.BlogLikeRepository.LikeUserBlogAsync(blog);
 
-            return Ok("User blog has been liked");
+            return Ok(true);
         }
 
         [HttpPost("AddBlogComment")]
@@ -92,15 +92,15 @@ namespace API.Controllers
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdWithLikesAsync(blogComment.BlogId);
 
-            if (blog == null) return NotFound("User blog not found");
+            if (blog == null) return NotFound(false);
 
             await unitOfWork.BlogCommentRepository.AddBlogCommentAsync(blog, blogComment.Content);
 
             if (!await unitOfWork.Complete())
             {
-                return BadRequest("Blog comment was not added successfully");
+                return BadRequest(false);
             }
-            return Ok("New blog comment was successfully added");
+            return Ok(true);
         }
 
         [HttpPost("AddBlog")]
@@ -110,15 +110,15 @@ namespace API.Controllers
 
             var postingUser = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
 
-            if (postingUser == null) return NotFound("Blog posting user was not found");
+            if (postingUser == null) return NotFound(false);
 
             await unitOfWork.BlogRepository.AddBlogAsync(postingUser, newBlog.Title, newBlog.Description);
 
             if (!await unitOfWork.Complete())
             {
-                return BadRequest("Blog was not added successfully");
+                return BadRequest(false);
             }
-            return Ok($"New blog titled: '{newBlog.Title}', has been published");
+            return Ok(true);
         }
 
         [HttpDelete("DeleteBlog")]
@@ -126,15 +126,15 @@ namespace API.Controllers
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(userBlog.Id);
 
-            if (blog == null) return NotFound("Blog for deletion was not found");
+            if (blog == null) return NotFound(false);
 
             unitOfWork.BlogRepository.RemoveBlog(blog);
 
             if (!await unitOfWork.Complete())
             {
-                return BadRequest("Not able to delete the blog post");
+                return BadRequest(false);
             }
-            return Ok("Successfully deleted the blog post");
+            return Ok(true);
         }
 
         [HttpDelete("UndoBlogLike")]
@@ -142,23 +142,23 @@ namespace API.Controllers
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdWithLikesAsync(userBlog.Id);
 
-            if (blog == null) return NotFound("User blog not found");
+            if (blog == null) return NotFound(false);
 
             var user = await unitOfWork.UserRepository.GetUserByIdAsync(userBlog.Id);
 
-            if (user == null) return NotFound("User not found");
+            if (user == null) return NotFound(false);
 
             var userBlogLike = unitOfWork.BlogLikeRepository.GetUserBlogLike(user, blog);
 
-            if (userBlogLike == null) return NotFound("User has not liked this blog post");
+            if (userBlogLike == null) return NotFound(false);
 
             unitOfWork.BlogLikeRepository.DeleteUserBlogLike(userBlogLike);
 
             if(!await unitOfWork.Complete())
             {
-                return BadRequest("Not able to undo the like of the blog post");
+                return BadRequest(false);
             }
-            return Ok("Successfully deleted the like for the blog post");
+            return Ok(true);
         }
 
         [HttpDelete("DeleteBlogComment")]
@@ -166,15 +166,15 @@ namespace API.Controllers
         {
             var blogComment = await unitOfWork.BlogCommentRepository.GetBlogCommentByIdAsync(deletionBlogComment.Id);
 
-            if (blogComment == null) return NotFound("Blog comment for deletion not found");
+            if (blogComment == null) return NotFound(false);
 
             unitOfWork.BlogCommentRepository.DeleteBlogCommentAsync(blogComment);
 
             if(!await unitOfWork.Complete())
             {
-                return BadRequest("Blog comment was not removed successfully");
+                return BadRequest(false);
             }
-            return Ok("Blog comment was removed successfully");
+            return Ok(true);
         }
     }
 }
