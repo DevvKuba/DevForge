@@ -23,7 +23,7 @@ import { BlogComment } from '../_models/blogComment';
   templateUrl: './blogs.component.html',
   styleUrl: './blogs.component.css'
 })
-export class BlogsComponent implements OnInit, OnDestroy {
+export class BlogsComponent implements OnInit {
   private blogService = inject(BlogService);
   private memberService = inject(MembersService);
   private accountService = inject(AccountService);
@@ -41,38 +41,11 @@ export class BlogsComponent implements OnInit, OnDestroy {
   blogCommentsOpen: boolean = false;
 
   ngOnInit(): void {
-    this.memberService.getMembers();
     this.blogService.gatherAllBlogs(this.pageNumber, this.pageSize).subscribe({
       next: (response) => {
         this.blogs = response.body;
       }, 
     })
-  }
-
-  ngOnDestroy(): void {
-    this.memberService.paginatedResult.set(null);
-  }
-
-  private memberResultsSync = effect(() => {
-    const paginatedMembers = this.memberService.paginatedResult();
-    console.log('Effect fired, paginatedMembers:', paginatedMembers);
-
-    if (paginatedMembers?.items) {
-      this.members = paginatedMembers.items;
-      this.filteredMembers = paginatedMembers.items;
-    }
-  });
-
-  searchMembers(event: any): void {
-     console.log('Members array:', this.members);
-    const query = (event.query ?? '').toLowerCase().trim();
-
-    this.filteredMembers = !query
-      ? this.members
-      : this.members.filter(member =>
-          member.username.toLowerCase().includes(query) ||
-          member.specialization.toLowerCase().includes(query)
-        );
   }
 
   isOwner(userId : number) : boolean {

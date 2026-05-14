@@ -13,44 +13,6 @@
         />
       </div>
 
-      <!-- Filter by Member -->
-      <div class="filter-item">
-        <label for="memberFilter">Filter by Author:</label>
-        <p-auto-complete 
-          [(ngModel)]="selectedMember"
-          [suggestions]="filteredMembers"
-          (completeMethod)="searchMembers($event)"
-          [dropdown]="true"
-          placeholder="Select a member"
-          class="member-dropdown"
-        >
-          <ng-template pTemplate="item" let-option>
-            <div class="member-option">
-              <img 
-                [src]="option.photoUrl" 
-                alt="{{option.username}}" 
-                class="member-thumbnail"
-                [title]="option.specialization"
-              />
-              <span class="member-name">{{option.username}}</span>
-            </div>
-          </ng-template>
-          <ng-template pTemplate="selectedItem" let-option>
-            @if (option) {
-              <div class="member-option">
-                <img 
-                  [src]="option.photoUrl" 
-                  alt="{{option.username}}" 
-                  class="member-thumbnail"
-                  [title]="option.specialization"
-                />
-                <span class="member-name">{{option.username}}</span>
-              </div>
-            }
-          </ng-template>
-        </p-auto-complete>
-      </div>
-
       <!-- Clear Filters Button -->
       <div class="filter-item">
         <button 
