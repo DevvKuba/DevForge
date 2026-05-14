@@ -185,62 +185,11 @@ export class BlogsComponent implements OnInit {
   }
 
   addBlogComment(blogId: number, content: string) {
-    const trimmedContent = content.trim();
-    if(!trimmedContent){
-      this.toastr.warning('Comment cannot be empty.');
-      return;
-    }
-
-    const currentUserId = this.accountService.currentUser()?.id;
-    if(currentUserId === null || currentUserId === undefined){
-      this.toastr.error('You must be logged in to comment.');
-      return;
-    }
-
-    const payload: BlogComment = {
-      id: 0,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      content: trimmedContent,
-      userId: Number(currentUserId),
-      blogId
-    };
-
-    this.blogService.addBlogComment(payload).subscribe({
-      next: (createdComment: BlogComment) => {
-        const commentToAdd = createdComment && typeof createdComment === 'object' && 'id' in createdComment
-          ? createdComment
-          : payload;
-
-        this.blogs = this.blogs.map(blog => {
-          if(blog.id !== blogId) return blog;
-          return {
-            ...blog,
-            blogComments: [...(blog.blogComments || []), commentToAdd]
-          };
-        });
-
-        this.commentContentByBlog[blogId] = '';
-        this.toastr.success('Comment added.');
-      },
-      error: () => this.toastr.error('Failed to add comment.')
-    });
+      
   }
 
   deleteBlogComment(blog: Blog, comment: BlogComment): void {
-    this.blogService.deleteBlogComment(comment).subscribe({
-      next: () => {
-        this.blogs = this.blogs.map(b => {
-          if(b.id !== blog.id) return b;
-          return {
-            ...b,
-            blogComments: b.blogComments.filter(c => c.id !== comment.id)
-          };
-        });
-        this.toastr.success('Comment deleted.');
-      },
-      error: () => this.toastr.error('Failed to delete comment.')
-    });
+    
   }
 
   saveComment(blog: Blog) {

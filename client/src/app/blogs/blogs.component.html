@@ -3,7 +3,7 @@
     <button
       pButton
       type="button"
-      [label]="isCreatingBlog ? 'Cancel' : 'Create Blog'"
+      [label]="isCreatingBlog ? 'Close' : 'Create Blog'"
       [icon]="isCreatingBlog ? 'pi pi-times' : 'pi pi-plus'"
       class="p-button-sm"
       (click)="toggleCreateBlogForm()"
@@ -72,14 +72,17 @@
         <!-- Header with Title and Delete Button -->
         <ng-template pTemplate="header">
           <div class="blog-header">
-            <h3 class="blog-title">{{blog.title}}</h3>
+            <div class="blog-title-wrap">
+              <h3 class="blog-title">{{blog.title}}</h3>
+              <p class="blog-meta">Published {{blog.publishedAt | date:'mediumDate'}}</p>
+            </div>
             @if (isOwner(blog.userId)) {
               <div class="owner-actions">
                 <button
                   pButton
                   type="button"
                   icon="pi pi-pencil"
-                  class="p-button-rounded p-button-text p-button-sm"
+                  class="p-button-rounded p-button-text p-button-sm owner-action-btn owner-edit-btn"
                   [title]="'Edit blog'"
                   (click)="startEditBlog(blog)"
                 ></button>
@@ -87,7 +90,7 @@
                   pButton
                   type="button"
                   icon="pi pi-trash"
-                  class="p-button-rounded p-button-danger p-button-text delete-btn"
+                  class="p-button-rounded p-button-text p-button-sm owner-action-btn owner-delete-btn"
                   [title]="'Delete blog'"
                   (click)="deleteBlog(blog)"
                 ></button>
@@ -99,41 +102,50 @@
         <!-- Blog Content -->
         <div class="blog-content">
           @if (isEditingBlog(blog)) {
-            <input
-              type="text"
-              name="editBlogTitle"
-              [(ngModel)]="editBlogTitle"
-              placeholder="Blog title"
-              class="search-input"
-            />
-            <textarea
-              name="editBlogDescription"
-              [(ngModel)]="editBlogDescription"
-              placeholder="Blog description"
-              class="comment-input"
-            ></textarea>
-            <div class="edit-actions">
-              <button
-                pButton
-                type="button"
-                label="Save"
-                icon="pi pi-check"
-                class="p-button-sm"
-                (click)="saveBlogEdit(blog)"
-              ></button>
-              <button
-                pButton
-                type="button"
-                label="Cancel"
-                icon="pi pi-times"
-                class="p-button-sm p-button-secondary"
-                (click)="cancelEditBlog()"
-              ></button>
+            <div class="edit-panel">
+              <div class="edit-field">
+                <label for="editBlogTitle">Title</label>
+                <input
+                  id="editBlogTitle"
+                  type="text"
+                  name="editBlogTitle"
+                  [(ngModel)]="editBlogTitle"
+                  placeholder="Blog title"
+                  class="search-input edit-input"
+                />
+              </div>
+              <div class="edit-field">
+                <label for="editBlogDescription">Description</label>
+                <textarea
+                  id="editBlogDescription"
+                  name="editBlogDescription"
+                  [(ngModel)]="editBlogDescription"
+                  placeholder="Blog description"
+                  class="comment-input edit-input"
+                ></textarea>
+              </div>
+              <div class="edit-actions">
+                <button
+                  pButton
+                  type="button"
+                  label="Save changes"
+                  icon="pi pi-check"
+                  class="p-button-sm"
+                  (click)="saveBlogEdit(blog)"
+                ></button>
+                <button
+                  pButton
+                  type="button"
+                  label="Discard"
+                  icon="pi pi-times"
+                  class="p-button-sm p-button-secondary"
+                  (click)="cancelEditBlog()"
+                ></button>
+              </div>
             </div>
           } @else {
             <p class="blog-description">{{blog.description}}</p>
           }
-          <p class="blog-date">Published: {{blog.publishedAt | date:'short'}}</p>
         </div>
 
         <!-- Blog Actions (Likes, Comments, etc) -->
@@ -144,10 +156,11 @@
               pButton 
               type="button" 
               icon="pi pi-heart-fill" 
-              class="p-button-rounded p-button-text like-btn"
+              class="p-button-rounded p-button-text action-icon-btn like-btn"
               [title]="'Like this blog'"
             ></button>
             <span class="action-count">{{blog.blogLikes.length || 0}}</span>
+            <span class="action-label">Likes</span>
           </div>
 
           <!-- Comments Section -->
@@ -156,11 +169,12 @@
               pButton 
               type="button" 
               icon="pi pi-comments" 
-              class="p-button-rounded p-button-text comment-btn"
+              class="p-button-rounded p-button-text action-icon-btn comment-btn"
               [title]="'View comments'"
               (click)="toggleComments(blog)"
             ></button>
             <span class="action-count">{{blog.blogComments.length || 0}}</span>
+            <span class="action-label">Comments</span>
           </div>
         </div>
 
@@ -179,7 +193,7 @@
                           pButton 
                           type="button" 
                           icon="pi pi-trash" 
-                          class="p-button-rounded p-button-danger p-button-text p-button-sm delete-comment-btn"
+                          class="p-button-rounded p-button-text p-button-sm delete-comment-btn"
                           [title]="'Delete comment'"
                           (click)="deleteBlogComment(blog, comment)"
                         ></button>
@@ -210,7 +224,7 @@
               <button
                 pButton
                 type="button"
-                label="Save Comment"
+                label="Post comment"
                 icon="pi pi-check"
                 class="p-button-sm"
                 (click)="addBlogComment(blog.id, commentContentByBlog[blog.id] || '')"
