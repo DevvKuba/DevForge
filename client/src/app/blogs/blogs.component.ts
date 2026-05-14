@@ -101,12 +101,8 @@ export class BlogsComponent implements OnInit {
     };
 
     this.blogService.addBlog(payload).subscribe({
-      next: (createdBlog: Blog) => {
-        if(createdBlog && typeof createdBlog === 'object' && 'id' in createdBlog){
-          this.blogs = [createdBlog, ...this.blogs];
-        } else {
-          this.refreshBlogs();
-        }
+      next: () => {
+        this.refreshBlogs();
         this.newBlogTitle = '';
         this.newBlogDescription = '';
         this.isCreatingBlog = false;
@@ -155,17 +151,7 @@ export class BlogsComponent implements OnInit {
   }
 
   deleteBlog(blog: Blog): void {
-    this.blogService.deleteBlog(blog).subscribe({
-      next: () => {
-        this.blogs = this.blogs.filter(b => b.id !== blog.id);
-        if(this.openCommentsBlogId === blog.id){
-          this.openCommentsBlogId = null;
-          this.openBlogComments = [];
-        }
-        this.toastr.success('Blog deleted.');
-      },
-      error: () => this.toastr.error('Failed to delete blog.')
-    });
+
   }
 
   isCommentsSectionOpen(blog: Blog) : boolean {

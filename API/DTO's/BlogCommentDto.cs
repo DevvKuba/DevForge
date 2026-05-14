@@ -4,6 +4,8 @@
     {
         public int Id { get; set; }
 
+        public int? UserId { get; set; } = null;
+
         public DateTime CreatedAt { get; private set; }
 
         public DateTime UpdatedAt { get; set; }

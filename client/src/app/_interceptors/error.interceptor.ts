@@ -39,6 +39,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             const navigationExtras: NavigationExtras = {state: {error: error.error}};
             router.navigateByUrl('/server-error', navigationExtras);
             break;
+
           default:
             toastr.error('Something unexpected went wrong');
             break;
