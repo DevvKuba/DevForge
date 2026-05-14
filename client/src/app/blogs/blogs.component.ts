@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { BlogService } from '../_services/blog.service';
 import { Blog } from '../_models/blog';
 import { CardModule } from 'primeng/card';
@@ -23,7 +23,7 @@ import { BlogComment } from '../_models/blogComment';
   templateUrl: './blogs.component.html',
   styleUrl: './blogs.component.css'
 })
-export class BlogsComponent implements OnInit {
+export class BlogsComponent implements OnInit, OnDestroy {
   private blogService = inject(BlogService);
   private memberService = inject(MembersService);
   private accountService = inject(AccountService);
@@ -40,8 +40,22 @@ export class BlogsComponent implements OnInit {
   context = '';
   blogCommentsOpen: boolean = false;
 
+  ngOnInit(): void {
+    this.memberService.getMembers();
+    this.blogService.gatherAllBlogs(this.pageNumber, this.pageSize).subscribe({
+      next: (response) => {
+        this.blogs = response.body;
+      }, 
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.memberService.paginatedResult.set(null);
+  }
+
   private memberResultsSync = effect(() => {
     const paginatedMembers = this.memberService.paginatedResult();
+    console.log('Effect fired, paginatedMembers:', paginatedMembers);
 
     if (paginatedMembers?.items) {
       this.members = paginatedMembers.items;
@@ -49,16 +63,8 @@ export class BlogsComponent implements OnInit {
     }
   });
 
-  ngOnInit(): void {
-    this.memberService.getMembers();
-    this.blogService.gatherAllBlogs(this.pageNumber, this.pageSize).subscribe({
-      next: (response) => {
-        this.blogs = response.data;
-      }, 
-    })
-  }
-
   searchMembers(event: any): void {
+     console.log('Members array:', this.members);
     const query = (event.query ?? '').toLowerCase().trim();
 
     this.filteredMembers = !query
