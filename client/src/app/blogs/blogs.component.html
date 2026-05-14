@@ -1,4 +1,43 @@
 <div class="blogs-container">
+  <div class="blogs-toolbar">
+    <button
+      pButton
+      type="button"
+      [label]="isCreatingBlog ? 'Cancel' : 'Create Blog'"
+      [icon]="isCreatingBlog ? 'pi pi-times' : 'pi pi-plus'"
+      class="p-button-sm"
+      (click)="toggleCreateBlogForm()"
+    ></button>
+  </div>
+
+  @if (isCreatingBlog) {
+    <div class="create-blog-section">
+      <input
+        type="text"
+        name="newBlogTitle"
+        [(ngModel)]="newBlogTitle"
+        placeholder="Blog title"
+        class="search-input"
+      />
+
+      <textarea
+        name="newBlogDescription"
+        [(ngModel)]="newBlogDescription"
+        placeholder="Blog description"
+        class="comment-input"
+      ></textarea>
+
+      <button
+        pButton
+        type="button"
+        label="Publish"
+        icon="pi pi-check"
+        class="p-button-sm"
+        (click)="createBlog()"
+      ></button>
+    </div>
+  }
+
   <!-- Filters Section -->
   <div class="filters-section">
     <div class="filter-row">
@@ -35,20 +74,65 @@
           <div class="blog-header">
             <h3 class="blog-title">{{blog.title}}</h3>
             @if (isOwner(blog.userId)) {
-              <button 
-                pButton 
-                type="button" 
-                icon="pi pi-trash" 
-                class="p-button-rounded p-button-danger p-button-text delete-btn"
-                [title]="'Delete blog'"
-              ></button>
+              <div class="owner-actions">
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-text p-button-sm"
+                  [title]="'Edit blog'"
+                  (click)="startEditBlog(blog)"
+                ></button>
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-danger p-button-text delete-btn"
+                  [title]="'Delete blog'"
+                  (click)="deleteBlog(blog)"
+                ></button>
+              </div>
             }
           </div>
         </ng-template>
 
         <!-- Blog Content -->
         <div class="blog-content">
-          <p class="blog-description">{{blog.description}}</p>
+          @if (isEditingBlog(blog)) {
+            <input
+              type="text"
+              name="editBlogTitle"
+              [(ngModel)]="editBlogTitle"
+              placeholder="Blog title"
+              class="search-input"
+            />
+            <textarea
+              name="editBlogDescription"
+              [(ngModel)]="editBlogDescription"
+              placeholder="Blog description"
+              class="comment-input"
+            ></textarea>
+            <div class="edit-actions">
+              <button
+                pButton
+                type="button"
+                label="Save"
+                icon="pi pi-check"
+                class="p-button-sm"
+                (click)="saveBlogEdit(blog)"
+              ></button>
+              <button
+                pButton
+                type="button"
+                label="Cancel"
+                icon="pi pi-times"
+                class="p-button-sm p-button-secondary"
+                (click)="cancelEditBlog()"
+              ></button>
+            </div>
+          } @else {
+            <p class="blog-description">{{blog.description}}</p>
+          }
           <p class="blog-date">Published: {{blog.publishedAt | date:'short'}}</p>
         </div>
 
@@ -97,6 +181,7 @@
                           icon="pi pi-trash" 
                           class="p-button-rounded p-button-danger p-button-text p-button-sm delete-comment-btn"
                           [title]="'Delete comment'"
+                          (click)="deleteBlogComment(blog, comment)"
                         ></button>
                       }
                     </div>
@@ -117,18 +202,10 @@
             <div class="add-comment-section">
               <textarea
                 name="commentContent"
-                [(ngModel)]="commentContent"
+                [(ngModel)]="commentContentByBlog[blog.id]"
                 placeholder="Write a comment..."
                 class="comment-input"
               ></textarea>
-
-              <input
-                name="context"
-                [(ngModel)]="context"
-                type="text"
-                placeholder="Context"
-                class="context-input"
-              />
 
               <button
                 pButton
@@ -136,7 +213,7 @@
                 label="Save Comment"
                 icon="pi pi-check"
                 class="p-button-sm"
-                (click)="addBlogComment(blog.id, commentContent)"
+                (click)="addBlogComment(blog.id, commentContentByBlog[blog.id] || '')"
               ></button>
             </div>
           </div>

@@ -22,7 +22,7 @@ export class BlogService {
 
   gatherSpecificUserBlogs(userId: number, pageNumber: number, pageSize: number) : Observable<any> {
     let params = setPaginationHeaders(pageNumber, pageSize);
-    params.append("UserId", userId);
+    params = params.append("UserId", userId);
 
     return this.http.get<Blog[]>(`${this.baseUrl}blogs/GatherUserBlogs`, {observe: 'response', params});
   }
