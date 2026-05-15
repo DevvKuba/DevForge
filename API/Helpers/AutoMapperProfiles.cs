@@ -22,6 +22,10 @@ namespace API.Helpers
             CreateMap<BlogLike, BlogLikeDto>();
             CreateMap<Photo, PhotoDto>();
             CreateMap<Photo, PhotoForApprovalDto>();
+
+            CreateMap<BlogDto, Blog>();
+            CreateMap<BlogCommentDto, BlogComment>();
+            CreateMap<BlogLikeDto, BlogLike>();
             CreateMap<MemberUpdateDto, AppUser>();
             CreateMap<RegisterDto, AppUser>();
             CreateMap<string, DateOnly>().ConvertUsing(s => DateOnly.Parse(s));
