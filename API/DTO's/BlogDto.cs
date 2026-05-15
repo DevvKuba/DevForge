@@ -18,6 +18,8 @@ namespace API.DTO_s
 
         public int UserId { get; set; }
 
+        public int? AlteringUserId { get; set; }
+
         public List<BlogLikeDto> BlogLikes { get; set; } = [];
 
         public List<BlogCommentDto> BlogComments { get; set; } = [];

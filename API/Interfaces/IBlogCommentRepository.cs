@@ -6,7 +6,7 @@ namespace API.Interfaces
     {
         Task<BlogComment?> GetBlogCommentByIdAsync(int id);
 
-        Task AddBlogCommentAsync(Blog blog, int userId, string content);
+        Task AddBlogCommentAsync(Blog blog, int? userId, string content);
 
         void DeleteBlogCommentAsync(BlogComment blogComment);
     }

@@ -82,7 +82,7 @@ namespace API.Controllers
 
             if (blog == null) return NotFound(false);
 
-            await unitOfWork.BlogLikeRepository.LikeUserBlogAsync(blog);
+            await unitOfWork.BlogLikeRepository.LikeUserBlogAsync(blog, userBlog.UserId);
 
             return Ok(true);
         }
@@ -92,9 +92,9 @@ namespace API.Controllers
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdWithLikesAsync(blogComment.BlogId);
 
-            if (blog == null) return NotFound(false);
+            if (blog == null || blogComment.UserId == null) return NotFound(false);
 
-            await unitOfWork.BlogCommentRepository.AddBlogCommentAsync(blog, blogComment.Content);
+            await unitOfWork.BlogCommentRepository.AddBlogCommentAsync(blog, blogComment.UserId, blogComment.Content);
 
             if (!await unitOfWork.Complete())
             {

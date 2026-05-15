@@ -11,7 +11,7 @@ namespace API.Data
             return targetBlog.BlogLikes.Where(l => l.Blog.UserId == targetUser.Id).FirstOrDefault();
         }
 
-        public async Task LikeUserBlogAsync(Blog blog, int userId)
+        public async Task LikeUserBlogAsync(Blog blog, int? userId)
         {
             var blogLike = new BlogLike
             {
