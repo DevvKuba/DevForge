@@ -82,7 +82,7 @@ namespace API.Controllers
 
             if (blog == null) return NotFound(false);
 
-            await unitOfWork.BlogLikeRepository.LikeUserBlogAsync(blog, userBlog.UserId);
+            await unitOfWork.BlogLikeRepository.LikeUserBlogAsync(blog);
 
             return Ok(true);
         }

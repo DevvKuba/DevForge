@@ -18,7 +18,7 @@ namespace API.DTO_s
 
         public int UserId { get; set; }
 
-        public int? AlteringUserId { get; set; }
+        public int? InteractingUserId { get; set; }
 
         public List<BlogLikeDto> BlogLikes { get; set; } = [];
 
