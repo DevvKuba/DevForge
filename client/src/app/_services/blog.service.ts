@@ -4,7 +4,7 @@ import { PaginatedResult } from '../_models/pagination';
 import { Blog } from '../_models/blog';
 import { Observable } from 'rxjs';
 import { setPaginationHeaders } from './paginationHelper';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { BlogComment } from '../_models/blogComment';
 
 @Injectable({
@@ -25,6 +25,10 @@ export class BlogService {
     params = params.append("UserId", userId);
 
     return this.http.get<Blog[]>(`${this.baseUrl}blogs/GatherUserBlogs`, {observe: 'response', params});
+  }
+
+  isBlogLikedByUser(blogId: number, interactingUserId: number) : Observable<any> {
+    return this.http.get(this.baseUrl + `blogs/CheckIfBlogIsLikedByUser?blogId=${blogId}&interactingUserId=${interactingUserId}`);
   }
 
   updateBlogComment(newBlogComment: BlogComment) : Observable<any> {

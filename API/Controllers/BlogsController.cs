@@ -42,7 +42,7 @@ namespace API.Controllers
         }
 
         [HttpGet("CheckIfBlogIsLikedByUser")]
-        public async Task<ActionResult<bool>> HasBlogBeenLikedByUserAsync(BlogDto capturedBlog)
+        public async Task<ActionResult<bool>> HasBlogBeenLikedByUserAsync(int blogId, int interactingUserId)
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(capturedBlog.Id);
 
