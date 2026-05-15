@@ -181,7 +181,14 @@ export class BlogsComponent implements OnInit {
   toggleLike(blog: Blog){
     blog.interactingUserId = this.accountService.currentUser()?.id ?? null;
 
-    
+    if(blog.interactingUserId == null) return;
+
+    if(this.blogService.isBlogLikedByUser(blog.id, blog.interactingUserId)){
+      this.blogService.undoBlogLike(blog);
+    } else {
+      this.blogService.addBlogLike(blog);
+    }
+    this.refreshBlogs();
   }
 
   private refreshBlogs(): void {
