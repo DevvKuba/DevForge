@@ -142,7 +142,11 @@ export class BlogsComponent implements OnInit {
   }
 
   deleteBlog(blog: Blog): void {
-
+    this.blogService.deleteBlog(blog).subscribe({
+      next: () => {
+        this.refreshBlogs();
+      }
+    })
   }
 
   isCommentsSectionOpen(blog: Blog) : boolean {
