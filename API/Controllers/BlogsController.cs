@@ -41,6 +41,18 @@ namespace API.Controllers
             return Ok(blogs);
         }
 
+        [HttpGet("CheckIfBlogIsLikedByUser")]
+        public async Task<ActionResult<bool>> HasBlogBeenLikedByUserAsync(BlogDto capturedBlog)
+        {
+            var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(capturedBlog.Id);
+
+            if (blog == null || capturedBlog.InteractingUserId == null) return NotFound(false);
+
+            var interactingUser = await unitOfWork.UserRepository.GetUserByIdAsync((int)capturedBlog.InteractingUserId);
+
+
+        }
+
         [HttpPut("UpdateBlogComment")]
         public async Task<ActionResult> UpdateCurrentBlogCommentAsync(BlogCommentDto updatedBlogComment)
         {

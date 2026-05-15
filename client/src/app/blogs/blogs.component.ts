@@ -178,12 +178,10 @@ export class BlogsComponent implements OnInit {
 
   }
 
-  addLike(blog: Blog){
+  toggleLike(blog: Blog){
     blog.interactingUserId = this.accountService.currentUser()?.id ?? null;
 
-    this.blogService.addBlogLike(blog).subscribe({
-      next: () => { this.refreshBlogs();}
-    })
+    
   }
 
   private refreshBlogs(): void {
