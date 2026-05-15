@@ -91,7 +91,8 @@ export class BlogsComponent implements OnInit {
       publishedAt: new Date(),
       updatedAt: new Date(),
       isDeleted: false,
-      userId: Number(currentUserId),
+      userId: currentUserId,
+      interactingUserId: null,
       blogLikes: [],
       blogComments: []
     };
@@ -178,7 +179,11 @@ export class BlogsComponent implements OnInit {
   }
 
   addLike(blog: Blog){
+    blog.interactingUserId = this.accountService.currentUser()?.id ?? null;
 
+    this.blogService.addBlogLike(blog).subscribe({
+      next: () => { this.refreshBlogs();}
+    })
   }
 
   private refreshBlogs(): void {

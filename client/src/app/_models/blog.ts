@@ -9,6 +9,7 @@ export interface Blog {
   updatedAt: Date,
   isDeleted: boolean,
   userId: number,
+  interactingUserId: number | null,
   blogLikes: BlogLike[],
   blogComments: BlogComment[]
 }
