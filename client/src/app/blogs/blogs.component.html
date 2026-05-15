@@ -157,6 +157,7 @@
               type="button" 
               icon="pi pi-heart-fill" 
               class="p-button-rounded p-button-text action-icon-btn like-btn"
+              (click)="addLike(blog)"
               [title]="'Like this blog'"
             ></button>
             <span class="action-count">{{blog.blogLikes.length || 0}}</span>

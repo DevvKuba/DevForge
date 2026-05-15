@@ -177,6 +177,10 @@ export class BlogsComponent implements OnInit {
 
   }
 
+  addLike(blog: Blog){
+
+  }
+
   private refreshBlogs(): void {
     this.blogService.gatherAllBlogs(this.pageNumber, this.pageSize).subscribe({
       next: (response) => {

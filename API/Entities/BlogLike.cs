@@ -13,5 +13,9 @@ namespace API.Entities
         public int BlogId { get; set; }
 
         public Blog Blog { get; set; } = null!;
+
+        public int? UserId { get; set; }
+
+        public AppUser? User { get; set; } = null;
     }
 }
