@@ -50,6 +50,11 @@ namespace API.Controllers
 
             var interactingUser = await unitOfWork.UserRepository.GetUserByIdAsync((int)capturedBlog.InteractingUserId);
 
+            if (interactingUser == null) return NotFound(false);
+
+            var hasUserLikedBlog = await unitOfWork.BlogLikeRepository.HasUserLikedTheBlog(interactingUser, blog);
+
+            return Ok(hasUserLikedBlog);
 
         }
 
