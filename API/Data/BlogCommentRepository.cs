@@ -12,11 +12,13 @@ namespace API.Data
             return await context.BlogComments.Where(c => c.Id == id).FirstAsync();
         }
 
-        public async Task AddBlogCommentAsync(Blog blog, string content)
+        public async Task AddBlogCommentAsync(Blog blog, int userId, string content)
         {
             var blogComment = new BlogComment
             {
-                Content = content
+                BlogId = blog.Id,
+                UserId = userId,
+                Content = content,
             };
 
             await context.BlogComments.AddAsync(blogComment);
