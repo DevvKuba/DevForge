@@ -185,15 +185,15 @@ export class BlogsComponent implements OnInit {
 
     this.blogService.isBlogLikedByUser(blog.id, blog.interactingUserId).subscribe({
       next: (response) => {
-        if (response.data) {
+        if (response) {
           this.blogService.undoBlogLike(blog).subscribe();
+          this.refreshBlogs();
         } else {
           this.blogService.addBlogLike(blog).subscribe();
+          this.refreshBlogs();
         }
       }
     });
-
-    this.refreshBlogs();
   }
 
 

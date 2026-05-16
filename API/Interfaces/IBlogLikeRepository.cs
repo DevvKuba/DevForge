@@ -5,7 +5,7 @@ namespace API.Interfaces
     public interface IBlogLikeRepository
     {
 
-        BlogLike? GetUserBlogLike(AppUser targetUser, Blog targetBlog);
+        Task<BlogLike?> GetUserBlogLike(AppUser targetUser, Blog targetBlog);
 
         Task<bool> HasUserLikedTheBlog(AppUser user, Blog targetBlog);
 

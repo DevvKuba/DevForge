@@ -7,9 +7,9 @@ namespace API.Data
 {
     public class BlogLikeRepository(DataContext context, IMapper mapper) : IBlogLikeRepository
     {
-        public BlogLike? GetUserBlogLike(AppUser targetUser, Blog targetBlog)
+        public async Task<BlogLike?> GetUserBlogLike(AppUser targetUser, Blog targetBlog)
         {
-            return targetBlog.BlogLikes.Where(l => l.Blog.UserId == targetUser.Id).FirstOrDefault();
+            return await context.BlogLikes.Where(l => l.UserId == targetUser.Id && l.BlogId == targetBlog.Id).FirstOrDefaultAsync();
         }
 
         public async Task<bool> HasUserLikedTheBlog(AppUser user, Blog targetBlog)
@@ -33,7 +33,7 @@ namespace API.Data
 
         public void DeleteUserBlogLike(BlogLike blogLike)
         {
-            throw new NotImplementedException();
+            context.BlogLikes.Remove(blogLike);
         }
     }
 }

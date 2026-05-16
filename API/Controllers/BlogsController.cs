@@ -101,6 +101,8 @@ namespace API.Controllers
 
             await unitOfWork.BlogLikeRepository.LikeUserBlogAsync(blog, userBlog.InteractingUserId);
 
+            if (!await unitOfWork.Complete()) return BadRequest(false);
+
             return Ok(true);
         }
 
@@ -165,16 +167,14 @@ namespace API.Controllers
 
             if (interactingUser == null) return NotFound(false);
 
-            var userBlogLike = unitOfWork.BlogLikeRepository.GetUserBlogLike(interactingUser, blog);
+            var userBlogLike = await unitOfWork.BlogLikeRepository.GetUserBlogLike(interactingUser, blog);
 
             if (userBlogLike == null) return NotFound(false);
 
             unitOfWork.BlogLikeRepository.DeleteUserBlogLike(userBlogLike);
 
-            if(!await unitOfWork.Complete())
-            {
-                return BadRequest(false);
-            }
+            if(!await unitOfWork.Complete()) return BadRequest(false);
+
             return Ok(true);
         }
 
