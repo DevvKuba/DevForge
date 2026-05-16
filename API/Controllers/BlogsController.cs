@@ -42,13 +42,13 @@ namespace API.Controllers
         }
 
         [HttpGet("CheckIfBlogIsLikedByUser")]
-        public async Task<ActionResult<bool>> HasBlogBeenLikedByUserAsync(int blogId, int? interactingUserId)
+        public async Task<ActionResult<bool>> HasBlogBeenLikedByUserAsync(int blogId, int interactingUserId)
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(blogId);
 
-            if (blog == null || interactingUserId == null) return NotFound(false);
+            if (blog == null) return NotFound(false);
 
-            var interactingUser = await unitOfWork.UserRepository.GetUserByIdAsync((int)interactingUserId);
+            var interactingUser = await unitOfWork.UserRepository.GetUserByIdAsync(interactingUserId);
 
             if (interactingUser == null) return NotFound(false);
 
@@ -159,13 +159,13 @@ namespace API.Controllers
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdWithLikesAsync(userBlog.Id);
 
-            if (blog == null) return NotFound(false);
+            if (blog == null || userBlog.InteractingUserId == null) return NotFound(false);
 
-            var user = await unitOfWork.UserRepository.GetUserByIdAsync(userBlog.Id);
+            var interactingUser = await unitOfWork.UserRepository.GetUserByIdAsync((int)userBlog.InteractingUserId);
 
-            if (user == null) return NotFound(false);
+            if (interactingUser == null) return NotFound(false);
 
-            var userBlogLike = unitOfWork.BlogLikeRepository.GetUserBlogLike(user, blog);
+            var userBlogLike = unitOfWork.BlogLikeRepository.GetUserBlogLike(interactingUser, blog);
 
             if (userBlogLike == null) return NotFound(false);
 

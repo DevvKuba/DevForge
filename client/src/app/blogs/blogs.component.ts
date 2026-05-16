@@ -178,18 +178,24 @@ export class BlogsComponent implements OnInit {
 
   }
 
-  toggleLike(blog: Blog){
+  toggleLike(blog: Blog) {
     blog.interactingUserId = this.accountService.currentUser()?.id ?? null;
 
-    if(blog.interactingUserId == null) return;
+    if (blog.interactingUserId == null) return;
 
-    if(this.blogService.isBlogLikedByUser(blog.id, blog.interactingUserId)){
-      this.blogService.undoBlogLike(blog);
-    } else {
-      this.blogService.addBlogLike(blog);
-    }
+    this.blogService.isBlogLikedByUser(blog.id, blog.interactingUserId).subscribe({
+      next: (response) => {
+        if (response.data) {
+          this.blogService.undoBlogLike(blog).subscribe();
+        } else {
+          this.blogService.addBlogLike(blog).subscribe();
+        }
+      }
+    });
+
     this.refreshBlogs();
   }
+
 
   private refreshBlogs(): void {
     this.blogService.gatherAllBlogs(this.pageNumber, this.pageSize).subscribe({
