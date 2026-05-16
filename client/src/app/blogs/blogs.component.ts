@@ -37,7 +37,6 @@ export class BlogsComponent implements OnInit {
   openCommentsBlogId: number | null = null;
   selectedMember: Member | null = null;
   commentContentByBlog: Record<number, string> = {};
-  blogCommentsOpen: boolean = false;
   isCreatingBlog = false;
   newBlogTitle = '';
   newBlogDescription = '';
@@ -162,12 +161,22 @@ export class BlogsComponent implements OnInit {
     }
     this.openBlogComments = blog.blogComments;
     this.openCommentsBlogId = blog.id;
-    this.blogCommentsOpen = true;
 
   }
 
   addBlogComment(blogId: number, content: string) {
-      
+      const blogComment : BlogComment = {
+        id: 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        content: content,
+        blogId: blogId,
+        userId: this.accountService.currentUser()?.id ?? 0,
+      } 
+
+      this.blogService.addBlogComment(blogComment).subscribe({
+        next: () => { this.refreshBlogs()}
+      });
   }
 
   deleteBlogComment(blog: Blog, comment: BlogComment): void {
@@ -187,11 +196,10 @@ export class BlogsComponent implements OnInit {
       next: (response) => {
         if (response) {
           this.blogService.undoBlogLike(blog).subscribe();
-          this.refreshBlogs();
         } else {
           this.blogService.addBlogLike(blog).subscribe();
-          this.refreshBlogs();
         }
+         this.refreshBlogs();
       }
     });
   }
