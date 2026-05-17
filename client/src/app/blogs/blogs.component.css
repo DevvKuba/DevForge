@@ -47,10 +47,25 @@
   min-width: 200px;
 }
 
+.search-input-group {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.search-input-group .search-input {
+  flex: 1;
+}
+
 .filter-item label {
   font-weight: 600;
   color: #333;
   font-size: 0.95rem;
+}
+
+.filter-label-spacer {
+  height: 0.95rem;
+  visibility: hidden;
 }
 
 .search-input {

@@ -44,16 +44,26 @@
       <!-- Search by Title -->
       <div class="filter-item">
         <label for="titleSearch">Search by Title:</label>
-        <input 
-          id="titleSearch"
-          type="text" 
-          placeholder="Search blogs..." 
-          class="search-input"
-        />
+        <div class="search-input-group">
+          <input 
+            id="titleSearch"
+            type="text" 
+            placeholder="Search blogs..." 
+            class="search-input"
+          />
+          <button 
+            pButton 
+            type="button" 
+            icon="pi pi-search"
+            label="Search"
+            class="p-button-sm"
+          ></button>
+        </div>
       </div>
 
       <!-- Clear Filters Button -->
       <div class="filter-item">
+        <label class="filter-label-spacer">&nbsp;</label>
         <button 
           pButton 
           type="button" 
