@@ -29,6 +29,8 @@ export class BlogsComponent implements OnInit {
 
   pageNumber : number = 1;
   pageSize : number = 8;
+  titleSearchTerm: string = '';
+
   blogs: Blog[] = [];
   members: Member[] = [];
   filteredMembers: Member[] = [];
@@ -46,7 +48,7 @@ export class BlogsComponent implements OnInit {
   editingCommentContent = '';
 
   ngOnInit(): void {
-    this.blogService.gatherAllBlogs(this.pageNumber, this.pageSize).subscribe({
+    this.blogService.gatherAllBlogs(this.pageNumber, this.pageSize, null).subscribe({
       next: (response) => {
         this.blogs = response.body || [];
       }, 
@@ -254,7 +256,7 @@ export class BlogsComponent implements OnInit {
   }
 
   private refreshBlogs(): void {
-    this.blogService.gatherAllBlogs(this.pageNumber, this.pageSize).subscribe({
+    this.blogService.gatherAllBlogs(this.pageNumber, this.pageSize, null).subscribe({
       next: (response) => {
         this.blogs = response.body || [];
       }

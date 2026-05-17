@@ -15,8 +15,15 @@ export class BlogService {
   http = inject(HttpClient);
   paginatedResult = signal<PaginatedResult<Blog[]> | null>(null);
 
-  gatherAllBlogs(pageNumber: number, pageSize: number) : Observable<any> {
-    let params = setPaginationHeaders(pageNumber, pageSize);
+  gatherAllBlogs(pageNumber: number, pageSize: number, titleSearchTerm: string | null) : Observable<any> {
+    let params;
+    if(titleSearchTerm != null){
+      params = setPaginationHeaders(pageNumber, pageSize);
+      params = params.append('TitleSearchTerm', titleSearchTerm);
+    }
+    else{
+      params = setPaginationHeaders(pageNumber, pageSize);
+    }
     return this.http.get<Blog[]>(`${this.baseUrl}blogs/GatherAllBlogs`, {observe: 'response', params});
   }
 
