@@ -187,30 +187,59 @@
               <div class="existing-comments">
                 @for (comment of blog.blogComments; track comment.id) {
                   <div class="comment-item">
-                    <div class="comment-header">
-                      <p class="comment-content">{{comment.content}}</p>
-                      @if (isOwner(comment.userId)) {
-                        <div class="comment-actions">
-                          <button 
-                            pButton 
-                            type="button" 
-                            icon="pi pi-pencil" 
-                            class="p-button-rounded p-button-text p-button-sm edit-comment-btn"
-                            [title]="'Edit comment'"
-                            (click)="updateComment(blog)"
+                    @if (isEditingComment(comment)) {
+                      <div class="comment-edit-panel">
+                        <textarea
+                          name="editCommentContent"
+                          [(ngModel)]="editingCommentContent"
+                          placeholder="Edit your comment..."
+                          class="comment-input"
+                        ></textarea>
+                        <div class="comment-edit-actions">
+                          <button
+                            pButton
+                            type="button"
+                            icon="pi pi-check"
+                            class="p-button-text p-button-sm edit-confirm-btn"
+                            [title]="'Save comment'"
+                            (click)="updateComment(comment)"
                           ></button>
-                          <button 
-                            pButton 
-                            type="button" 
-                            icon="pi pi-trash" 
-                            class="p-button-rounded p-button-text p-button-sm delete-comment-btn"
-                            [title]="'Delete comment'"
-                            (click)="deleteBlogComment(comment)"
+                          <button
+                            pButton
+                            type="button"
+                            icon="pi pi-times"
+                            class="p-button-text p-button-sm edit-cancel-btn"
+                            [title]="'Cancel edit'"
+                            (click)="cancelEditComment()"
                           ></button>
                         </div>
-                      }
-                    </div>
-                    <p class="comment-date">{{comment.createdAt | date:'short'}}</p>
+                      </div>
+                    } @else {
+                      <div class="comment-header">
+                        <p class="comment-content">{{comment.content}}</p>
+                        @if (isOwner(comment.userId)) {
+                          <div class="comment-actions">
+                            <button 
+                              pButton 
+                              type="button" 
+                              icon="pi pi-pencil" 
+                              class="p-button-rounded p-button-text p-button-sm edit-comment-btn"
+                              [title]="'Edit comment'"
+                              (click)="startEditComment(comment)"
+                            ></button>
+                            <button 
+                              pButton 
+                              type="button" 
+                              icon="pi pi-trash" 
+                              class="p-button-rounded p-button-text p-button-sm delete-comment-btn"
+                              [title]="'Delete comment'"
+                              (click)="deleteBlogComment(comment)"
+                            ></button>
+                          </div>
+                        }
+                      </div>
+                      <p class="comment-date">{{comment.createdAt | date:'short'}}</p>
+                    }
                   </div>
                 }
               </div>

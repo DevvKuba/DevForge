@@ -43,6 +43,8 @@ export class BlogsComponent implements OnInit {
   editingBlogId: number | null = null;
   editBlogTitle = '';
   editBlogDescription = '';
+  editingCommentId: number | null = null;
+  editingCommentContent = '';
 
   ngOnInit(): void {
     this.blogService.gatherAllBlogs(this.pageNumber, this.pageSize).subscribe({
@@ -187,8 +189,39 @@ export class BlogsComponent implements OnInit {
     })
   }
 
-  updateComment(blog: Blog) {
-  
+  isEditingComment(comment: BlogComment): boolean {
+    return this.editingCommentId === comment.id;
+  }
+
+  startEditComment(comment: BlogComment): void {
+    this.editingCommentId = comment.id;
+    this.editingCommentContent = comment.content;
+  }
+
+  cancelEditComment(): void {
+    this.editingCommentId = null;
+    this.editingCommentContent = '';
+  }
+
+  updateComment(comment: BlogComment): void {
+    const content = this.editingCommentContent.trim();
+
+    if (!content) {
+      return;
+    }
+
+    const updatedComment: BlogComment = {
+      ...comment,
+      content,
+      updatedAt: new Date()
+    };
+
+    this.blogService.updateBlogComment(updatedComment).subscribe({
+      next: () => {
+        this.refreshBlogs();
+        this.cancelEditComment();
+      }
+    });
   }
 
   toggleLike(blog: Blog) {
