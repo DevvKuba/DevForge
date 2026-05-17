@@ -25,11 +25,10 @@ import { BlogComment } from '../_models/blogComment';
 })
 export class BlogsComponent implements OnInit {
   private blogService = inject(BlogService);
-  private memberService = inject(MembersService);
   private accountService = inject(AccountService);
 
   pageNumber : number = 1;
-  pageSize : number = 5;
+  pageSize : number = 8;
   blogs: Blog[] = [];
   members: Member[] = [];
   filteredMembers: Member[] = [];
@@ -241,6 +240,18 @@ export class BlogsComponent implements OnInit {
     });
   }
 
+
+  nextPage(): void {
+    this.pageNumber++;
+    this.refreshBlogs();
+  }
+
+  previousPage(): void {
+    if (this.pageNumber > 1) {
+      this.pageNumber--;
+      this.refreshBlogs();
+    }
+  }
 
   private refreshBlogs(): void {
     this.blogService.gatherAllBlogs(this.pageNumber, this.pageSize).subscribe({

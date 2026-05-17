@@ -282,4 +282,29 @@
       <p>No blogs found. Check back later!</p>
     </div>
   }
+
+  <!-- Pagination Controls -->
+  <div class="pagination-controls">
+    <div class="pagination-buttons">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-chevron-left"
+        label="Previous"
+        class="p-button-secondary"
+        (click)="previousPage()"
+        [disabled]="pageNumber === 1"
+      ></button>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-chevron-right"
+        iconPos="right"
+        label="Next"
+        class="p-button-secondary"
+        (click)="nextPage()"
+      ></button>
+    </div>
+    <span class="page-info">Page {{pageNumber}}</span>
+  </div>
 </div>
