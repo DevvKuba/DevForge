@@ -187,8 +187,8 @@ export class BlogsComponent implements OnInit {
     })
   }
 
-  saveComment(blog: Blog) {
-
+  updateComment(blog: Blog) {
+  
   }
 
   toggleLike(blog: Blog) {

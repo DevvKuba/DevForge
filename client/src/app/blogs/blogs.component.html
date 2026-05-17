@@ -190,14 +190,24 @@
                     <div class="comment-header">
                       <p class="comment-content">{{comment.content}}</p>
                       @if (isOwner(comment.userId)) {
-                        <button 
-                          pButton 
-                          type="button" 
-                          icon="pi pi-trash" 
-                          class="p-button-rounded p-button-text p-button-sm delete-comment-btn"
-                          [title]="'Delete comment'"
-                          (click)="deleteBlogComment(comment)"
-                        ></button>
+                        <div class="comment-actions">
+                          <button 
+                            pButton 
+                            type="button" 
+                            icon="pi pi-pencil" 
+                            class="p-button-rounded p-button-text p-button-sm edit-comment-btn"
+                            [title]="'Edit comment'"
+                            (click)="updateComment(blog)"
+                          ></button>
+                          <button 
+                            pButton 
+                            type="button" 
+                            icon="pi pi-trash" 
+                            class="p-button-rounded p-button-text p-button-sm delete-comment-btn"
+                            [title]="'Delete comment'"
+                            (click)="deleteBlogComment(comment)"
+                          ></button>
+                        </div>
                       }
                     </div>
                     <p class="comment-date">{{comment.createdAt | date:'short'}}</p>

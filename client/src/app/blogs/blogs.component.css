@@ -353,6 +353,16 @@
   font-size: 0.8rem;
 }
 
+.comment-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.edit-comment-btn {
+  color: #2563eb;
+}
+
 .delete-comment-btn {
   color: #dc2626;
 }
