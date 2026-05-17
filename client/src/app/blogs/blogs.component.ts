@@ -179,8 +179,12 @@ export class BlogsComponent implements OnInit {
       });
   }
 
-  deleteBlogComment(blog: Blog, comment: BlogComment): void {
-    
+  deleteBlogComment(blogComment: BlogComment): void {
+    this.blogService.deleteBlogComment(blogComment).subscribe({
+      next: () => {
+        this.refreshBlogs();
+      }
+    })
   }
 
   saveComment(blog: Blog) {
