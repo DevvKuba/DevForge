@@ -14,7 +14,7 @@ import { ActivatedRoute} from '@angular/router';
   templateUrl: './member-blogs.component.html',
   styleUrl: './member-blogs.component.css'
 })
-export class MemberBlogsComponent {
+export class MemberBlogsComponent implements OnInit {
   userId: number = 0;
 
   private blogService = inject(BlogService);
@@ -24,4 +24,22 @@ export class MemberBlogsComponent {
   pageNumber = 1;
   pageSize = 4;
 
+  ngOnInit(): void {
+    this.route.paramMap.subscribe({
+      next: (params) => {
+        this.userId = Number.parseInt(params.get('id') || '0');
+        this.loadMemberBlogs();
+      }
+    })
+  }
+
+  loadMemberBlogs(): void {
+    if(this.userId == null) return;
+
+    this.blogService.gatherSpecificUserBlogs(this.userId, this.pageNumber, this.pageSize).subscribe({
+      next: (response) => {
+        this.blogs = response.body;
+      }
+    });
+  }
 }
