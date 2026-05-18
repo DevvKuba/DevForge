@@ -11,11 +11,12 @@ import { MessageService } from '../../_services/message.service';
 import { PresenceService } from '../../_services/presence.service';
 import { AccountService } from '../../_services/account.service';
 import { HubConnection, HubConnectionState } from '@microsoft/signalr';
+import { MemberBlogsComponent } from "../member-blogs/member-blogs.component";
 
 
 @Component({
   selector: 'app-member-detail',
-  imports: [TabsModule, GalleryModule, TimeagoModule, DatePipe, MemberMessagesComponent, MemberMessagesComponent],
+  imports: [TabsModule, GalleryModule, TimeagoModule, DatePipe, MemberMessagesComponent, MemberMessagesComponent, MemberBlogsComponent],
   templateUrl: './member-detail.component.html',
   styleUrl: './member-detail.component.css'
 })

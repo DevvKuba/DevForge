@@ -78,6 +78,11 @@
           <app-member-messages
           ></app-member-messages>
           </tab>
+
+          <tab heading="Blogs" (selectTab)="onTabActivated($event)">
+          <app-member-blogs
+          ></app-member-blogs>
+          </tab>
       </tabset>
     </div>
 
