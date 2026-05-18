@@ -55,6 +55,18 @@ export class BlogsComponent implements OnInit {
     })
   }
 
+   nextPage(): void {
+    this.pageNumber++;
+    this.refreshBlogs();
+  }
+
+  previousPage(): void {
+    if (this.pageNumber > 1) {
+      this.pageNumber--;
+      this.refreshBlogs();
+    }
+  }
+
   isOwner(userId : number) : boolean {
     const currentUserId = this.accountService.currentUser()?.id;
     if(currentUserId === null || currentUserId === undefined) return false;
@@ -242,18 +254,19 @@ export class BlogsComponent implements OnInit {
     });
   }
 
+  searchForSpecificBlogTitle(){
+    
+    const searchTerm = this.titleSearchTerm.trim();
 
-  nextPage(): void {
-    this.pageNumber++;
-    this.refreshBlogs();
+    if(!searchTerm) return;
+
+    this.blogService.gatherAllBlogs(this.pageNumber, this.pageSize, searchTerm).subscribe({
+      next: (response) => {
+        this.blogs = response.body || [];
+      }
+    })
   }
 
-  previousPage(): void {
-    if (this.pageNumber > 1) {
-      this.pageNumber--;
-      this.refreshBlogs();
-    }
-  }
 
   private refreshBlogs(): void {
     this.blogService.gatherAllBlogs(this.pageNumber, this.pageSize, null).subscribe({

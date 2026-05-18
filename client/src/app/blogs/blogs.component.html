@@ -47,6 +47,7 @@
         <div class="search-input-group">
           <input 
             id="titleSearch"
+            [(ngModel)]="titleSearchTerm"
             type="text" 
             placeholder="Search blogs..." 
             class="search-input"
@@ -57,6 +58,7 @@
             icon="pi pi-search"
             label="Search"
             class="p-button-sm"
+            (click)="searchForSpecificBlogTitle()"
           ></button>
         </div>
       </div>
