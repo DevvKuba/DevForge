@@ -1,1 +1,24 @@
-<p>member-blogs works!</p>
+<div class="member-blogs-container">
+  <div class="member-blogs-header">
+    <h3>Blogs</h3>
+  </div>
+
+  <!-- Blog Cards -->
+  <div class="member-blogs-list">
+    @if (blogs.length > 0) {
+      @for (blog of blogs; track blog.id) {
+        <p-card class="member-blog-card">
+          <div class="blog-content">
+            <h4 class="blog-title">{{blog.title}}</h4>
+            <p class="blog-meta">{{blog.publishedAt | date:'short'}}</p>
+            <p class="blog-description">{{blog.description}}</p>
+          </div>
+        </p-card>
+      }
+    } @else {
+      <div class="no-blogs-message">
+        <p>No blogs from this member yet</p>
+      </div>
+    }
+  </div>
+</div>
