@@ -50,6 +50,20 @@ namespace API.Data
             return await PagedList<BlogDto>.CreateAsync(blogs, blogParams.PageNumber, blogParams.PageSize);
         }
 
+        public async Task<List<BlogDto>> GetAllBlogsWithSpecificTitleAsync(BlogParams blogParams)
+        {
+            var query = context.Blogs
+                .Include(b => b.BlogComments)
+                .Include(b => b.BlogLikes)
+                .OrderByDescending(b => b.PublishedAt)
+                .Where(b => b.Title.Contains(blogParams.TitleSearchTerm!))
+                .AsQueryable();
+
+            var blogs = query.ProjectTo<BlogDto>(mapper.ConfigurationProvider);
+
+            return await PagedList<BlogDto>.CreateAsync(blogs, blogParams.PageNumber, blogParams.PageSize);
+        }
+
         public async Task<List<BlogDto>> GetAllUserBlogsAsync(BlogParams blogParams)
         {
             var query = context.Blogs

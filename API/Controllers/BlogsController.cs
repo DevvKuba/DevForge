@@ -16,12 +16,18 @@ namespace API.Controllers
         [HttpGet("GatherAllBlogs")]
         public async Task<ActionResult<List<BlogDto>>> GatherAllBlogsAsync([FromQuery] BlogParams blogParams)
         {
-            var blogs = await unitOfWork.BlogRepository.GetAllBlogsAsync(blogParams);
+            List<BlogDto> blogs = [];
 
-            if (blogs.Count == 0 | blogs == null)
+            if (blogParams.TitleSearchTerm != null)
             {
-                return NotFound(false);
+                blogs = await unitOfWork.BlogRepository.GetAllBlogsWithSpecificTitleAsync(blogParams);
             }
+            else
+            {
+                blogs = await unitOfWork.BlogRepository.GetAllBlogsAsync(blogParams);
+            }
+
+            if (blogs.Count == 0 | blogs == null) return NotFound(false);
 
             return Ok(blogs);
         }
