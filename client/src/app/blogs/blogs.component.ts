@@ -255,7 +255,6 @@ export class BlogsComponent implements OnInit {
   }
 
   searchForSpecificBlogTitle(){
-    
     const searchTerm = this.titleSearchTerm.trim();
 
     if(!searchTerm) return;
