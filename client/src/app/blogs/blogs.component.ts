@@ -267,7 +267,7 @@ export class BlogsComponent implements OnInit {
   }
 
 
-  private refreshBlogs(): void {
+  refreshBlogs(): void {
     this.blogService.gatherAllBlogs(this.pageNumber, this.pageSize, null).subscribe({
       next: (response) => {
         this.blogs = response.body || [];
