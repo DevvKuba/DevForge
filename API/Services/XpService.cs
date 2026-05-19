@@ -11,10 +11,27 @@ namespace API.Services
 
         public XpAwardDto AwardXp(int awardXp, int totalXp, int level)
         {
+            var expThreshold = GetXpThresholdForLevel(level);
+
+            var updatedTotalXp = totalXp + awardXp;
+
+           // assuming only one level can be updated via the awardXp
+            if(updatedTotalXp > expThreshold)
+            {
+                level++;
+
+                var leftOverExp = GetRemainingOrLeftoverXpForNextLevel(updatedTotalXp, level);
+
+                return new XpAwardDto { CurrentXp = leftOverExp, CurrentLevel = level};
+            }
+            else
+            {
+                return new XpAwardDto { CurrentXp = updatedTotalXp, CurrentLevel = level };
+            }
 
         }
 
-        public int GetRemainingXpForNextLevel(int totalXp, int level)
+        public int GetRemainingOrLeftoverXpForNextLevel(int totalXp, int level)
         {
             var expThreshold = GetXpThresholdForLevel(level);
 
