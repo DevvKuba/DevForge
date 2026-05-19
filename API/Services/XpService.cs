@@ -1,4 +1,5 @@
-﻿using API.Interfaces;
+﻿using API.DTO_s;
+using API.Interfaces;
 
 namespace API.Services
 {
@@ -8,25 +9,27 @@ namespace API.Services
 
         public double Exponent { get; set; } = 1.5;
 
-        public int GetOverflowXpAfterLevelUp(int totalXp, int pastLevel)
+        public XpAwardDto AwardXp(int awardXp, int totalXp, int level)
         {
-            throw new NotImplementedException();
+
         }
 
         public int GetRemainingXpForNextLevel(int totalXp, int level)
         {
-            throw new NotImplementedException();
+            var expThreshold = GetXpThresholdForLevel(level);
+
+            return expThreshold - totalXp;
         }
 
-        public int AwardXp(int totalXp, int level)
+        public bool HasLevelUpOccured(int currentXp, int level)
         {
-            throw new NotImplementedException();
+            var expThreshold = GetXpThresholdForLevel(level);
+
+            if (currentXp > expThreshold) return true;
+
+            return false;
         }
 
-        public bool hasLevelUpOccured(int totalXp, int level)
-        {
-            throw new NotImplementedException();
-        }
 
         public int GetXpThresholdForLevel(int level)
         {

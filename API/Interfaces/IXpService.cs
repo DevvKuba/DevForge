@@ -1,4 +1,6 @@
-﻿namespace API.Interfaces
+﻿using API.DTO_s;
+
+namespace API.Interfaces
 {
     public interface IXpService
     {
@@ -6,11 +8,9 @@
 
         int GetRemainingXpForNextLevel(int totalXp, int level); // until next level
 
-        int GetOverflowXpAfterLevelUp(int totalXp, int pastLevel); 
+        XpAwardDto AwardXp(int awardXp, int totalXp, int level);
 
-        int AwardXp(int totalXp, int level);
-
-        bool hasLevelUpOccured(int totalXp, int level);
+        bool HasLevelUpOccured(int currentXp, int level);
 
     }
 }
