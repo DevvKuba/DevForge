@@ -4,11 +4,10 @@ namespace API.Services
 {
     public class XpService : IXpService
     {
+        public int BaseValue { get; set; } = 100;
 
-        public int GetXpThresholdForLevel(int level)
-        {
-            throw new NotImplementedException();
-        }
+        public double Exponent { get; set; } = 1.5;
+
         public int GetOverflowXpAfterLevelUp(int totalXp, int pastLevel)
         {
             throw new NotImplementedException();
@@ -27,6 +26,11 @@ namespace API.Services
         public bool hasLevelUpOccured(int totalXp, int level)
         {
             throw new NotImplementedException();
+        }
+
+        public int GetXpThresholdForLevel(int level)
+        {
+            return (int)Math.Round(BaseValue * Math.Pow(level, Exponent), 0);
         }
     }
 }
