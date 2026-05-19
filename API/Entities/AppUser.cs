@@ -30,6 +30,12 @@ public class AppUser : IdentityUser<int>
 
     public string? Country { get; set; }
 
+    public int AppExperiencePoints { get; set; } = 0;
+
+    public int Level { get; set; } = 0;
+
+    public DateTime? LastLevelUpDate { get; set; } // for tracking milestones
+
     public List<Photo> Photos { get; set; } = [];
 
     public List<UserLike> LikedByUsers { get; set; } = [];
