@@ -13,6 +13,23 @@
             <p class="blog-meta">{{blog.publishedAt | date:'dd/MM/yyyy'}}</p>
             <p class="blog-description">{{blog.description}}</p>
           </div>
+
+          <!-- Blog Actions (View-Only: Likes and Comments Counts) -->
+          <div class="blog-actions">
+            <!-- Likes Section -->
+            <div class="action-group likes">
+              <i class="pi pi-heart-fill action-icon"></i>
+              <span class="action-count">{{blog.blogLikes.length || 0}}</span>
+              <span class="action-label">Likes</span>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="action-group comments">
+              <i class="pi pi-comments action-icon"></i>
+              <span class="action-count">{{blog.blogComments.length || 0}}</span>
+              <span class="action-label">Comments</span>
+            </div>
+          </div>
         </p-card>
       }
     } @else {
