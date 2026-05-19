@@ -64,8 +64,15 @@ public class UserRepository(DataContext context, IMapper mapper) : IUserReposito
             .ToListAsync();
     }
 
+    public void UpdateAppExperienceAndLevel(AppUser user, int newPoints, int level)
+    {
+        user.AppExperiencePoints = newPoints;
+        user.Level = level;
+    }
+
     public void Update(AppUser user)
     {
         context.Entry(user).State = EntityState.Modified;
     }
+
 }

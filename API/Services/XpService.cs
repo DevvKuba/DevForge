@@ -4,11 +4,11 @@ namespace API.Services
 {
     public class XpService : IXpService
     {
-        public int AwardXp(int totalXp, int level)
+
+        public int GetXpThresholdForLevel(int level)
         {
             throw new NotImplementedException();
         }
-
         public int GetOverflowXpAfterLevelUp(int totalXp, int pastLevel)
         {
             throw new NotImplementedException();
@@ -19,7 +19,7 @@ namespace API.Services
             throw new NotImplementedException();
         }
 
-        public int GetXpThresholdForLevel(int level)
+        public int AwardXp(int totalXp, int level)
         {
             throw new NotImplementedException();
         }

@@ -18,5 +18,7 @@ namespace API.Interfaces
 
         Task<AppUser?> GetUserByPhotoIdAsync(int photoId);
 
+        void UpdateAppExperienceAndLevel(AppUser user, int newPoints, int level);
+
     }
 }
