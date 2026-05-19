@@ -190,7 +190,10 @@ export class BlogsComponent implements OnInit {
       } 
 
       this.blogService.addBlogComment(blogComment).subscribe({
-        next: () => { this.refreshBlogs()}
+        next: () => { 
+          this.refreshBlogs()
+          this.commentContentByBlog[blogId] = '';
+        }
       });
   }
 
