@@ -3,6 +3,7 @@ using API.Entities;
 using API.Extensions;
 using API.Helpers;
 using API.Interfaces;
+using API.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ namespace API.Controllers
 {
     // user needs to be autherized / logged in before utilising get requests
     [Authorize]
-    public class UsersController(IUnitOfWork unitOfWork, IMapper mapper, IPhotoService photoService) : BaseApiController
+    public class UsersController(IUnitOfWork unitOfWork, IMapper mapper, IPhotoService photoService, IXpService xpService) : BaseApiController
     {
         [HttpGet]
         // specifices to look in query string => [FromQuery]
@@ -36,6 +37,10 @@ namespace API.Controllers
             if (user.UserName == null) return BadRequest("User does not have a username");
 
             var memberDto = await unitOfWork.UserRepository.GetMemberAsync(user.Id);
+
+            if (memberDto == null) return NotFound("No member like this exists");
+
+            memberDto.LevelThreshold = xpService.GetXpThresholdForLevel(memberDto.Level);
 
             return memberDto!;
 
