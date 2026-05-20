@@ -27,6 +27,10 @@
 
         public string? Interests { get; set; }
 
+        public int AppExperiencePoints { get; set; }
+
+        public int Level { get; set; }
+
         // refactored
         public string? Skills { get; set; }
 

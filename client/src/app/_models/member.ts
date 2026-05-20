@@ -13,10 +13,11 @@ export interface Member {
   interests: string
   city: string
   country: string
-  //new
   skills: string
   yearsOfExperience: number
   specialization: string
+  appExperiencePoints: number,
+  level: number,
   email: string
   photos: Photo[]
 }
