@@ -32,7 +32,7 @@ public class AppUser : IdentityUser<int>
 
     public int AppExperiencePoints { get; set; } = 0;
 
-    public int Level { get; set; } = 0;
+    public int Level { get; set; } = 1;
 
     public DateTime? LastLevelUpDate { get; set; } // for tracking milestones
 

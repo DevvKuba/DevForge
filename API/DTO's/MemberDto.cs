@@ -31,6 +31,8 @@
 
         public int Level { get; set; }
 
+        public int LevelThreshold { get; set; }
+
         // refactored
         public string? Skills { get; set; }
 
