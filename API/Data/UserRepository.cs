@@ -11,11 +11,11 @@ namespace API;
 // where we aquire methods that interact with the database 
 public class UserRepository(DataContext context, IMapper mapper) : IUserRepository
 {
-    public async Task<MemberDto?> GetMemberAsync(string username)
+    public async Task<MemberDto?> GetMemberAsync(int userId)
     {
         return await context.Users
             // use normalisedUser == username.ToUpper() if need be
-            .Where(x => x.UserName == username)
+            .Where(x => x.Id == userId)
             .ProjectTo<MemberDto>(mapper.ConfigurationProvider)
             .SingleOrDefaultAsync();
     }

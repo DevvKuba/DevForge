@@ -35,7 +35,7 @@ namespace API.Controllers
 
             if (user.UserName == null) return BadRequest("User does not have a username");
 
-            var memberDto = await unitOfWork.UserRepository.GetMemberAsync(user.UserName);
+            var memberDto = await unitOfWork.UserRepository.GetMemberAsync(user.Id);
 
             return memberDto!;
 
