@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace API.Controllers
 {
     // Datacontent context -> database
-    public class AccountController(UserManager<AppUser> userManager, ITokenService tokenService, IMapper mapper) : BaseApiController
+    public class AccountController(UserManager<AppUser> userManager, ITokenService tokenService, IXpService xpService, IMapper mapper) : BaseApiController
     {
         [HttpPost("register")] // account/register
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
@@ -30,6 +30,9 @@ namespace API.Controllers
             {
                 Id = user.Id,
                 Username = user.UserName,
+                AppExperiencePoints = user.AppExperiencePoints,
+                Level = user.Level,
+                LevelThreshold = xpService.GetXpThresholdForLevel(user.Level),
                 Token = await tokenService.CreateToken(user),
                 KnownAs = user.KnownAs,
                 Gender = user.Gender,
@@ -54,6 +57,9 @@ namespace API.Controllers
                 Id = user.Id,
                 Username = user.UserName,
                 KnownAs = user.KnownAs,
+                AppExperiencePoints = user.AppExperiencePoints,
+                Level = user.Level,
+                LevelThreshold = xpService.GetXpThresholdForLevel(user.Level),
                 Token = await tokenService.CreateToken(user),
                 Gender = user.Gender,
                 PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
