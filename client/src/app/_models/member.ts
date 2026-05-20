@@ -18,6 +18,7 @@ export interface Member {
   specialization: string
   appExperiencePoints: number,
   level: number,
+  levelThreshold: number,
   email: string
   photos: Photo[]
 }
