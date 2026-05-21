@@ -36,6 +36,7 @@ namespace API.Extensions
             services.AddScoped<IBlogCommentRepository, BlogCommentRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IXpService, XpService>();
             services.AddScoped<LogUserActivity>();
 
             services.AddAutoMapper(config => 
