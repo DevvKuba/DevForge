@@ -19,6 +19,17 @@ export class NavComponent {
   private toaster = inject(ToastrService);
   model: any = {};
 
+  // XP Bar Configuration (preset demo values)
+  currentLevel = 5;
+  currentXp = 1250;
+  xpNeededForNextLevel = 2000;
+  levelSeparators = [0, 25, 50, 75]; // Separator positions as percentages
+
+  // Calculate XP progress percentage
+  get xpProgress(): number {
+    return (this.currentXp / this.xpNeededForNextLevel) * 100;
+  }
+
   login(){
     this.accountService.login(this.model).subscribe({
       next: _ => {
