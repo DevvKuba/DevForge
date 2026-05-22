@@ -1,9 +1,12 @@
 using API.Data;
+using API.DTO_s;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Middleware;
 using API.SignalR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API
@@ -33,6 +36,7 @@ namespace API
                     c.RoutePrefix = string.Empty;
                 });
             }
+
 
             // Configure the HTTP request pipeline.
             // specifying what can be shared and with who

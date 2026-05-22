@@ -4,7 +4,7 @@
     {
         public int Level { get; set; }
 
-        public int CurrentXp { get; set; }
+        public int AppExperiencePoints { get; set; }
 
         public int LevelThreshold { get; set; }
     }
