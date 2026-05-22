@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AccountService } from '../_services/account.service';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -12,7 +12,7 @@ import { HasRoleDirective } from '../_directives/has-role.directive';
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
-export class NavComponent {
+export class NavComponent implements OnInit {
   // post http request
   accountService = inject(AccountService);
   private router = inject(Router);
@@ -20,10 +20,16 @@ export class NavComponent {
   model: any = {};
 
   // XP Bar Configuration (preset demo values)
-  currentLevel = 5;
-  currentXp = 1250;
-  xpNeededForNextLevel = 2000;
+  currentLevel: number = 0;
+  currentXp: number = 0;
+  xpNeededForNextLevel: number = 0;
   levelSeparators = [0, 25, 50, 75]; // Separator positions as percentages
+
+  ngOnInit(): void {
+    this.currentLevel = this.accountService.currentUser()?.level ?? 0;
+    this.currentXp = this.accountService.currentUser()?.appExperiencePoints ?? 0;
+    this.xpNeededForNextLevel = this.accountService.currentUser()?.levelThreshold ?? 0;
+  }
 
   // Calculate XP progress percentage
   get xpProgress(): number {
