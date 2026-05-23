@@ -22,21 +22,6 @@ namespace API
             builder.Services.AddApplicationServices(builder.Configuration);
             builder.Services.AddIdentityServices(builder.Configuration);
 
-            var app = builder.Build();
-
-            app.UseMiddleware<ExceptionMiddleware>();
-
-            // Enable Swagger/OpenAPI
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "SWE Networking Platform API v1");
-                    c.RoutePrefix = string.Empty;
-                });
-            }
-
             builder.Services.AddControllers()
                 .ConfigureApiBehaviorOptions(options =>
                 {
@@ -58,12 +43,27 @@ namespace API
                             Data = null,
                             Message = errors.FirstOrDefault() ?? "Validation Failed",
                             Success = false,
-                            XpDetails = new UserXpDetailDto{}
+                            XpDetails = new UserXpDetailDto { }
                         };
 
                         return new BadRequestObjectResult(apiResponse);
                     };
                 });
+
+            var app = builder.Build();
+
+            app.UseMiddleware<ExceptionMiddleware>();
+
+            // Enable Swagger/OpenAPI
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "SWE Networking Platform API v1");
+                    c.RoutePrefix = string.Empty;
+                });
+            }
 
             // Configure the HTTP request pipeline.
             // specifying what can be shared and with who
