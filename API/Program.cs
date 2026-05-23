@@ -37,6 +37,33 @@ namespace API
                 });
             }
 
+            builder.Services.AddControllers()
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.InvalidModelStateResponseFactory = context =>
+                    {
+                        // all validation error messages through data annotations
+                        var errors = context.ModelState
+                            .Where(e => e.Value?.Errors.Count > 0)
+                            .SelectMany(e => e.Value!.Errors)
+                            .Select(e => e.ErrorMessage)
+                            .ToList();
+
+                        // if at some point we want to create a combined messages
+                        // string. join all the errors through a bullet point or ';' for instance
+
+                        // custom api response
+                        var apiResponse = new ApiResponse<string>
+                        {
+                            Data = null,
+                            Message = errors.FirstOrDefault() ?? "Validation Failed",
+                            Success = false,
+                            XpDetails = new UserXpDetailDto{}
+                        };
+
+                        return new BadRequestObjectResult(apiResponse);
+                    };
+                });
 
             // Configure the HTTP request pipeline.
             // specifying what can be shared and with who

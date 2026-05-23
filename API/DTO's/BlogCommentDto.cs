@@ -1,4 +1,6 @@
-﻿namespace API.DTO_s
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace API.DTO_s
 {
     public class BlogCommentDto
     {
@@ -10,6 +12,7 @@
 
         public DateTime UpdatedAt { get; set; }
 
+        [Required(ErrorMessage = "Must provide content to post comment")]
         public required string Content { get; set; }
 
         public int BlogId { get; set; }
