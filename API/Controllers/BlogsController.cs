@@ -129,21 +129,21 @@ namespace API.Controllers
         }
 
         [HttpPost("AddBlog")]
-        public async Task<ActionResult> AddNewBlogAsync(BlogDto newBlog)
+        public async Task<ActionResult<ApiResponse<string>>> AddNewBlogAsync(BlogDto newBlog)
         {
             var userId = User.GetUserId();
 
             var postingUser = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
 
-            if (postingUser == null) return NotFound(false);
+            if (postingUser == null) return NotFound(new ApiResponse<string> { });
 
             await unitOfWork.BlogRepository.AddBlogAsync(postingUser, newBlog.Title, newBlog.Description);
 
             if (!await unitOfWork.Complete())
             {
-                return BadRequest(false);
+                return BadRequest(new ApiResponse<string> { });
             }
-            return Ok(true);
+            return Ok(new ApiResponse<string> {Success = true, XpDetails = new UserXpDetailDto { } });
         }
 
         [HttpDelete("DeleteBlog")]

@@ -8,9 +8,9 @@ namespace API.Helpers
 
         public string? Message { get; set; }
 
-        public bool Success { get; set; }
+        public bool? Success { get; set; }
 
-        public required UserXpDetailDto XpDetails { get; set; }
+        public UserXpDetailDto? XpDetails { get; set; }
 
     }
 }
