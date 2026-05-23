@@ -9,11 +9,11 @@ namespace API.Services
 
         public double Exponent { get; set; } = 1.5;
 
-        public UserDto AwardXp(UserDto user, int awardXp, int totalXp, int level)
+        public UserDto AwardXp(UserDto user, int awardXp, int currentXp, int level)
         {
             var expThreshold = GetXpThresholdForLevel(level);
 
-            var updatedTotalXp = totalXp + awardXp;
+            var updatedTotalXp = currentXp + awardXp;
 
            // assuming only one level can be updated via the awardXp
             if(updatedTotalXp > expThreshold)
