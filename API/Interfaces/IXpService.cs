@@ -1,4 +1,5 @@
 ﻿using API.DTO_s;
+using API.Entities;
 
 namespace API.Interfaces
 {
@@ -8,11 +9,9 @@ namespace API.Interfaces
 
         int GetRemainingOrLeftoverXpForNextLevel(int totalXp, int level); // until next level
 
-        UserDto AwardXp(UserDto user, int awardXp, int totalXp, int level);
+        UserXpDetailDto AwardXp(AppUser user, int awardXp, int currentXp, int level);
 
         bool HasLevelUpOccured(int currentXp, int level);
-
-        void UpdateUserXpDetails(UserDto user, int level, int experiencePoints, int levelThreshold);
 
     }
 }

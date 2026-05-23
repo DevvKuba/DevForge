@@ -143,6 +143,8 @@ namespace API.Controllers
 
             xpService.AwardXp(user, (int)XpActions.PostBlog, postingUser.AppExperiencePoints, postingUser.Level);
 
+            //unitOfWork.UserRepository.UpdateAppExperienceAndLevel();
+
             if (!await unitOfWork.Complete())
             {
                 return BadRequest(new ApiResponse<string> { });
