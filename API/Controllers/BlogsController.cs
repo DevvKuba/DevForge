@@ -139,11 +139,9 @@ namespace API.Controllers
 
             await unitOfWork.BlogRepository.AddBlogAsync(postingUser, newBlog.Title, newBlog.Description);
 
-            var user = mapper.Map<UserDto>(postingUser);
+            var updatedXpDetails = xpService.AwardXp(postingUser, (int)XpActions.PostBlog, postingUser.AppExperiencePoints, postingUser.Level);
 
-            xpService.AwardXp(user, (int)XpActions.PostBlog, postingUser.AppExperiencePoints, postingUser.Level);
-
-            //unitOfWork.UserRepository.UpdateAppExperienceAndLevel();
+            unitOfWork.UserRepository.UpdateAppExperienceAndLevel(postingUser, updatedXpDetails.AppExperiencePoints, updatedXpDetails.Level);
 
             if (!await unitOfWork.Complete())
             {
