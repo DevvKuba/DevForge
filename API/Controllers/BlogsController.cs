@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [Authorize]
-    public class BlogsController(IUnitOfWork unitOfWork, IMapper mapper) : BaseApiController
+    public class BlogsController(IUnitOfWork unitOfWork, IXpService xpService, IMapper mapper) : BaseApiController
     {
         [HttpGet("GatherAllBlogs")]
         public async Task<ActionResult<List<BlogDto>>> GatherAllBlogsAsync([FromQuery] BlogParams blogParams)
@@ -138,6 +138,8 @@ namespace API.Controllers
             if (postingUser == null) return NotFound(new ApiResponse<string> { });
 
             await unitOfWork.BlogRepository.AddBlogAsync(postingUser, newBlog.Title, newBlog.Description);
+
+            xpService.AwardXp
 
             if (!await unitOfWork.Complete())
             {

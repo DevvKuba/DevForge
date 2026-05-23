@@ -9,7 +9,7 @@ namespace API.Services
 
         public double Exponent { get; set; } = 1.5;
 
-        public UserXpDetailDto AwardXp(int awardXp, int totalXp, int level)
+        public UserDto AwardXp(UserDto user, int awardXp, int totalXp, int level)
         {
             var expThreshold = GetXpThresholdForLevel(level);
 
@@ -22,12 +22,15 @@ namespace API.Services
 
                 var leftOverExp = GetRemainingOrLeftoverXpForNextLevel(updatedTotalXp, level);
 
-                return new UserXpDetailDto { Level = level, AppExperiencePoints = leftOverExp, LevelThreshold = GetXpThresholdForLevel(level)};
+                UpdateUserXpDetails(user, level, leftOverExp, GetXpThresholdForLevel(level));
+
             }
             else
             {
-                return new UserXpDetailDto { Level = level, AppExperiencePoints = updatedTotalXp, LevelThreshold = GetXpThresholdForLevel(level)};
+                UpdateUserXpDetails(user, level, updatedTotalXp, GetXpThresholdForLevel(level));
             }
+
+            return user;
 
         }
 
@@ -51,6 +54,13 @@ namespace API.Services
         public int GetXpThresholdForLevel(int level)
         {
             return (int)Math.Round(BaseValue * Math.Pow(level, Exponent), 0);
+        }
+
+        public void UpdateUserXpDetails(UserDto user, int level, int experiencePoints, int levelThreshold)
+        {
+            user.Level = level;
+            user.AppExperiencePoints = experiencePoints;
+            user.LevelThreshold = levelThreshold;
         }
     }
 }

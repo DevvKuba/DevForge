@@ -12,5 +12,7 @@ namespace API.Helpers
 
         public UserXpDetailDto? XpDetails { get; set; }
 
+
+
     }
 }
