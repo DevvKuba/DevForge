@@ -5,6 +5,7 @@ import { map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { FollowService } from './follow.service';
 import { PresenceService } from './presence.service';
+import { UserXpDetailDto } from '../_models/dtos/userXpDetailDto';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +60,15 @@ export class AccountService {
     localStorage.removeItem('user');
     this.currentUser.set(null);
     this.presenceService.stopHubConnection();
+  }
+
+  updateUserXpProperties(xpDetails: UserXpDetailDto){
+    this.currentUser.update(currentUser => ({
+      ...currentUser!,
+      appExperiencePoints: xpDetails.appExperiencePoints,
+      level: xpDetails.level,
+      levelThreshold: xpDetails.levelThreshold
+    }));
   }
 
 }
