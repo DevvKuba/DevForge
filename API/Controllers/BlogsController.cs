@@ -145,7 +145,13 @@ namespace API.Controllers
             {
                 return BadRequest(new ApiResponse<string> { });
             }
-            return Ok(new ApiResponse<string> {Success = true, XpDetails = new UserXpDetailDto { } });
+            return Ok(new ApiResponse<string> {
+                Success = true,
+                XpDetails = new UserXpDetailDto { 
+                    AppExperiencePoints = postingUser.AppExperiencePoints,
+                    Level = postingUser.Level,
+                    LevelThreshold = xpService.GetXpThresholdForLevel(postingUser.Level),
+                } });
         }
 
         [HttpDelete("DeleteBlog")]
