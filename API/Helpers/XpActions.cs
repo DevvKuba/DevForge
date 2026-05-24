@@ -8,6 +8,5 @@
         SendMessageToUser = 1,
         FollowerGained = 15,
         LikeGainedOnBlog = 10,
-        CommentReceivedOnBlog = 10,
     }
 }

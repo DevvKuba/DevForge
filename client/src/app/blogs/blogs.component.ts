@@ -10,6 +10,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MembersService } from '../_services/members.service';
 import { AccountService } from '../_services/account.service';
 import { BlogComment } from '../_models/blogComment';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-blogs',
@@ -247,16 +248,18 @@ export class BlogsComponent implements OnInit {
 
     if (blog.interactingUserId == null) return;
 
-    this.blogService.isBlogLikedByUser(blog.id, blog.interactingUserId).subscribe({
-      next: (response) => {
-        if (response) {
-          this.blogService.undoBlogLike(blog).subscribe();
-        } else {
-          this.blogService.addBlogLike(blog).subscribe();
-        }
-         this.refreshBlogs();
+    this.blogService.isBlogLikedByUser(blog.id, blog.interactingUserId).pipe(
+      switchMap(response => 
+        response
+        ? this.blogService.undoBlogLike(blog)
+        : this.blogService.addBlogLike(blog)
+      )
+    ).subscribe({
+      next: (response) =>  {
+        this.accountService.updateUserXpProperties(response.xpDetails);
+        this.refreshBlogs();
       }
-    });
+    })
   }
 
   searchForSpecificBlogTitle(){
