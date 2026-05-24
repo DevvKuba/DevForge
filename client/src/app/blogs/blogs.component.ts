@@ -112,8 +112,9 @@ export class BlogsComponent implements OnInit {
     };
 
     this.blogService.addBlog(payload).subscribe({
-      next: () => {
+      next: (response) => {
         this.refreshBlogs();
+        this.accountService.updateUserXpProperties(response.xpDetails);
         this.newBlogTitle = '';
         this.newBlogDescription = '';
         this.isCreatingBlog = false;
@@ -192,10 +193,7 @@ export class BlogsComponent implements OnInit {
       this.blogService.addBlogComment(blogComment).subscribe({
         next: (response) => { 
           this.refreshBlogs();
-          console.log(response.xpDetails);
           this.accountService.updateUserXpProperties(response.xpDetails);
-          // console.log(this.accountService.currentUser()?.appExperiencePoints);
-
           this.commentContentByBlog[blogId] = '';
         }
       });
