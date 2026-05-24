@@ -4,13 +4,13 @@ using API.Interfaces;
 
 namespace API.Services
 {
-    public class XpService : IXpService
+    public class XpService(IUnitOfWork unitOfWork) : IXpService
     {
         public int BaseValue { get; set; } = 100;
 
         public double Exponent { get; set; } = 1.5;
 
-        public UserXpDetailDto AwardXp(AppUser user, int awardXp, int currentXp, int level)
+        public void AwardXp(AppUser user, int awardXp, int currentXp, int level)
         {
             var expThreshold = GetXpThresholdForLevel(level);
 
@@ -23,12 +23,12 @@ namespace API.Services
 
                 var leftOverExp = GetRemainingOrLeftoverXpForNextLevel(updatedTotalXp, level);
 
-                return new UserXpDetailDto { Level = level, AppExperiencePoints = leftOverExp };
+                unitOfWork.UserRepository.UpdateAppExperienceAndLevel(user, leftOverExp, level);
 
             }
             else
             {
-                return new UserXpDetailDto { Level = level, AppExperiencePoints = updatedTotalXp };
+                unitOfWork.UserRepository.UpdateAppExperienceAndLevel(user, updatedTotalXp, level);
             }
 
         }

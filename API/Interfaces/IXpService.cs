@@ -9,7 +9,7 @@ namespace API.Interfaces
 
         int GetRemainingOrLeftoverXpForNextLevel(int totalXp, int level); // until next level
 
-        UserXpDetailDto AwardXp(AppUser user, int awardXp, int currentXp, int level);
+        void AwardXp(AppUser user, int awardXp, int currentXp, int level);
 
         bool HasLevelUpOccured(int currentXp, int level);
 

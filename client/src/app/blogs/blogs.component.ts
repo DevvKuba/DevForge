@@ -191,7 +191,8 @@ export class BlogsComponent implements OnInit {
 
       this.blogService.addBlogComment(blogComment).subscribe({
         next: () => { 
-          this.refreshBlogs()
+          this.refreshBlogs();
+          // toggle account service method to update the xp properties ?
           this.commentContentByBlog[blogId] = '';
         }
       });

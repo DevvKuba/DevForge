@@ -39,9 +39,6 @@ export class MemberEditComponent implements OnInit {
     this.memberService.getMember(user.id).subscribe({
       next: member => {
         this.member = member;
-        console.log(member.level);
-        console.log(member.appExperiencePoints);
-
       }
     })
   }
