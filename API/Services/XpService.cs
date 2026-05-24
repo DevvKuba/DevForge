@@ -21,7 +21,7 @@ namespace API.Services
             {
                 level++;
 
-                var leftOverExp = GetRemainingOrLeftoverXpForNextLevel(updatedTotalXp, level);
+                var leftOverExp = updatedTotalXp- expThreshold;
 
                 unitOfWork.UserRepository.UpdateAppExperienceAndLevel(user, leftOverExp, level);
 
@@ -31,13 +31,6 @@ namespace API.Services
                 unitOfWork.UserRepository.UpdateAppExperienceAndLevel(user, updatedTotalXp, level);
             }
 
-        }
-
-        public int GetRemainingOrLeftoverXpForNextLevel(int totalXp, int level)
-        {
-            var expThreshold = GetXpThresholdForLevel(level);
-
-            return expThreshold - totalXp;
         }
 
         public bool HasLevelUpOccured(int currentXp, int level)
