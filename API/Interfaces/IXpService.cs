@@ -7,7 +7,7 @@ namespace API.Interfaces
     {
         int GetXpThresholdForLevel(int level); // IMP total exp for that level
 
-        void AwardXp(AppUser user, int awardXp, int currentXp, int level);
+        void AwardXp(AppUser user, int awardXp);
 
         bool HasLevelUpOccured(int currentXp, int level);
 

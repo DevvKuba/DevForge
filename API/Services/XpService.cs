@@ -10,8 +10,11 @@ namespace API.Services
 
         public double Exponent { get; set; } = 1.5;
 
-        public void AwardXp(AppUser user, int awardXp, int currentXp, int level)
+        public void AwardXp(AppUser user, int awardXp)
         {
+            var level = user.Level;
+            var currentXp = user.AppExperiencePoints;
+
             var expThreshold = GetXpThresholdForLevel(level);
 
             var updatedTotalXp = currentXp + awardXp;

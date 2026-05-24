@@ -99,17 +99,34 @@ namespace API.Controllers
         }
 
         [HttpPost("AddBlogLike")]
-        public async Task<ActionResult> LikeUserBlogAsync(BlogDto userBlog)
+        public async Task<ActionResult<ApiResponse<string>>> LikeUserBlogAsync(BlogDto userBlog)
         {
+            var userId = User.GetUserId();
+
+            var likingUser = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
+
+            if (likingUser == null) return NotFound(new ApiResponse<string> { Message = "Liking user was not found"});
+
             var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(userBlog.Id);
 
-            if (blog == null) return NotFound(false);
+            if (blog == null) return NotFound(new ApiResponse<string> { Message = "Blog to be liked not found" });
 
             await unitOfWork.BlogLikeRepository.LikeUserBlogAsync(blog, userBlog.InteractingUserId);
 
-            if (!await unitOfWork.Complete()) return BadRequest(false);
+            xpService.AwardXp(likingUser, (int)XpActions.LikeOtherBlog);
 
-            return Ok(true);
+            if (!await unitOfWork.Complete()) return BadRequest(new ApiResponse<string> { Message = "Changes during blog like did not persist" });
+
+            return Ok(new ApiResponse<string>
+            {
+                Success = true,
+                XpDetails = new UserXpDetailDto
+                {
+                    AppExperiencePoints = likingUser.AppExperiencePoints,
+                    Level = likingUser.Level,
+                    LevelThreshold = xpService.GetXpThresholdForLevel(likingUser.Level),
+                }
+            });
         }
 
         [HttpPost("AddBlogComment")]
@@ -139,7 +156,7 @@ namespace API.Controllers
 
             await unitOfWork.BlogRepository.AddBlogAsync(postingUser, newBlog.Title, newBlog.Description);
 
-            xpService.AwardXp(postingUser, (int)XpActions.PostBlog, postingUser.AppExperiencePoints, postingUser.Level);
+            xpService.AwardXp(postingUser, (int)XpActions.PostBlog);
 
             if (!await unitOfWork.Complete())
             {
