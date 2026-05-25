@@ -41,17 +41,16 @@ namespace API.Services
             var level = user.Level;
             var currentXp = user.AppExperiencePoints;
 
-            var expThreshold = GetXpThresholdForLevel(level);
-
             var updatedTotalXp = currentXp - loseXp;
 
-            if (updatedTotalXp < expThreshold)
+            var pastLevelThreshold = GetXpThresholdForLevel(level - 1);
+
+            // if the updated xp is less than the past level threshold
+            if (updatedTotalXp < pastLevelThreshold)
             {
                 level--;
 
-                var leftOverExp = expThreshold - updatedTotalXp;
-
-                unitOfWork.UserRepository.UpdateAppExperienceAndLevel(user, leftOverExp, level);
+                unitOfWork.UserRepository.UpdateAppExperienceAndLevel(user, updatedTotalXp, level);
 
             }
             else
