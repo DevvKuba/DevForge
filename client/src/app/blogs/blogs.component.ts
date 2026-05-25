@@ -11,6 +11,7 @@ import { MembersService } from '../_services/members.service';
 import { AccountService } from '../_services/account.service';
 import { BlogComment } from '../_models/blogComment';
 import { switchMap } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-blogs',
@@ -27,6 +28,7 @@ import { switchMap } from 'rxjs';
 export class BlogsComponent implements OnInit {
   private blogService = inject(BlogService);
   private accountService = inject(AccountService);
+  private toastr = inject(ToastrService);
 
   pageNumber : number = 1;
   pageSize : number = 8;
@@ -168,10 +170,18 @@ export class BlogsComponent implements OnInit {
   }
 
   isCommentsSectionOpen(blog: Blog) : boolean {
-    return this.openCommentsBlogId == blog.id;
+    const userId = this.accountService.currentUser()?.id ?? 0;
+
+    return this.openCommentsBlogId == blog.id && userId !== blog.userId; // true case
   }
 
   toggleComments(blog: Blog){
+    const userId = this.accountService.currentUser()?.id ?? 0;
+
+    if(userId === blog.userId) {
+      this.toastr.error("Cannot comment on personal blog posts");
+    }
+
     if(this.openCommentsBlogId == blog.id){
       this.openCommentsBlogId = null;
       this.openBlogComments = [];
