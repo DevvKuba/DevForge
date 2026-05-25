@@ -160,8 +160,9 @@ export class BlogsComponent implements OnInit {
 
   deleteBlog(blog: Blog): void {
     this.blogService.deleteBlog(blog).subscribe({
-      next: () => {
+      next: (response) => {
         this.refreshBlogs();
+        this.accountService.updateUserXpProperties(response.xpDetails);
       }
     })
   }
@@ -202,8 +203,9 @@ export class BlogsComponent implements OnInit {
 
   deleteBlogComment(blogComment: BlogComment): void {
     this.blogService.deleteBlogComment(blogComment).subscribe({
-      next: () => {
+      next: (response) => {
         this.refreshBlogs();
+        this.accountService.updateUserXpProperties(response.xpDetails);
       }
     })
   }
