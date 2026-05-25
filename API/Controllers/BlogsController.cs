@@ -130,19 +130,27 @@ namespace API.Controllers
         }
 
         [HttpPost("AddBlogComment")]
-        public async Task<ActionResult> AddBlogCommentAsync(BlogCommentDto blogComment)
+        public async Task<ActionResult<ApiResponse<string>>> AddBlogCommentAsync(BlogCommentDto blogComment)
         {
+            var userId = User.GetUserId();
+
+            var postingUser = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
+
+            if (postingUser == null) return NotFound(new ApiResponse<string> { });
+
             var blog = await unitOfWork.BlogRepository.GetBlogByIdWithLikesAsync(blogComment.BlogId);
 
-            if (blog == null || blogComment.UserId == null) return NotFound(false);
+            if (blog == null || blogComment.UserId == null) return NotFound(new ApiResponse<string> { });
 
             await unitOfWork.BlogCommentRepository.AddBlogCommentAsync(blog, blogComment.UserId, blogComment.Content);
 
+            xpService.AwardXp(postingUser, (int)XpActions.PostBlog);
+
             if (!await unitOfWork.Complete())
             {
-                return BadRequest(false);
+                return BadRequest(new ApiResponse<string> { });
             }
-            return Ok(true);
+            return Ok(new ApiResponse<string> { });
         }
 
         [HttpPost("AddBlog")]
