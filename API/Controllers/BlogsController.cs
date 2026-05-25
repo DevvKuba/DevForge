@@ -172,19 +172,36 @@ namespace API.Controllers
         }
 
         [HttpDelete("DeleteBlog")]
-        public async Task<ActionResult> DeleteUserBlogAsync([FromBody] BlogDto userBlog)
+        public async Task<ActionResult<ApiResponse<string>>> DeleteUserBlogAsync([FromBody] BlogDto userBlog)
         {
+            var userId = User.GetUserId();
+
+            var postingUser = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
+
+            if (postingUser == null) return NotFound(new ApiResponse<string> { });
+
             var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(userBlog.Id);
 
-            if (blog == null) return NotFound(false);
+            if (blog == null) return NotFound(new ApiResponse<string> { });
 
             unitOfWork.BlogRepository.RemoveBlog(blog);
 
+            xpService.LoseXp(postingUser, (int)XpActions.PostBlog);
+
             if (!await unitOfWork.Complete())
             {
-                return BadRequest(false);
+                return BadRequest(new ApiResponse<string> { });
             }
-            return Ok(true);
+            return Ok(new ApiResponse<string>
+            {
+                Success = true,
+                XpDetails = new UserXpDetailDto
+                {
+                    AppExperiencePoints = postingUser.AppExperiencePoints,
+                    Level = postingUser.Level,
+                    LevelThreshold = xpService.GetXpThresholdForLevel(postingUser.Level),
+                }
+            });
         }
 
         [HttpDelete("UndoBlogLike")]
@@ -221,19 +238,37 @@ namespace API.Controllers
         }
 
         [HttpDelete("DeleteBlogComment")]
-        public async Task<ActionResult> DeleteUserBlogCommentAsync([FromBody] BlogCommentDto deletionBlogComment)
+        public async Task<ActionResult<ApiResponse<string>>> DeleteUserBlogCommentAsync([FromBody] BlogCommentDto deletionBlogComment)
         {
+            var userId = User.GetUserId();
+
+            var postingUser = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
+
+            if (postingUser == null) return NotFound(new ApiResponse<string> { });
+
             var blogComment = await unitOfWork.BlogCommentRepository.GetBlogCommentByIdAsync(deletionBlogComment.Id);
 
-            if (blogComment == null) return NotFound(false);
+            if (blogComment == null) return NotFound(new ApiResponse<string> { });
 
             unitOfWork.BlogCommentRepository.DeleteBlogCommentAsync(blogComment);
 
+            xpService.LoseXp(postingUser, (int)XpActions.CommentOnOtherBlog);
+
             if(!await unitOfWork.Complete())
             {
-                return BadRequest(false);
+                return BadRequest(new ApiResponse<string> { });
             }
-            return Ok(true);
+
+            return Ok(new ApiResponse<string>
+            {
+                Success = true,
+                XpDetails = new UserXpDetailDto
+                {
+                    AppExperiencePoints = postingUser.AppExperiencePoints,
+                    Level = postingUser.Level,
+                    LevelThreshold = xpService.GetXpThresholdForLevel(postingUser.Level),
+                }
+            });
         }
     }
 }
