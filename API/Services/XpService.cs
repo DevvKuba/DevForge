@@ -36,6 +36,30 @@ namespace API.Services
 
         }
 
+        public void LoseXp(AppUser user, int loseXp)
+        {
+            var level = user.Level;
+            var currentXp = user.AppExperiencePoints;
+
+            var expThreshold = GetXpThresholdForLevel(level);
+
+            var updatedTotalXp = currentXp - loseXp;
+
+            if (updatedTotalXp < expThreshold)
+            {
+                level--;
+
+                var leftOverExp = expThreshold - updatedTotalXp;
+
+                unitOfWork.UserRepository.UpdateAppExperienceAndLevel(user, leftOverExp, level);
+
+            }
+            else
+            {
+                unitOfWork.UserRepository.UpdateAppExperienceAndLevel(user, updatedTotalXp, level);
+            }
+        }
+
         public bool HasLevelUpOccured(int currentXp, int level)
         {
             var expThreshold = GetXpThresholdForLevel(level);

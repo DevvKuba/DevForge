@@ -9,6 +9,8 @@ namespace API.Interfaces
 
         void AwardXp(AppUser user, int awardXp);
 
+        void LoseXp(AppUser user, int loseXp);
+
         bool HasLevelUpOccured(int currentXp, int level);
 
     }
