@@ -188,25 +188,36 @@ namespace API.Controllers
         }
 
         [HttpDelete("UndoBlogLike")]
-        public async Task<ActionResult> DeleteUserBlogLikeAsync([FromBody] BlogDto userBlog)
+        public async Task<ActionResult<ApiResponse<string>>> DeleteUserBlogLikeAsync([FromBody] BlogDto userBlog)
         {
             var blog = await unitOfWork.BlogRepository.GetBlogByIdWithLikesAsync(userBlog.Id);
 
-            if (blog == null || userBlog.InteractingUserId == null) return NotFound(false);
+            if (blog == null || userBlog.InteractingUserId == null) return NotFound(new ApiResponse<string> { });
 
             var interactingUser = await unitOfWork.UserRepository.GetUserByIdAsync((int)userBlog.InteractingUserId);
 
-            if (interactingUser == null) return NotFound(false);
+            if (interactingUser == null) return NotFound(new ApiResponse<string> { });
 
             var userBlogLike = await unitOfWork.BlogLikeRepository.GetUserBlogLike(interactingUser, blog);
 
-            if (userBlogLike == null) return NotFound(false);
+            if (userBlogLike == null) return NotFound(new ApiResponse<string> { });
 
             unitOfWork.BlogLikeRepository.DeleteUserBlogLike(userBlogLike);
 
-            if(!await unitOfWork.Complete()) return BadRequest(false);
+            xpService.LoseXp(interactingUser, (int)XpActions.LikeOtherBlog);
 
-            return Ok(true);
+            if(!await unitOfWork.Complete()) return BadRequest(new ApiResponse<string> { });
+
+            return Ok(new ApiResponse<string>
+            {
+                Success = true,
+                XpDetails = new UserXpDetailDto
+                {
+                    AppExperiencePoints = interactingUser.AppExperiencePoints,
+                    Level = interactingUser.Level,
+                    LevelThreshold = xpService.GetXpThresholdForLevel(interactingUser.Level),
+                }
+            });
         }
 
         [HttpDelete("DeleteBlogComment")]
