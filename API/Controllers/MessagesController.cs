@@ -10,23 +10,25 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [Authorize]
-    public class MessagesController(IUnitOfWork unitOfWork, IMapper mapper) : BaseApiController
+    public class MessagesController(IUnitOfWork unitOfWork, IXpService xpService, IMapper mapper) : BaseApiController
     {
         [HttpPost]
-        public async Task<ActionResult<MessageDto>> CreateMessage(CreateMessageDto createMessageDto)
+        public async Task<ActionResult<ApiResponse<MessageDto>>> CreateMessage(CreateMessageDto createMessageDto)
         {
             var userId = User.GetUserId();
 
-            if (userId == createMessageDto.RecipientId)
-            {
-                return BadRequest("You cannot message yourself");
-            }
+            var user = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
+
+            if (userId == createMessageDto.RecipientId) return BadRequest(new ApiResponse<MessageDto> { });
+
+            if (user == null) return NotFound(new ApiResponse<MessageDto> { });
+
 
             var sender = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
             var recipient = await unitOfWork.UserRepository.GetUserByIdAsync(createMessageDto.RecipientId);
 
             if (recipient == null || sender == null)
-                return BadRequest("Cannot send message at this time");
+                return BadRequest(new ApiResponse<MessageDto> { Message = "Cannot send message at this time" });
 
             var message = new Message
             {
@@ -38,9 +40,25 @@ namespace API.Controllers
             };
 
             unitOfWork.MessageRepository.AddMessage(message);
-            if (await unitOfWork.Complete()) return Ok(mapper.Map<MessageDto>(message));
 
-            return BadRequest("Failed to save message");
+            xpService.AwardXp(user, (int)XpActions.SendMessageToUser);
+
+            if (await unitOfWork.Complete())
+            {
+                return Ok(new ApiResponse<MessageDto> 
+                {
+                  Data = mapper.Map<MessageDto>(message),
+                  Success = true,
+                  XpDetails = new UserXpDetailDto
+                  {
+                      AppExperiencePoints = user.AppExperiencePoints,
+                      Level = user.Level,
+                      LevelThreshold = xpService.GetXpThresholdForLevel(user.Level),
+                  }
+                });
+            }
+
+            return BadRequest(new ApiResponse<MessageDto> { });
         }
 
 
