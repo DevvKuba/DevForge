@@ -46,12 +46,12 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     next: _ => this.onRouteParamsChange()
   })
 
-    this.route.queryParams.subscribe({
-      next: params => {
-        params['tab'] && this.selectTab(params['tab'])
-      }
-    })
-  }
+  this.route.queryParams.subscribe({
+    next: params => {
+      params['tab'] && this.selectTab(params['tab'])
+    }
+  })
+}
 
   selectTab(heading: string){
     if(this.memberTabs){

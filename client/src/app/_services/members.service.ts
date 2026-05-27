@@ -9,6 +9,7 @@ import { UserParams } from '../_models/userParams';
 import { observeNotification } from 'rxjs/internal/Notification';
 import { AccountService } from './account.service';
 import { setPaginatedResponse, setPaginationHeaders } from './paginationHelper';
+import { ApiResponse } from '../_models/apiResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -47,15 +48,20 @@ export class MembersService {
     })
   }
 
-  getMember(userId: number) : Observable<Member> {
+  getMember(userId: number) : Observable<ApiResponse<Member>> {
     // adds all members on given page to memberCache
     const member: Member = [...this.memberCache.values()]
     .reduce((arr, elem) => arr.concat(elem.body), [])
     .find((m:Member) => m.id === userId); 
 
-    if(member) return of(member);
+    if(member) return of({
+      data: member,
+      message: '',
+      success: true,
+      xpDetails: null
+    });
   
-    return this.http.get<Member>(this.baseUrl + `users/GetUserById?userId=${userId}`);
+    return this.http.get<ApiResponse<Member>>(this.baseUrl + `users/GetUserById?userId=${userId}`);
   }
 
   // calls put request from our api, that updates member data in database
