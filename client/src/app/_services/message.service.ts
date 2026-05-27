@@ -10,6 +10,7 @@ import { User } from '../_models/user';
 import { Group } from '../modals/group';
 import { BusyService } from './busy.service';
 import { Observable } from 'rxjs';
+import { ApiResponse } from '../_models/apiResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -75,8 +76,12 @@ export class MessageService {
     return this.http.get<Message[]>(this.baseUrl + 'messages/thread/' + username);
   }
 
-  async sendMessage(userId: number, content:string) : Promise<any>{
-    return this.hubConnection?.invoke('SendMessage', {recipientId: userId, content})
+  async sendMessage(userId: number, content:string) : Promise<ApiResponse<any>>{
+    if(!this.hubConnection){
+      throw new Error('Hub connection not established');
+    }
+
+    return await this.hubConnection?.invoke<ApiResponse<any>>('SendMessage', {recipientId: userId, content})
   }
 
   deleteMessage(id: number) : Observable<Object>{
