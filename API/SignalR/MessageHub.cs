@@ -2,13 +2,15 @@
 using API.DTO_s;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.SignalR;
 
 namespace API.SignalR
 {
-    public class MessageHub(IUnitOfWork unitOfWork, IMapper mapper, IHubContext<PresenceHub> presenceHub) : Hub
+    public class MessageHub(IUnitOfWork unitOfWork, IMapper mapper, IXpService xpService, IHubContext<PresenceHub> presenceHub) : Hub
     {
         public override async Task OnConnectedAsync()
         {
@@ -46,7 +48,7 @@ namespace API.SignalR
             await base.OnDisconnectedAsync(exception);
         }
 
-        public async Task SendMessage(CreateMessageDto createMessageDto)
+        public async Task<ApiResponse<string>> SendMessage(CreateMessageDto createMessageDto)
         {
             var userId = Context.User?.GetUserId() ?? throw new Exception("could not get user");
             if (userId == createMessageDto.RecipientId)
@@ -89,9 +91,23 @@ namespace API.SignalR
             }
 
             unitOfWork.MessageRepository.AddMessage(message);
+
+            xpService.AwardXp(sender, (int)XpActions.SendMessageToUser);
+
             if (await unitOfWork.Complete())
             {
                 await Clients.Group(groupName).SendAsync("NewMessage", mapper.Map<MessageDto>(message));
+
+                return new ApiResponse<string>
+                {
+                    Success = true,
+                    XpDetails = new UserXpDetailDto
+                    {
+                        Level = sender.Level,
+                        AppExperiencePoints = sender.AppExperiencePoints,
+                        LevelThreshold = xpService.GetXpThresholdForLevel(sender.Level)
+                    }
+                };
             }
             else
             {

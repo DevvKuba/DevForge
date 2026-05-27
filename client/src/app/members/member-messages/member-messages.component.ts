@@ -13,7 +13,8 @@ import { ActivatedRoute } from '@angular/router';
 export class MemberMessagesComponent implements AfterViewChecked,OnInit {
   @ViewChild('messageForm') messageForm?: NgForm;
   @ViewChild('scrollMe') scrollContainer?: any;
-  messageService = inject(MessageService)
+  messageService = inject(MessageService);
+
   route = inject(ActivatedRoute);
   userId: number = 0;
   messageContent = '';
