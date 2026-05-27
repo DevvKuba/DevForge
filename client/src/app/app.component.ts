@@ -5,6 +5,7 @@ import { AccountService } from './_services/account.service';
 import { HomeComponent } from "./home/home.component";
 import { NgxSpinnerComponent} from 'ngx-spinner';
 import { MembersService } from './_services/members.service';
+import { UserXpDetailDto } from './_models/dtos/userXpDetailDto';
 
 @Component({
   selector: 'app-root',
@@ -16,10 +17,11 @@ import { MembersService } from './_services/members.service';
 export class AppComponent implements OnInit {
   private accountService = inject(AccountService);
   private memberService = inject(MembersService);
-
+  
   // start up upon app start / refresh  
   ngOnInit(): void {
   this.setCurrentUser();
+  this.loadMostRecentXp();
   }
 
   setCurrentUser(){
@@ -29,6 +31,14 @@ export class AppComponent implements OnInit {
     this.accountService.setCurrentUser(user);
   }
 
+  loadMostRecentXp(){
+    this.memberService.getMemberWithXp(this.accountService.currentUser()?.id ?? 0).subscribe({
+      next: (response) => {
+        if(!response.xpDetails) return;
+        this.accountService.updateUserXpProperties(response.xpDetails!);
+      }
+    })
+  }
 
 }
 

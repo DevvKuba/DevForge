@@ -59,6 +59,10 @@ export class MembersService {
     return this.http.get<Member>(this.baseUrl + `users/GetUserById?userId=${userId}`);
   }
 
+  getMemberWithXp(userId: number) : Observable<ApiResponse<Member>> {
+    return this.http.get<ApiResponse<Member>>(this.baseUrl + `users/GetUserByIdWithXp?userId=${userId}`);
+  }
+
   // calls put request from our api, that updates member data in database
   updateMember(member: Member) : Observable<Object>{
     return this.http.put(this.baseUrl + 'users', member);
