@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { PhotoEditorComponent } from "../photo-editor/photo-editor.component";
 import { DatePipe } from '@angular/common';
 import { TimeagoModule } from 'ngx-timeago';
+import { R3SelectorScopeMode } from '@angular/compiler';
 
 @Component({
   selector: 'app-member-edit',
@@ -38,7 +39,7 @@ export class MemberEditComponent implements OnInit {
     if(!user) return;
     this.memberService.getMember(user.id).subscribe({
       next: (response) => {
-        this.member = response.data!;
+        this.member = response;
       }
     })
   }

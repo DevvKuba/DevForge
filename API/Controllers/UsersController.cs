@@ -28,11 +28,30 @@ namespace API.Controllers
 
         // route parameter
         [HttpGet("GetUserById")]
-        public async Task<ActionResult<ApiResponse<MemberDto>>> GetUserAsync([FromQuery] int userId)
+        public async Task<ActionResult<MemberDto>> GetUserAsync([FromQuery] int userId)
         {
             var user = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
 
-            if (user == null) return NotFound(new ApiResponse<MemberDto> { Message = "No one is logged in, cannot proceed"});
+            if (user == null) return NotFound( "No one is logged in, cannot proceed");
+
+            if (user.UserName == null) return BadRequest("User does not have a username");
+
+            var memberDto = await unitOfWork.UserRepository.GetMemberAsync(user.Id);
+
+            if (memberDto == null) return NotFound("No member like this exists");
+
+            memberDto.LevelThreshold = xpService.GetXpThresholdForLevel(memberDto.Level);
+
+            return memberDto;
+
+        }
+
+        [HttpGet("GetUserByIdWithXp")]
+        public async Task<ActionResult<ApiResponse<MemberDto>>> GetUserAsyncWithXp([FromQuery] int userId)
+        {
+            var user = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
+
+            if (user == null) return NotFound(new ApiResponse<MemberDto> { Message = "No one is logged in, cannot proceed" });
 
             if (user.UserName == null) return BadRequest(new ApiResponse<MemberDto> { Message = "User does not have a username" });
 
