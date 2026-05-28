@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class LikesController(IUnitOfWork unitOfWork) : BaseApiController
+    public class LikesController(IUnitOfWork unitOfWork, IXpService xpService) : BaseApiController
     {
         [HttpPost("{targetUserId:int}")]
         public async Task<ActionResult> ToggleLike(int targetUserId)
@@ -15,7 +15,7 @@ namespace API.Controllers
             var sourceUserId = User.GetUserId();
 
             if (sourceUserId == targetUserId) return BadRequest("You cannot like yourself");
-
+                    
             var existingLike = await unitOfWork.LikesRepository.GetUserLike(sourceUserId, targetUserId);
 
             if (existingLike == null)
@@ -27,6 +27,10 @@ namespace API.Controllers
                 };
 
                 unitOfWork.LikesRepository.AddLike(like);
+
+                var targetUser = await unitOfWork.UserRepository.GetUserByIdAsync(targetUserId);
+
+                xpService.AwardXp(targetUser!, (int)XpActions.LikeGainedOnProfile);
             }
             else
             {
