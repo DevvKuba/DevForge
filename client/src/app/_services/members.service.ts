@@ -64,8 +64,8 @@ export class MembersService {
   }
 
   // calls put request from our api, that updates member data in database
-  updateMember(member: Member) : Observable<Object>{
-    return this.http.put(this.baseUrl + 'users', member);
+  updateMember(member: Member) : Observable<ApiResponse<any>>{
+    return this.http.put<ApiResponse<any>>(this.baseUrl + 'users', member);
   }
 
 
