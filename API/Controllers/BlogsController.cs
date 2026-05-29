@@ -103,7 +103,9 @@ namespace API.Controllers
 
             var likingUser = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
 
-            if (likingUser == null) return NotFound(new ApiResponse<string> { Message = "Liking user was not found"});
+            var userOwningBlog = await unitOfWork.UserRepository.GetUserByIdAsync(userBlog.UserId);
+
+            if (likingUser == null || userOwningBlog == null) return NotFound(new ApiResponse<string> { Message = "Users not not found"});
 
             var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(userBlog.Id);
 
@@ -112,6 +114,8 @@ namespace API.Controllers
             await unitOfWork.BlogLikeRepository.LikeUserBlogAsync(blog, userBlog.InteractingUserId);
 
             xpService.AwardXp(likingUser, (int)XpActions.LikeOtherBlog);
+
+            xpService.AwardXp(userOwningBlog, (int)XpActions.LikeGainedOnBlog);
 
             if (!await unitOfWork.Complete()) return BadRequest(new ApiResponse<string> { Message = "Changes during blog like did not persist" });
 
