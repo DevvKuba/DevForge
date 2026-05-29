@@ -51,13 +51,13 @@ namespace API.Controllers
         {
             var user = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
 
-            if (user == null) return NotFound(new ApiResponse<MemberDto> { Message = "No one is logged in, cannot proceed" });
+            if (user == null) return NotFound(new ApiResponse<MemberDto> { Success = false, Message = "User not found" });
 
-            if (user.UserName == null) return BadRequest(new ApiResponse<MemberDto> { Message = "User does not have a username" });
+            if (user.UserName == null) return BadRequest(new ApiResponse<MemberDto> { Success = false, Message = "User does not have a username" });
 
             var memberDto = await unitOfWork.UserRepository.GetMemberAsync(user.Id);
 
-            if (memberDto == null) return NotFound(new ApiResponse<MemberDto> { Message = "No member like this exists" });
+            if (memberDto == null) return NotFound(new ApiResponse<MemberDto> { Success = false, Message = "Member not found" });
 
             memberDto.LevelThreshold = xpService.GetXpThresholdForLevel(memberDto.Level);
 
@@ -65,6 +65,7 @@ namespace API.Controllers
             {
                 Data = memberDto,
                 Success = true,
+                Message = "User retrieved successfully",
                 XpDetails = new UserXpDetailDto
                 {
                     Level = memberDto.Level,
@@ -82,7 +83,7 @@ namespace API.Controllers
             // user from datbase aquired by entity framework
             var user = await unitOfWork.UserRepository.GetUserByIdAsync(User.GetUserId());
 
-            if (user == null) return BadRequest(new ApiResponse<string> { });
+            if (user == null) return BadRequest(new ApiResponse<string> { Success = false, Message = "User not found" });
 
             mapper.Map(memberUpdateDto, user!);
 
@@ -97,6 +98,8 @@ namespace API.Controllers
             {
                 return Ok(new ApiResponse<string>
                 {
+                    Success = true,
+                    Message = "Profile updated successfully",
                     XpDetails = new UserXpDetailDto
                     {
                         Level = user.Level,
@@ -106,7 +109,7 @@ namespace API.Controllers
                 });
             }
 
-            return BadRequest(new ApiResponse<string> { });
+            return BadRequest(new ApiResponse<string> { Success = false, Message = "Failed to update profile" });
 
         }
 
