@@ -138,21 +138,31 @@ namespace API.Controllers
 
             var postingUser = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
 
-            if (postingUser == null) return NotFound(new ApiResponse<string> { });
+            if (postingUser == null) return NotFound(new ApiResponse<string> { Success = false, Message = "User not found" });
 
             var blog = await unitOfWork.BlogRepository.GetBlogByIdWithLikesAsync(blogComment.BlogId);
 
-            if (blog == null || blogComment.UserId == null) return NotFound(new ApiResponse<string> { });
+            if (blog == null || blogComment.UserId == null) return NotFound(new ApiResponse<string> { Success = false, Message = "Blog or comment data not found" });
 
             await unitOfWork.BlogCommentRepository.AddBlogCommentAsync(blog, blogComment.UserId, blogComment.Content);
 
-            xpService.AwardXp(postingUser, (int)XpActions.PostBlog);
+            xpService.AwardXp(postingUser, (int)XpActions.CommentOnOtherBlog);
 
             if (!await unitOfWork.Complete())
             {
-                return BadRequest(new ApiResponse<string> { });
+                return BadRequest(new ApiResponse<string> { Success = false, Message = "Failed to save blog comment" });
             }
-            return Ok(new ApiResponse<string> { });
+            return Ok(new ApiResponse<string> 
+            {
+                Success = true,
+                Message = "Comment added successfully",
+                XpDetails = new UserXpDetailDto
+                {
+                    AppExperiencePoints = postingUser.AppExperiencePoints,
+                    Level = postingUser.Level,
+                    LevelThreshold = xpService.GetXpThresholdForLevel(postingUser.Level),
+                }
+            });
         }
 
         [HttpPost("AddBlog")]
@@ -162,7 +172,7 @@ namespace API.Controllers
 
             var postingUser = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
 
-            if (postingUser == null) return NotFound(new ApiResponse<string> { });
+            if (postingUser == null) return NotFound(new ApiResponse<string> { Success = false, Message = "User not found" });
 
             await unitOfWork.BlogRepository.AddBlogAsync(postingUser, newBlog.Title, newBlog.Description);
 
@@ -170,10 +180,11 @@ namespace API.Controllers
 
             if (!await unitOfWork.Complete())
             {
-                return BadRequest(new ApiResponse<string> { });
+                return BadRequest(new ApiResponse<string> { Success = false, Message = "Failed to create blog post" });
             }
             return Ok(new ApiResponse<string> {
                 Success = true,
+                Message = "Blog post created successfully",
                 XpDetails = new UserXpDetailDto { 
                     AppExperiencePoints = postingUser.AppExperiencePoints,
                     Level = postingUser.Level,
@@ -188,11 +199,11 @@ namespace API.Controllers
 
             var postingUser = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
 
-            if (postingUser == null) return NotFound(new ApiResponse<string> { });
+            if (postingUser == null) return NotFound(new ApiResponse<string> { Success = false, Message = "User not found" });
 
             var blog = await unitOfWork.BlogRepository.GetBlogByIdAsync(userBlog.Id);
 
-            if (blog == null) return NotFound(new ApiResponse<string> { });
+            if (blog == null) return NotFound(new ApiResponse<string> { Success = false, Message = "Blog post not found" });
 
             unitOfWork.BlogRepository.RemoveBlog(blog);
 
@@ -200,11 +211,12 @@ namespace API.Controllers
 
             if (!await unitOfWork.Complete())
             {
-                return BadRequest(new ApiResponse<string> { });
+                return BadRequest(new ApiResponse<string> { Success = false, Message = "Failed to delete blog post" });
             }
             return Ok(new ApiResponse<string>
             {
                 Success = true,
+                Message = "Blog post deleted successfully",
                 XpDetails = new UserXpDetailDto
                 {
                     AppExperiencePoints = postingUser.AppExperiencePoints,
@@ -254,11 +266,11 @@ namespace API.Controllers
 
             var postingUser = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
 
-            if (postingUser == null) return NotFound(new ApiResponse<string> { });
+            if (postingUser == null) return NotFound(new ApiResponse<string> { Success = false, Message = "User not found" });
 
             var blogComment = await unitOfWork.BlogCommentRepository.GetBlogCommentByIdAsync(deletionBlogComment.Id);
 
-            if (blogComment == null) return NotFound(new ApiResponse<string> { });
+            if (blogComment == null) return NotFound(new ApiResponse<string> { Success = false, Message = "Comment not found" });
 
             unitOfWork.BlogCommentRepository.DeleteBlogCommentAsync(blogComment);
 
@@ -266,12 +278,13 @@ namespace API.Controllers
 
             if(!await unitOfWork.Complete())
             {
-                return BadRequest(new ApiResponse<string> { });
+                return BadRequest(new ApiResponse<string> { Success = false, Message = "Failed to delete comment" });
             }
 
             return Ok(new ApiResponse<string>
             {
                 Success = true,
+                Message = "Comment deleted successfully",
                 XpDetails = new UserXpDetailDto
                 {
                     AppExperiencePoints = postingUser.AppExperiencePoints,
