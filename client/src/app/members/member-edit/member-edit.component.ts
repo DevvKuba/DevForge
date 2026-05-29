@@ -26,6 +26,7 @@ export class MemberEditComponent implements OnInit {
   }
 
   member?: Member;
+  originalMember?: Member;
   private accountService = inject(AccountService);
   private memberService = inject(MembersService);
   private toastr = inject(ToastrService);
@@ -40,12 +41,19 @@ export class MemberEditComponent implements OnInit {
     this.memberService.getMember(user.id).subscribe({
       next: (response) => {
         this.member = response;
+        this.originalMember = { ...response };
       }
     })
   }
 
   updateMember(){
-    this.memberService.updateMember(this.editForm?.value).subscribe({
+    const newFieldCount = this.countNewlyFilledFields();
+    const updatePayload = {
+      ...this.editForm?.value,
+      newlyFilledFieldCount: newFieldCount
+    };
+    
+    this.memberService.updateMember(updatePayload).subscribe({
       next: _ => {
         this.toastr.success('Profile updated successfully');
         this.editForm?.reset(this.member);
@@ -56,4 +64,27 @@ export class MemberEditComponent implements OnInit {
   onMemberChange(event: Member){
     this.member = event;
   }
+
+  countNewlyFilledFields(): number {
+    const fieldsToCheck = ['introduction', 'skills', 'interests', 'email', 'city', 'country', 'specialization'];
+    
+    let newFieldCount = 0;
+    
+    fieldsToCheck.forEach(field => {
+      const originalValue = (this.originalMember as any)[field] || '';
+      const currentValue = (this.member as any)[field] || '';
+      
+      // Check if field was empty and now has a value
+      if (this.isEmpty(originalValue) && !this.isEmpty(currentValue)) {
+        newFieldCount++;
+      }
+    });
+    
+    return newFieldCount;
+  }
+
+  private isEmpty(value: any): boolean {
+    return value === null || value === undefined || value === '' || value === 0;
+  }
+
 }
