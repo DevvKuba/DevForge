@@ -77,12 +77,12 @@ namespace API.Controllers
 
         // put requests to update database
         [HttpPut]
-        public async Task<ActionResult> UpdateUserAsync(MemberUpdateDto memberUpdateDto)
+        public async Task<ActionResult<ApiResponse<string>>> UpdateUserAsync(MemberUpdateDto memberUpdateDto)
         {
             // user from datbase aquired by entity framework
             var user = await unitOfWork.UserRepository.GetUserByIdAsync(User.GetUserId());
 
-            if (user == null) return BadRequest("Could not find user");
+            if (user == null) return BadRequest(new ApiResponse<string> { });
 
             mapper.Map(memberUpdateDto, user!);
 
@@ -93,9 +93,20 @@ namespace API.Controllers
                 xpService.AwardXp(user, xpGained);
             }
 
-            if (await unitOfWork.Complete()) return NoContent();
+            if (await unitOfWork.Complete())
+            {
+                return Ok(new ApiResponse<string>
+                {
+                    XpDetails = new UserXpDetailDto
+                    {
+                        Level = user.Level,
+                        AppExperiencePoints = user.AppExperiencePoints,
+                        LevelThreshold = xpService.GetXpThresholdForLevel(user.Level)
+                    }
+                });
+            }
 
-            return BadRequest("Failed to update user");
+            return BadRequest(new ApiResponse<string> { });
 
         }
 
