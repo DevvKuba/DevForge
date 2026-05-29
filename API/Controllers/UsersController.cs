@@ -86,6 +86,13 @@ namespace API.Controllers
 
             mapper.Map(memberUpdateDto, user!);
 
+            if(memberUpdateDto.NewlyFilledFieldCount != 0)
+            {
+                int xpGained = (int)XpActions.ProfilePropertyFilledForFirstTime * memberUpdateDto.NewlyFilledFieldCount;
+
+                xpService.AwardXp(user, xpGained);
+            }
+
             if (await unitOfWork.Complete()) return NoContent();
 
             return BadRequest("Failed to update user");
