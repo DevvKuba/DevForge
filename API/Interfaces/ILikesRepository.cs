@@ -6,7 +6,7 @@ namespace API.Interfaces
 {
     public interface ILikesRepository
     {
-        Task<UserLike>? GetUserLike(int sourceUserId, int targetUserId);
+        Task<UserLike?> GetUserLikeAsync(int sourceUserId, int targetUserId);
 
         Task<PagedList<MemberDto>> GetUserLikes(LikesParams likesParams);
 

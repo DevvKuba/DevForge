@@ -16,7 +16,7 @@ namespace API.Controllers
 
             if (sourceUserId == targetUserId) return BadRequest("You cannot like yourself");
                     
-            var existingLike = await unitOfWork.LikesRepository.GetUserLike(sourceUserId, targetUserId);
+            var existingLike = await unitOfWork.LikesRepository.GetUserLikeAsync(sourceUserId, targetUserId);
 
             if (existingLike == null)
             {

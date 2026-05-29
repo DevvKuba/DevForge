@@ -28,7 +28,7 @@ namespace API.Data
                 .ToListAsync();
         }
 
-        public async Task<UserLike?> GetUserLike(int sourceUserId, int targetUserId)
+        public async Task<UserLike?> GetUserLikeAsync(int sourceUserId, int targetUserId)
         {
             return await context.Likes.FindAsync(sourceUserId, targetUserId);
         }
