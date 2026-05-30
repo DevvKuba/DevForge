@@ -109,6 +109,7 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, 
             .HasForeignKey(c => c.BlogId)
             .OnDelete(DeleteBehavior.Cascade);
 
+
     }
 
 }
