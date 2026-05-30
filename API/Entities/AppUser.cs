@@ -48,6 +48,8 @@ public class AppUser : IdentityUser<int>
 
     public List<Blog> Blogs { get; set; } = [];
 
+    public List<Quiz> OngoingQuizzes { get; set; } = [];
+
     // join 
     public ICollection<AppUserRole> UserRoles { get; set; } = [];
 

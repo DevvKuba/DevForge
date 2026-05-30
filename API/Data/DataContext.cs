@@ -26,6 +26,10 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, 
 
     public DbSet<BlogComment> BlogComments { get; set; }
 
+    public DbSet<Quiz> Quizzes { get; set; }
+
+    public DbSet<QuizQuestion> QuizQuestions { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -109,6 +113,17 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, 
             .HasForeignKey(c => c.BlogId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.Entity<Quiz>()
+            .HasOne(q => q.User)
+            .WithMany(u => u.OngoingQuizzes)
+            .HasForeignKey(q => q.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<QuizQuestion>()
+            .HasOne(qq => qq.Quiz)
+            .WithMany(q => q.Questions)
+            .HasForeignKey(qq => qq.QuizId)
+            .OnDelete(DeleteBehavior.Cascade);
 
     }
 
