@@ -10,7 +10,7 @@
 
         public required List<string> IncorrectAnswers { get; set; }
 
-        public required string  Difficulty { get; set; }
+        public required string Difficulty { get; set; }
 
         public int QuizId { get; set; }
 
