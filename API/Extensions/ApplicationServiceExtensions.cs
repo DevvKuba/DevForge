@@ -34,6 +34,7 @@ namespace API.Extensions
             services.AddScoped<IBlogRepository, BlogRepository>();
             services.AddScoped<IBlogLikeRepository, BlogLikeRepository>();
             services.AddScoped<IBlogCommentRepository, BlogCommentRepository>();
+            services.AddScoped<IQuizRepository, QuizRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IXpService, XpService>();
