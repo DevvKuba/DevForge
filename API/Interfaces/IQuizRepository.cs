@@ -6,5 +6,6 @@ namespace API.Interfaces
 {
     public interface IQuizRepository
     {
+        Task<PagedList<QuizDto>> GetUserQuizzesAsync(QuizParams quizParams);
     }
 }
