@@ -1,4 +1,5 @@
 ﻿using API.Entities;
+using API.Helpers;
 
 namespace API.DTO_s
 {
@@ -6,9 +7,7 @@ namespace API.DTO_s
     {
         public int Id { get; set; }
 
-        public required string Topic { get; set; } // change to enum
-
-        public required string Difficulty { get; set; } // change to enum
+        public Difficulties Difficulty { get; set; } 
 
         public required List<QuizQuestionDto> Questions { get; set; }
 

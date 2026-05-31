@@ -1,12 +1,12 @@
-﻿namespace API.Entities
+﻿using API.Helpers;
+
+namespace API.Entities
 {
     public class Quiz
     {
         public int Id { get; set; }
 
-        public required string Topic { get; set; } // change to enum
-
-        public required string Difficulty { get; set; } // change to enum
+        public Difficulties Difficulty { get; set; }
 
         public required List<QuizQuestion> Questions { get; set; }
 
