@@ -5,7 +5,7 @@ namespace API.Data
     // A scoped service
     public class UnitOfWork(DataContext context, IUserRepository userRepository, ILikesRepository likesRepository,
         IMessageRepository messageRepository, IPhotoRepository photoRepository, IBlogRepository blogRepository,
-        IBlogLikeRepository blogLikeRepository, IBlogCommentRepository blogCommentRepository) : IUnitOfWork
+        IBlogLikeRepository blogLikeRepository, IBlogCommentRepository blogCommentRepository, IQuizRepository quizRepository) : IUnitOfWork
     {
         public IUserRepository UserRepository => userRepository;
 
@@ -20,6 +20,8 @@ namespace API.Data
         public IBlogLikeRepository BlogLikeRepository => blogLikeRepository;
 
         public IBlogCommentRepository BlogCommentRepository => blogCommentRepository;
+
+        public IQuizRepository QuizRepository => quizRepository;
 
         public async Task<bool> Complete()
         {

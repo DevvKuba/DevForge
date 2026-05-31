@@ -16,6 +16,8 @@
 
         IBlogCommentRepository BlogCommentRepository { get; }
 
+        IQuizRepository QuizRepository { get; }
+
         Task<bool> Complete();
 
         bool HasChanges();
