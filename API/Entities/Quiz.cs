@@ -6,7 +6,7 @@ namespace API.Entities
     {
         public int Id { get; set; }
 
-        public Difficulties Difficulty { get; set; }
+        public required string Difficulty { get; set; }
 
         public required List<QuizQuestion> Questions { get; set; }
 

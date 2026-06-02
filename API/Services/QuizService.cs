@@ -11,7 +11,7 @@ namespace API.Services
 
         public int ComputerScienceCategoryId { get; } = 18;
 
-        public async Task<List<QuizDto>> RetrieveQuestionsAsync(int numberOfQuestions, string difficulty, string questionType)
+        public async Task<List<QuizQuestionDto>> RetrieveQuestionsAsync(int numberOfQuestions, string difficulty, string questionType)
         {
             var requestUrl = BaseUrl + "amount=" + numberOfQuestions.ToString() + "&difficulty=" +
                 difficulty + "&category=" + ComputerScienceCategoryId + "&type=" +questionType;
@@ -19,6 +19,10 @@ namespace API.Services
             var response = await httpClient.GetAsync(requestUrl);
 
             if (!response.IsSuccessStatusCode) return [];
+
+            var responseContent = response.Content;
+
+            throw new NotImplementedException();
         }
     }
 }

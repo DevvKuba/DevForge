@@ -19,5 +19,9 @@ namespace API.Data
 
             return await PagedList<QuizDto>.CreateAsync(quizzes, quizParams.PageNumber, quizParams.PageSize);
         }
+
+        // persist quiz once quser completes it
+
+        // delete quiz - in case of not liking performance / accidental completion?
     }
 }
