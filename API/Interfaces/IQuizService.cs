@@ -5,6 +5,6 @@ namespace API.Interfaces
 {
     public interface IQuizService
     {
-        Task<List<QuizDto>> CallOpenTriviaToRetrieveQuestions(int numberOfQuestions, Difficulties difficulty, QuestionTypes questionType);
+        Task<List<QuizDto>> RetrieveQuestionsAsync(int numberOfQuestions, string difficulty, string questionType);
     }
 }

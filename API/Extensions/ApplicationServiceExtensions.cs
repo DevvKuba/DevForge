@@ -38,6 +38,7 @@ namespace API.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IXpService, XpService>();
+            services.AddScoped<IQuizService, QuizService>();
             services.AddScoped<LogUserActivity>();
 
             services.AddAutoMapper(config => 
@@ -48,6 +49,7 @@ namespace API.Extensions
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.AddSignalR();
             services.AddSingleton<PresenceTracker>();
+            services.AddHttpClient<IQuizService, QuizService>();
 
             // Add Swagger/OpenAPI
             services.AddEndpointsApiExplorer();
