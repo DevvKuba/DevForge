@@ -12,7 +12,7 @@ namespace API.Controllers
     public class QuizController(IUnitOfWork unitOfWork, IMapper mapper, IQuizService quizService) : BaseApiController
     {
         [HttpGet("GetComputerScienceQuestions")]
-        public async Task<ActionResult<List<QuizQuestionDto>>> GetComputerScienceQuestionsAsync(QuizInfoDto quizInfo)
+        public async Task<ActionResult<List<QuizQuestionDto>>> GetComputerScienceQuestionsAsync([FromQuery] QuizInfoDto quizInfo)
         {
             var quizQuestions = await quizService.RetrieveQuestionsAsync(quizInfo.NumberOfQuestions, quizInfo.Difficulty, quizInfo.QuestionType);
 

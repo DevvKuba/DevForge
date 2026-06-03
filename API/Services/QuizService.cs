@@ -2,6 +2,7 @@
 using API.Helpers;
 using API.Interfaces;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 
 namespace API.Services
 {
@@ -20,9 +21,11 @@ namespace API.Services
 
             if (!response.IsSuccessStatusCode) return [];
 
-            var responseContent = response.Content;
+            var json = await response.Content.ReadAsStringAsync();
 
-            throw new NotImplementedException();
+            var quizQuestions = JsonSerializer.Deserialize<RootResponseDto>(json);
+
+            return [];
         }
     }
 }
