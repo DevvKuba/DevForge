@@ -1,8 +1,10 @@
 ﻿using API.DTO_s;
 using API.Helpers;
 using API.Interfaces;
+using Microsoft.AspNetCore.Http.Json;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace API.Services
 {
@@ -23,9 +25,16 @@ namespace API.Services
 
             var json = await response.Content.ReadAsStringAsync();
 
-            var quizQuestions = JsonSerializer.Deserialize<RootResponseDto>(json);
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
 
-            return [];
+            var quizQuestions = JsonSerializer.Deserialize<RootResponseDto>(json, options);
+
+            if (quizQuestions == null || quizQuestions.Results.Count == 0) return [];
+
+            return quizQuestions.Results;
         }
     }
 }
