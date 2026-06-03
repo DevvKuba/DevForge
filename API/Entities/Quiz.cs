@@ -10,7 +10,7 @@ namespace API.Entities
 
         public required List<QuizQuestion> Questions { get; set; }
 
-        public int Score { get; set; }
+        public double PercentageScore { get; set; }
 
         public DateTime CompletedAt { get; set; }
 
