@@ -11,7 +11,7 @@ using Microsoft.Extensions.Configuration.UserSecrets;
 namespace API.Controllers
 {
     [Authorize]
-    public class QuizController(IUnitOfWork unitOfWork, IMapper mapper, IQuizService quizService) : BaseApiController
+    public class QuizController(IUnitOfWork unitOfWork, IMapper mapper, IQuizService quizService, IXpService xpService) : BaseApiController
     {
         [HttpGet("GetComputerScienceQuestions")]
         public async Task<ActionResult<List<QuizQuestionDto>>> GetComputerScienceQuestionsAsync([FromQuery] QuizInfoDto quizInfo)
@@ -37,6 +37,11 @@ namespace API.Controllers
             completedQuiz.CompletedAt = DateTime.UtcNow;
 
             await unitOfWork.QuizRepository.SaveQuizAsync(completedQuiz);
+
+            xpService.AwardXp(associatedUser,
+                xpService.CalculateXpGainsForQuizCompletion(completedQuiz.Difficulty, completedQuiz.Questions.Count, completedQuiz.PercentageScore));
+
+            if (!await unitOfWork.Complete()) return BadRequest(new ApiResponse<string> { Success = false, Message = "Quiz not saved" });
 
             return Ok(new ApiResponse<string> 
             {

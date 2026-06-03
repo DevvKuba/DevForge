@@ -27,13 +27,11 @@ namespace API.Services
                 var leftOverExp = updatedTotalXp- expThreshold;
 
                 unitOfWork.UserRepository.UpdateAppExperienceAndLevel(user, leftOverExp, level);
-
             }
             else
             {
                 unitOfWork.UserRepository.UpdateAppExperienceAndLevel(user, updatedTotalXp, level);
             }
-
         }
 
         public void LoseXp(AppUser user, int loseXp)
@@ -51,7 +49,6 @@ namespace API.Services
                 level--;
 
                 unitOfWork.UserRepository.UpdateAppExperienceAndLevel(user, updatedTotalXp, level);
-
             }
             else
             {
@@ -68,6 +65,24 @@ namespace API.Services
             return false;
         }
 
+        public int CalculateXpGainsForQuizCompletion(string difficulty, int numberOfQuestions, double percentageScore)
+        {
+            var difficultyMultiplier = difficulty switch
+            {
+                "easy" => 1.0,
+                "medium" => 1.4,
+                "hard" => 1.8,
+                _ => 1.0
+            };
+
+            var baseXp = difficultyMultiplier * numberOfQuestions;
+
+            var accuracyBonus = (percentageScore / 100) * numberOfQuestions + 1;
+
+            var totalXp = baseXp * accuracyBonus;
+
+            return (int)Math.Round(totalXp);
+        }
 
         public int GetXpThresholdForLevel(int level)
         {

@@ -11,6 +11,8 @@ namespace API.Interfaces
 
         void LoseXp(AppUser user, int loseXp);
 
+        int CalculateXpGainsForQuizCompletion(string difficulty, int numberOfQuestions, double percentageScore);
+
         bool HasLevelUpOccured(int currentXp, int level);
 
     }
