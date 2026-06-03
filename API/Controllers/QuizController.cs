@@ -1,10 +1,12 @@
 ﻿using API.DTO_s;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace API.Controllers
 {
@@ -20,5 +22,31 @@ namespace API.Controllers
 
             return Ok(quizQuestions);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<ApiResponse<string>>> SaveCompletedQuizAsync(QuizDto quizDto)
+        {
+            if (quizDto == null) return NotFound(new ApiResponse<string> { Success = false, Message = "Quiz info not found"});
+
+            var associatedUser = await unitOfWork.UserRepository.GetUserByIdAsync(quizDto.UserId);
+
+            if (associatedUser == null) return NotFound(new ApiResponse<string> { Success = false, Message = "Associated user not found" });
+
+            var completedQuiz = mapper.Map<Quiz>(quizDto);
+
+            completedQuiz.CompletedAt = DateTime.UtcNow;
+
+            await unitOfWork.QuizRepository.SaveQuizAsync(completedQuiz);
+
+            return Ok(new ApiResponse<string> 
+            {
+                Success = true,
+                Message = "User Quiz saved"
+            });
+        }
+
+        // Get Call To get a history of most recent quizzes, returns with it's quiz Questions 
+        // allows for checking of how many xp points were gained, completed questions etc.
     }
+
 }

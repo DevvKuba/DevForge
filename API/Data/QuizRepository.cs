@@ -1,4 +1,5 @@
 ﻿using API.DTO_s;
+using API.Entities;
 using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
@@ -20,7 +21,10 @@ namespace API.Data
             return await PagedList<QuizDto>.CreateAsync(quizzes, quizParams.PageNumber, quizParams.PageSize);
         }
 
-        // persist quiz once quser completes it
+        public async Task SaveQuizAsync(Quiz quiz)
+        {
+            await context.Quizzes.AddAsync(quiz);
+        }
 
         // delete quiz - in case of not liking performance / accidental completion?
     }
