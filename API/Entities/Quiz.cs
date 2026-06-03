@@ -12,6 +12,8 @@ namespace API.Entities
 
         public double PercentageScore { get; set; }
 
+        public int XpAwardedForCompletion { get; set; }
+
         public DateTime CompletedAt { get; set; }
 
         public int UserId { get; set; }

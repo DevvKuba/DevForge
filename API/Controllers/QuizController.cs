@@ -13,7 +13,10 @@ namespace API.Controllers
     [Authorize]
     public class QuizController(IUnitOfWork unitOfWork, IMapper mapper, IQuizService quizService, IXpService xpService) : BaseApiController
     {
-        [HttpGet("GetComputerScienceQuestions")]
+        // Get Call To get a history of most recent quizzes, returns with it's quiz Questions 
+        // allows for checking of how many xp points were gained, completed questions etc.
+
+        [HttpGet("GetComputerScienceQuestions")] // historically all questions answered
         public async Task<ActionResult<List<QuizQuestionDto>>> GetComputerScienceQuestionsAsync([FromQuery] QuizInfoDto quizInfo)
         {
             var quizQuestions = await quizService.RetrieveQuestionsAsync(quizInfo.NumberOfQuestions, quizInfo.Difficulty, quizInfo.QuestionType);
@@ -38,8 +41,10 @@ namespace API.Controllers
 
             await unitOfWork.QuizRepository.SaveQuizAsync(completedQuiz);
 
-            xpService.AwardXp(associatedUser,
-                xpService.CalculateXpGainsForQuizCompletion(completedQuiz.Difficulty, completedQuiz.Questions.Count, completedQuiz.PercentageScore));
+            var gainXp = xpService.CalculateXpGainsForQuizCompletion(completedQuiz.Difficulty, completedQuiz.Questions.Count, completedQuiz.PercentageScore);
+
+            completedQuiz.XpAwardedForCompletion = gainXp;
+            xpService.AwardXp(associatedUser, gainXp);
 
             if (!await unitOfWork.Complete()) return BadRequest(new ApiResponse<string> { Success = false, Message = "Quiz not saved" });
 
@@ -49,9 +54,6 @@ namespace API.Controllers
                 Message = "User Quiz saved"
             });
         }
-
-        // Get Call To get a history of most recent quizzes, returns with it's quiz Questions 
-        // allows for checking of how many xp points were gained, completed questions etc.
     }
 
 }
