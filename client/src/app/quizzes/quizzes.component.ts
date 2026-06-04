@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Quiz } from '../_models/quiz';
+import { QuizQuestion } from '../_models/quizQuestion';
+import { AccountService } from '../_services/account.service';
+import { QuizService } from '../_services/quiz.service';
 
 @Component({
   selector: 'app-quizzes',
@@ -11,9 +14,16 @@ import { Quiz } from '../_models/quiz';
   styleUrl: './quizzes.component.css'
 })
 export class QuizzesComponent {
+  accountService = inject(AccountService);
+  quizService = inject(QuizService);
+
+  currentUserId: number = 0;
   completedQuizzes: Quiz[] = [];
+  currentQuizQuestions: QuizQuestion[] = [];
   expandedQuizId: number | null = null;
   showQuizCriteriaDialog = false;
+  pageNumber = 1;
+  pageSize = 10;
 
   quizCriteria = {
     numberOfQuestions: 10,
@@ -22,7 +32,13 @@ export class QuizzesComponent {
   };
 
   ngOnInit() {
-    // TODO: Load completed quizzes from quiz service
+    this.currentUserId = this.accountService.currentUser()?.id ?? 0;
+    this.quizService.getAllUserQuizzes(this.currentUserId, this.pageNumber, this.pageSize).subscribe({
+      next: (response) => {
+        this.completedQuizzes = response.body;
+        console.log(this.completedQuizzes);
+      }
+    })
   }
 
   openQuizCriteriaModal() {

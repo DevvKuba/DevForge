@@ -27,7 +27,7 @@ namespace API.Controllers
             
             var quizzes = await unitOfWork.QuizRepository.GetUserQuizzesAsync(quizParams);
 
-            if (quizzes.Count == 0 || quizzes == null) return NotFound(new List<Quiz> { });
+            if (quizzes.Count == 0 || quizzes == null) return Ok(new List<Quiz> { });
 
             return Ok(quizzes);
         }
