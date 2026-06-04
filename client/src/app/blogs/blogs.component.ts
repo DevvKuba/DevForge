@@ -16,10 +16,10 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-blogs',
   imports: [
-    CardModule, 
-    ButtonModule, 
-    AutoCompleteModule, 
-    CommonModule, 
+    CardModule,
+    ButtonModule,
+    AutoCompleteModule,
+    CommonModule,
     FormsModule
   ],
   templateUrl: './blogs.component.html',
@@ -30,8 +30,8 @@ export class BlogsComponent implements OnInit {
   private accountService = inject(AccountService);
   private toastr = inject(ToastrService);
 
-  pageNumber : number = 1;
-  pageSize : number = 8;
+  pageNumber: number = 1;
+  pageSize: number = 8;
   titleSearchTerm: string = '';
 
   blogs: Blog[] = [];
@@ -54,11 +54,11 @@ export class BlogsComponent implements OnInit {
     this.blogService.gatherAllBlogs(this.pageNumber, this.pageSize, null).subscribe({
       next: (response) => {
         this.blogs = response.body || [];
-      }, 
+      },
     })
   }
 
-   nextPage(): void {
+  nextPage(): void {
     this.pageNumber++;
     this.refreshBlogs();
   }
@@ -70,9 +70,9 @@ export class BlogsComponent implements OnInit {
     }
   }
 
-  isOwner(userId : number) : boolean {
+  isOwner(userId: number): boolean {
     const currentUserId = this.accountService.currentUser()?.id;
-    if(currentUserId === null || currentUserId === undefined) return false;
+    if (currentUserId === null || currentUserId === undefined) return false;
     return Number(userId) === Number(currentUserId);
   }
 
@@ -82,7 +82,7 @@ export class BlogsComponent implements OnInit {
 
   toggleCreateBlogForm(): void {
     this.isCreatingBlog = !this.isCreatingBlog;
-    if(!this.isCreatingBlog){
+    if (!this.isCreatingBlog) {
       this.newBlogTitle = '';
       this.newBlogDescription = '';
     }
@@ -92,12 +92,12 @@ export class BlogsComponent implements OnInit {
     const title = this.newBlogTitle.trim();
     const description = this.newBlogDescription.trim();
 
-    if(!title || !description){
+    if (!title || !description) {
       return;
     }
 
     const currentUserId = this.accountService.currentUser()?.id;
-    if(currentUserId === null || currentUserId === undefined){
+    if (currentUserId === null || currentUserId === undefined) {
       return;
     }
 
@@ -141,7 +141,7 @@ export class BlogsComponent implements OnInit {
     const title = this.editBlogTitle.trim();
     const description = this.editBlogDescription.trim();
 
-    if(!title || !description){
+    if (!title || !description) {
       return;
     }
 
@@ -169,20 +169,20 @@ export class BlogsComponent implements OnInit {
     })
   }
 
-  isCommentsSectionOpen(blog: Blog) : boolean {
+  isCommentsSectionOpen(blog: Blog): boolean {
     const userId = this.accountService.currentUser()?.id ?? 0;
 
     return this.openCommentsBlogId == blog.id && userId !== blog.userId; // true case
   }
 
-  toggleComments(blog: Blog){
+  toggleComments(blog: Blog) {
     const userId = this.accountService.currentUser()?.id ?? 0;
 
-    if(userId === blog.userId) {
+    if (userId === blog.userId) {
       this.toastr.error("Cannot comment on personal blog posts");
     }
 
-    if(this.openCommentsBlogId == blog.id){
+    if (this.openCommentsBlogId == blog.id) {
       this.openCommentsBlogId = null;
       this.openBlogComments = [];
       return;
@@ -193,22 +193,22 @@ export class BlogsComponent implements OnInit {
   }
 
   addBlogComment(blogId: number, content: string) {
-      const blogComment : BlogComment = {
-        id: 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        content: content,
-        blogId: blogId,
-        userId: this.accountService.currentUser()?.id ?? 0,
-      } 
+    const blogComment: BlogComment = {
+      id: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      content: content,
+      blogId: blogId,
+      userId: this.accountService.currentUser()?.id ?? 0,
+    }
 
-      this.blogService.addBlogComment(blogComment).subscribe({
-        next: (response) => { 
-          this.refreshBlogs();
-          this.accountService.updateUserXpProperties(response.xpDetails);
-          this.commentContentByBlog[blogId] = '';
-        }
-      });
+    this.blogService.addBlogComment(blogComment).subscribe({
+      next: (response) => {
+        this.refreshBlogs();
+        this.accountService.updateUserXpProperties(response.xpDetails);
+        this.commentContentByBlog[blogId] = '';
+      }
+    });
   }
 
   deleteBlogComment(blogComment: BlogComment): void {
@@ -261,23 +261,23 @@ export class BlogsComponent implements OnInit {
     if (blog.interactingUserId == null) return;
 
     this.blogService.isBlogLikedByUser(blog.id, blog.interactingUserId).pipe(
-      switchMap(response => 
+      switchMap(response =>
         response
-        ? this.blogService.undoBlogLike(blog)
-        : this.blogService.addBlogLike(blog)
+          ? this.blogService.undoBlogLike(blog)
+          : this.blogService.addBlogLike(blog)
       )
     ).subscribe({
-      next: (response) =>  {
+      next: (response) => {
         this.accountService.updateUserXpProperties(response.xpDetails);
         this.refreshBlogs();
       }
     })
   }
 
-  searchForSpecificBlogTitle(){
+  searchForSpecificBlogTitle() {
     const searchTerm = this.titleSearchTerm.trim();
 
-    if(!searchTerm) return;
+    if (!searchTerm) return;
 
     this.blogService.gatherAllBlogs(this.pageNumber, this.pageSize, searchTerm).subscribe({
       next: (response) => {

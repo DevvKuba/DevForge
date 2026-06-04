@@ -32,7 +32,7 @@ namespace API.Controllers
         {
             var user = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
 
-            if (user == null) return NotFound( "No one is logged in, cannot proceed");
+            if (user == null) return NotFound("No one is logged in, cannot proceed");
 
             if (user.UserName == null) return BadRequest("User does not have a username");
 
@@ -87,7 +87,7 @@ namespace API.Controllers
 
             mapper.Map(memberUpdateDto, user!);
 
-            if(memberUpdateDto.NewlyFilledFieldCount != 0)
+            if (memberUpdateDto.NewlyFilledFieldCount != 0)
             {
                 int xpGained = (int)XpActions.ProfilePropertyFilledForFirstTime * memberUpdateDto.NewlyFilledFieldCount;
 

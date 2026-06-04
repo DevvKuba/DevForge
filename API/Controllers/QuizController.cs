@@ -23,8 +23,8 @@ namespace API.Controllers
 
             var user = await unitOfWork.UserRepository.GetUserByIdAsync((int)quizParams.UserId);
 
-            if(user == null) return NotFound(new List<Quiz> { });
-            
+            if (user == null) return NotFound(new List<Quiz> { });
+
             var quizzes = await unitOfWork.QuizRepository.GetUserQuizzesAsync(quizParams);
 
             if (quizzes.Count == 0 || quizzes == null) return Ok(new List<Quiz> { });
@@ -45,7 +45,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<ApiResponse<string>>> SaveCompletedQuizAsync(QuizDto quizDto)
         {
-            if (quizDto == null) return NotFound(new ApiResponse<string> { Success = false, Message = "Quiz info not found"});
+            if (quizDto == null) return NotFound(new ApiResponse<string> { Success = false, Message = "Quiz info not found" });
 
             var associatedUser = await unitOfWork.UserRepository.GetUserByIdAsync(quizDto.UserId);
 
@@ -64,7 +64,7 @@ namespace API.Controllers
 
             if (!await unitOfWork.Complete()) return BadRequest(new ApiResponse<string> { Success = false, Message = "Quiz not saved" });
 
-            return Ok(new ApiResponse<string> 
+            return Ok(new ApiResponse<string>
             {
                 Success = true,
                 Message = "User Quiz saved"

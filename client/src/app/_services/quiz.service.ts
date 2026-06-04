@@ -13,11 +13,11 @@ export class QuizService {
   http = inject(HttpClient);
   baseUrl = environment.apiUrl;
 
-  getAllUserQuizzes(userId: number, pageNumber: number, pageSize: number) : Observable<any> {
+  getAllUserQuizzes(userId: number, pageNumber: number, pageSize: number): Observable<any> {
     let params;
     params = setPaginationHeaders(pageNumber, pageSize);
     params = params.append('UserId', userId);
 
-    return this.http.get<Quiz[]>(this.baseUrl + 'quiz/GetAllCompletedQuizzes', {observe: 'response', params});
+    return this.http.get<Quiz[]>(this.baseUrl + 'quiz/GetAllCompletedQuizzes', { observe: 'response', params });
   }
 }

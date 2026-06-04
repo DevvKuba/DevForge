@@ -1,41 +1,20 @@
 <div class="blogs-container">
   <div class="blogs-toolbar">
-    <button
-      pButton
-      type="button"
-      [label]="isCreatingBlog ? 'Close' : 'Create Blog'"
-      [icon]="isCreatingBlog ? 'pi pi-times' : 'pi pi-plus'"
-      class="p-button-sm"
-      (click)="toggleCreateBlogForm()"
-    ></button>
+    <button pButton type="button" [label]="isCreatingBlog ? 'Close' : 'Create Blog'"
+      [icon]="isCreatingBlog ? 'pi pi-times' : 'pi pi-plus'" class="p-button-sm"
+      (click)="toggleCreateBlogForm()"></button>
   </div>
 
   @if (isCreatingBlog) {
-    <div class="create-blog-section">
-      <input
-        type="text"
-        name="newBlogTitle"
-        [(ngModel)]="newBlogTitle"
-        placeholder="Blog title"
-        class="search-input"
-      />
+  <div class="create-blog-section">
+    <input type="text" name="newBlogTitle" [(ngModel)]="newBlogTitle" placeholder="Blog title" class="search-input" />
 
-      <textarea
-        name="newBlogDescription"
-        [(ngModel)]="newBlogDescription"
-        placeholder="Blog description"
-        class="comment-input"
-      ></textarea>
+    <textarea name="newBlogDescription" [(ngModel)]="newBlogDescription" placeholder="Blog description"
+      class="comment-input"></textarea>
 
-      <button
-        pButton
-        type="button"
-        label="Publish"
-        icon="pi pi-check"
-        class="p-button-sm"
-        (click)="createBlog()"
-      ></button>
-    </div>
+    <button pButton type="button" label="Publish" icon="pi pi-check" class="p-button-sm"
+      (click)="createBlog()"></button>
+  </div>
   }
 
   <!-- Filters Section -->
@@ -45,35 +24,18 @@
       <div class="filter-item">
         <label for="titleSearch">Search by Title:</label>
         <div class="search-input-group">
-          <input 
-            id="titleSearch"
-            [(ngModel)]="titleSearchTerm"
-            type="text" 
-            placeholder="Search blogs..." 
-            class="search-input"
-          />
-          <button 
-            pButton 
-            type="button" 
-            icon="pi pi-search"
-            label="Search"
-            class="p-button-sm"
-            (click)="searchForSpecificBlogTitle()"
-          ></button>
+          <input id="titleSearch" [(ngModel)]="titleSearchTerm" type="text" placeholder="Search blogs..."
+            class="search-input" />
+          <button pButton type="button" icon="pi pi-search" label="Search" class="p-button-sm"
+            (click)="searchForSpecificBlogTitle()"></button>
         </div>
       </div>
 
       <!-- Clear Filters Button -->
       <div class="filter-item">
         <label class="filter-label-spacer">&nbsp;</label>
-        <button 
-          pButton 
-          type="button" 
-          label="Clear Filters" 
-          icon="pi pi-times"
-          class="p-button-secondary"
-          (click)="refreshBlogs()"
-        ></button>
+        <button pButton type="button" label="Clear Filters" icon="pi pi-times" class="p-button-secondary"
+          (click)="refreshBlogs()"></button>
       </div>
     </div>
   </div>
@@ -81,242 +43,149 @@
   <!-- Blog Cards -->
   <div class="blogs-grid">
     @for (blog of blogs; track blog.id) {
-      <p-card class="blog-card">
-        <!-- Header with Title and Delete Button -->
-        <ng-template pTemplate="header">
-          <div class="blog-header">
-            <div class="blog-title-wrap">
-              <h3 class="blog-title">{{blog.title}}</h3>
-              <p class="blog-meta">Published {{blog.publishedAt | date:'mediumDate'}}</p>
-            </div>
-            @if (isOwner(blog.userId)) {
-              <div class="owner-actions">
-                <button
-                  pButton
-                  type="button"
-                  icon="pi pi-pencil"
-                  class="p-button-rounded p-button-text p-button-sm owner-action-btn owner-edit-btn"
-                  [title]="'Edit blog'"
-                  (click)="startEditBlog(blog)"
-                ></button>
-                <button
-                  pButton
-                  type="button"
-                  icon="pi pi-trash"
-                  class="p-button-rounded p-button-text p-button-sm owner-action-btn owner-delete-btn"
-                  [title]="'Delete blog'"
-                  (click)="deleteBlog(blog)"
-                ></button>
-              </div>
-            }
+    <p-card class="blog-card">
+      <!-- Header with Title and Delete Button -->
+      <ng-template pTemplate="header">
+        <div class="blog-header">
+          <div class="blog-title-wrap">
+            <h3 class="blog-title">{{blog.title}}</h3>
+            <p class="blog-meta">Published {{blog.publishedAt | date:'mediumDate'}}</p>
           </div>
-        </ng-template>
-
-        <!-- Blog Content -->
-        <div class="blog-content">
-          @if (isEditingBlog(blog)) {
-            <div class="edit-panel">
-              <div class="edit-field">
-                <label for="editBlogTitle">Title</label>
-                <input
-                  id="editBlogTitle"
-                  type="text"
-                  name="editBlogTitle"
-                  [(ngModel)]="editBlogTitle"
-                  placeholder="Blog title"
-                  class="search-input edit-input"
-                />
-              </div>
-              <div class="edit-field">
-                <label for="editBlogDescription">Description</label>
-                <textarea
-                  id="editBlogDescription"
-                  name="editBlogDescription"
-                  [(ngModel)]="editBlogDescription"
-                  placeholder="Blog description"
-                  class="comment-input edit-input"
-                ></textarea>
-              </div>
-              <div class="edit-actions">
-                <button
-                  pButton
-                  type="button"
-                  label="Save changes"
-                  icon="pi pi-check"
-                  class="p-button-sm"
-                  (click)="saveBlogEdit(blog)"
-                ></button>
-                <button
-                  pButton
-                  type="button"
-                  label="Discard"
-                  icon="pi pi-times"
-                  class="p-button-sm p-button-secondary"
-                  (click)="cancelEditBlog()"
-                ></button>
-              </div>
-            </div>
-          } @else {
-            <p class="blog-description">{{blog.description}}</p>
+          @if (isOwner(blog.userId)) {
+          <div class="owner-actions">
+            <button pButton type="button" icon="pi pi-pencil"
+              class="p-button-rounded p-button-text p-button-sm owner-action-btn owner-edit-btn" [title]="'Edit blog'"
+              (click)="startEditBlog(blog)"></button>
+            <button pButton type="button" icon="pi pi-trash"
+              class="p-button-rounded p-button-text p-button-sm owner-action-btn owner-delete-btn"
+              [title]="'Delete blog'" (click)="deleteBlog(blog)"></button>
+          </div>
           }
         </div>
+      </ng-template>
 
-        <!-- Blog Actions (Likes, Comments, etc) -->
-        <div class="blog-actions">
-          <!-- Likes Section -->
-          <div class="action-group likes">
-            <button 
-              pButton 
-              type="button" 
-              icon="pi pi-heart-fill" 
-              class="p-button-rounded p-button-text action-icon-btn like-btn"
-              (click)="toggleLike(blog)"
-              [title]="'Like this blog'"
-            ></button>
-            <span class="action-count">{{blog.blogLikes.length || 0}}</span>
-            <span class="action-label">Likes</span>
+      <!-- Blog Content -->
+      <div class="blog-content">
+        @if (isEditingBlog(blog)) {
+        <div class="edit-panel">
+          <div class="edit-field">
+            <label for="editBlogTitle">Title</label>
+            <input id="editBlogTitle" type="text" name="editBlogTitle" [(ngModel)]="editBlogTitle"
+              placeholder="Blog title" class="search-input edit-input" />
           </div>
-
-          <!-- Comments Section -->
-          <div class="action-group comments">
-            <button 
-              pButton 
-              type="button" 
-              icon="pi pi-comments" 
-              class="p-button-rounded p-button-text action-icon-btn comment-btn"
-              [title]="'View comments'"
-              (click)="toggleComments(blog)"
-            ></button>
-            <span class="action-count">{{blog.blogComments.length || 0}}</span>
-            <span class="action-label">Comments</span>
+          <div class="edit-field">
+            <label for="editBlogDescription">Description</label>
+            <textarea id="editBlogDescription" name="editBlogDescription" [(ngModel)]="editBlogDescription"
+              placeholder="Blog description" class="comment-input edit-input"></textarea>
+          </div>
+          <div class="edit-actions">
+            <button pButton type="button" label="Save changes" icon="pi pi-check" class="p-button-sm"
+              (click)="saveBlogEdit(blog)"></button>
+            <button pButton type="button" label="Discard" icon="pi pi-times" class="p-button-sm p-button-secondary"
+              (click)="cancelEditBlog()"></button>
           </div>
         </div>
-
-        <!-- Comments Section (Collapsible) -->
-        @if (isCommentsSectionOpen(blog)) {
-          <div class="comments-section">
-            <!-- Existing Comments -->
-            @if (blog.blogComments && blog.blogComments.length > 0) {
-              <div class="existing-comments">
-                @for (comment of blog.blogComments; track comment.id) {
-                  <div class="comment-item">
-                    @if (isEditingComment(comment)) {
-                      <div class="comment-edit-panel">
-                        <textarea
-                          name="editCommentContent"
-                          [(ngModel)]="editingCommentContent"
-                          placeholder="Edit your comment..."
-                          class="comment-input"
-                        ></textarea>
-                        <div class="comment-edit-actions">
-                          <button
-                            pButton
-                            type="button"
-                            icon="pi pi-check"
-                            class="p-button-text p-button-sm edit-confirm-btn"
-                            [title]="'Save comment'"
-                            (click)="updateComment(comment)"
-                          ></button>
-                          <button
-                            pButton
-                            type="button"
-                            icon="pi pi-times"
-                            class="p-button-text p-button-sm edit-cancel-btn"
-                            [title]="'Cancel edit'"
-                            (click)="cancelEditComment()"
-                          ></button>
-                        </div>
-                      </div>
-                    } @else {
-                      <div class="comment-header">
-                        <p class="comment-content">{{comment.content}}</p>
-                        @if (isOwner(comment.userId)) {
-                          <div class="comment-actions">
-                            <button 
-                              pButton 
-                              type="button" 
-                              icon="pi pi-pencil" 
-                              class="p-button-rounded p-button-text p-button-sm edit-comment-btn"
-                              [title]="'Edit comment'"
-                              (click)="startEditComment(comment)"
-                            ></button>
-                            <button 
-                              pButton 
-                              type="button" 
-                              icon="pi pi-trash" 
-                              class="p-button-rounded p-button-text p-button-sm delete-comment-btn"
-                              [title]="'Delete comment'"
-                              (click)="deleteBlogComment(comment)"
-                            ></button>
-                          </div>
-                        }
-                      </div>
-                      <p class="comment-date">{{comment.createdAt | date:'short'}}</p>
-                    }
-                  </div>
-                }
-              </div>
-            }
-
-            <!-- No Comments Message -->
-            @if (!blog.blogComments || blog.blogComments.length === 0) {
-              <p class="no-comments">
-                No comments yet. Be the first to comment!
-              </p>
-            }
-
-            <!-- Add New Comment Section -->
-            <div class="add-comment-section">
-              <textarea
-                name="commentContent"
-                [(ngModel)]="commentContentByBlog[blog.id]"
-                placeholder="Write a comment..."
-                class="comment-input"
-              ></textarea>
-
-              <button
-                pButton
-                type="button"
-                label="Post comment"
-                icon="pi pi-check"
-                class="p-button-sm"
-                (click)="addBlogComment(blog.id, commentContentByBlog[blog.id] || '')"
-              ></button>
-            </div>
-          </div>
+        } @else {
+        <p class="blog-description">{{blog.description}}</p>
         }
-      </p-card>
+      </div>
+
+      <!-- Blog Actions (Likes, Comments, etc) -->
+      <div class="blog-actions">
+        <!-- Likes Section -->
+        <div class="action-group likes">
+          <button pButton type="button" icon="pi pi-heart-fill"
+            class="p-button-rounded p-button-text action-icon-btn like-btn" (click)="toggleLike(blog)"
+            [title]="'Like this blog'"></button>
+          <span class="action-count">{{blog.blogLikes.length || 0}}</span>
+          <span class="action-label">Likes</span>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="action-group comments">
+          <button pButton type="button" icon="pi pi-comments"
+            class="p-button-rounded p-button-text action-icon-btn comment-btn" [title]="'View comments'"
+            (click)="toggleComments(blog)"></button>
+          <span class="action-count">{{blog.blogComments.length || 0}}</span>
+          <span class="action-label">Comments</span>
+        </div>
+      </div>
+
+      <!-- Comments Section (Collapsible) -->
+      @if (isCommentsSectionOpen(blog)) {
+      <div class="comments-section">
+        <!-- Existing Comments -->
+        @if (blog.blogComments && blog.blogComments.length > 0) {
+        <div class="existing-comments">
+          @for (comment of blog.blogComments; track comment.id) {
+          <div class="comment-item">
+            @if (isEditingComment(comment)) {
+            <div class="comment-edit-panel">
+              <textarea name="editCommentContent" [(ngModel)]="editingCommentContent" placeholder="Edit your comment..."
+                class="comment-input"></textarea>
+              <div class="comment-edit-actions">
+                <button pButton type="button" icon="pi pi-check" class="p-button-text p-button-sm edit-confirm-btn"
+                  [title]="'Save comment'" (click)="updateComment(comment)"></button>
+                <button pButton type="button" icon="pi pi-times" class="p-button-text p-button-sm edit-cancel-btn"
+                  [title]="'Cancel edit'" (click)="cancelEditComment()"></button>
+              </div>
+            </div>
+            } @else {
+            <div class="comment-header">
+              <p class="comment-content">{{comment.content}}</p>
+              @if (isOwner(comment.userId)) {
+              <div class="comment-actions">
+                <button pButton type="button" icon="pi pi-pencil"
+                  class="p-button-rounded p-button-text p-button-sm edit-comment-btn" [title]="'Edit comment'"
+                  (click)="startEditComment(comment)"></button>
+                <button pButton type="button" icon="pi pi-trash"
+                  class="p-button-rounded p-button-text p-button-sm delete-comment-btn" [title]="'Delete comment'"
+                  (click)="deleteBlogComment(comment)"></button>
+              </div>
+              }
+            </div>
+            <p class="comment-date">{{comment.createdAt | date:'short'}}</p>
+            }
+          </div>
+          }
+        </div>
+        }
+
+        <!-- No Comments Message -->
+        @if (!blog.blogComments || blog.blogComments.length === 0) {
+        <p class="no-comments">
+          No comments yet. Be the first to comment!
+        </p>
+        }
+
+        <!-- Add New Comment Section -->
+        <div class="add-comment-section">
+          <textarea name="commentContent" [(ngModel)]="commentContentByBlog[blog.id]" placeholder="Write a comment..."
+            class="comment-input"></textarea>
+
+          <button pButton type="button" label="Post comment" icon="pi pi-check" class="p-button-sm"
+            (click)="addBlogComment(blog.id, commentContentByBlog[blog.id] || '')"></button>
+        </div>
+      </div>
+      }
+    </p-card>
     }
   </div>
 
   <!-- No Blogs Message -->
   @if (blogs.length === 0) {
-    <div class="no-blogs-message">
-      <p>No blogs found. Check back later!</p>
-    </div>
+  <div class="no-blogs-message">
+    <p>No blogs found. Check back later!</p>
+  </div>
   }
 
   <!-- Pagination Controls -->
   <div class="pagination-controls">
     <div class="pagination-buttons">
-      <button
-        pButton
-        type="button"
-        icon="pi pi-chevron-left"
-        label="Previous"
-        class="p-button-secondary"
-        (click)="previousPage()"
-        [disabled]="pageNumber === 1"
-      ></button>
-      <button
-        pButton
-        type="button"
-        icon="pi pi-chevron-right"
-        iconPos="right"
-        label="Next"
-        class="p-button-secondary"
-        (click)="nextPage()"
-      ></button>
+      <button pButton type="button" icon="pi pi-chevron-left" label="Previous" class="p-button-secondary"
+        (click)="previousPage()" [disabled]="pageNumber === 1"></button>
+      <button pButton type="button" icon="pi pi-chevron-right" iconPos="right" label="Next" class="p-button-secondary"
+        (click)="nextPage()"></button>
     </div>
     <span class="page-info">Page {{pageNumber}}</span>
   </div>
