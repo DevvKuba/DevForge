@@ -16,6 +16,88 @@
     </div>
   </div>
 
+  <!-- Quiz Criteria Modal -->
+  @if (showQuizCriteriaDialog) {
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal fade show d-block" role="dialog" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Set Quiz Criteria</h5>
+            <button type="button" class="btn-close" (click)="closeQuizCriteriaModal()" aria-label="Close"></button>
+          </div>
+
+          <div class="modal-body">
+            <!-- Number of Questions -->
+            <div class="mb-3">
+              <label for="numberOfQuestions" class="form-label">Number of Questions</label>
+              <input
+                type="number"
+                class="form-control"
+                id="numberOfQuestions"
+                [(ngModel)]="quizCriteria.numberOfQuestions"
+                min="5"
+                max="50"
+                [class.is-invalid]="isInvalidNumberOfQuestions()"
+              />
+              @if (isInvalidNumberOfQuestions()) {
+                <div class="invalid-feedback" style="display: block;">
+                  @if (quizCriteria.numberOfQuestions < 5 || quizCriteria.numberOfQuestions > 50) {
+                    <small>Number of questions must be between 5 and 50</small>
+                  }
+                </div>
+              }
+              <small class="form-text text-muted">Between 5 and 50 questions</small>
+            </div>
+
+            <!-- Difficulty -->
+            <div class="mb-3">
+              <label for="difficulty" class="form-label">Difficulty Level</label>
+              <select
+                class="form-select"
+                id="difficulty"
+                [(ngModel)]="quizCriteria.difficulty"
+              >
+                <option value="">Select Difficulty</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+            </div>
+
+            <!-- Question Type -->
+            <div class="mb-3">
+              <label for="questionType" class="form-label">Question Type</label>
+              <select
+                class="form-select"
+                id="questionType"
+                [(ngModel)]="quizCriteria.questionType"
+              >
+                <option value="">Select Question Type</option>
+                <option value="multiple">Multiple Choice</option>
+                <option value="boolean">True/False (Boolean)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-success"
+              (click)="submitQuizCriteria()"
+              [disabled]="!isQuizCriteriaValid()"
+            >
+              Start Quiz
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="closeQuizCriteriaModal()">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
   <!-- Empty State -->
   @if (completedQuizzes.length === 0) {
     <div class="alert alert-info text-center py-5">
@@ -52,7 +134,7 @@
                       <i class="fa fa-signal me-1"></i>{{ quiz.difficulty | uppercase }}
                     </span>
                     <span class="ms-2 text-muted small">
-                      <i class="fa fa-book me-1"></i>{{ quiz.questions?.length }} Questions
+                      <i class="fa fa-book me-1"></i>{{ quiz.questions.length }} Questions
                     </span>
                   </div>
                 </div>
@@ -144,7 +226,7 @@
                         <div class="col-md-6 mb-3">
                           <div class="stat-item">
                             <span class="text-muted">Total Questions:</span>
-                            <strong class="d-block">{{ quiz.questions?.length }}</strong>
+                            <strong class="d-block">{{ quiz.questions.length }}</strong>
                           </div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -164,7 +246,7 @@
                         <div class="col-md-6">
                           <div class="stat-item">
                             <span class="text-muted">Questions Correct:</span>
-                            <strong class="d-block">{{ (quiz.percentageScore / 100) * quiz.questions?.length | number: '1.0-0' }}</strong>
+                            <strong class="d-block">{{ (quiz.percentageScore / 100) * quiz.questions.length | number: '1.0-0' }}</strong>
                           </div>
                         </div>
                       </div>

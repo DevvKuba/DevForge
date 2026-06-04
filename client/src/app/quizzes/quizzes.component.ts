@@ -1,29 +1,63 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { FormsModule } from '@angular/forms';
 import { Quiz } from '../_models/quiz';
-import { QuizCriteriaComponent } from '../modals/quiz-criteria/quiz-criteria.component';
 
 @Component({
   selector: 'app-quizzes',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './quizzes.component.html',
   styleUrl: './quizzes.component.css'
 })
 export class QuizzesComponent {
-  private modalService = inject(BsModalService);
-  bsModalRef?: BsModalRef<QuizCriteriaComponent>;
-
   completedQuizzes: Quiz[] = [];
   expandedQuizId: number | null = null;
+  showQuizCriteriaDialog = false;
+
+  quizCriteria = {
+    numberOfQuestions: 10,
+    difficulty: 'medium',
+    questionType: 'multiple'
+  };
 
   ngOnInit() {
     // TODO: Load completed quizzes from quiz service
   }
 
   openQuizCriteriaModal() {
-    // TODO: Open quiz criteria modal and handle submission
+    this.showQuizCriteriaDialog = true;
+  }
+
+  closeQuizCriteriaModal() {
+    this.showQuizCriteriaDialog = false;
+    this.resetQuizCriteria();
+  }
+
+  submitQuizCriteria() {
+    if (this.isQuizCriteriaValid()) {
+      // TODO: Call quiz service with this.quizCriteria to fetch questions from external API
+      console.log('Quiz criteria submitted:', this.quizCriteria);
+      this.closeQuizCriteriaModal();
+    }
+  }
+
+  isQuizCriteriaValid(): boolean {
+    // TODO: Implement validation logic
+    return true;
+  }
+
+  isInvalidNumberOfQuestions(): boolean {
+    // TODO: Implement validation for number of questions
+    return false;
+  }
+
+  resetQuizCriteria() {
+    this.quizCriteria = {
+      numberOfQuestions: 10,
+      difficulty: 'medium',
+      questionType: 'multiple'
+    };
   }
 
   toggleQuizExpansion(quizId: number) {
