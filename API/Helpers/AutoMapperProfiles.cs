@@ -23,7 +23,9 @@ namespace API.Helpers
             CreateMap<BlogLike, BlogLikeDto>();
             CreateMap<Photo, PhotoDto>();
             CreateMap<Photo, PhotoForApprovalDto>();
+            CreateMap<Quiz, QuizDto>();
             CreateMap<QuizDto, Quiz>();
+            CreateMap<QuizQuestion, QuizQuestionDto>();
             CreateMap<QuizQuestionDto, QuizQuestion>();
 
             CreateMap<BlogDto, Blog>();

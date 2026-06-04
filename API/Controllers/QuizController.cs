@@ -16,6 +16,22 @@ namespace API.Controllers
         // Get Call To get a history of most recent quizzes, returns with it's quiz Questions 
         // allows for checking of how many xp points were gained, completed questions etc.
 
+        [HttpGet("GetAllCompletedQuizzes")]
+        public async Task<ActionResult<List<Quiz>>> GetAllUserCompletedQuizzesAsync([FromQuery] QuizParams quizParams)
+        {
+            if (quizParams.UserId == null) return NotFound(new List<Quiz> { });
+
+            var user = await unitOfWork.UserRepository.GetUserByIdAsync((int)quizParams.UserId);
+
+            if(user == null) return NotFound(new List<Quiz> { });
+            
+            var quizzes = await unitOfWork.QuizRepository.GetUserQuizzesAsync(quizParams);
+
+            if (quizzes.Count == 0 || quizzes == null) return NotFound(new List<Quiz> { });
+
+            return Ok(quizzes);
+        }
+
         [HttpGet("GetComputerScienceQuestions")] // historically all questions answered
         public async Task<ActionResult<List<QuizQuestionDto>>> GetComputerScienceQuestionsAsync([FromQuery] QuizInfoDto quizInfo)
         {
