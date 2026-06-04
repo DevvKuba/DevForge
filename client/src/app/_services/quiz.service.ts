@@ -8,7 +8,6 @@ import { PaginatedResult } from '../_models/pagination';
   providedIn: 'root'
 })
 export class QuizService {
-
   http = inject(HttpClient);
   baseUrl = environment.apiUrl;
 }

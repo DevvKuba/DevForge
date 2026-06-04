@@ -1,1 +1,182 @@
-<p>quizzes works!</p>
+<div class="container mt-5">
+  <!-- Header Section -->
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h2 class="mb-0">My Quizzes</h2>
+      <p class="text-muted">View your completed quizzes and attempt new ones</p>
+    </div>
+    <div class="col-md-4 text-end">
+      <button
+        class="btn btn-primary"
+        (click)="openQuizCriteriaModal()"
+        title="Start a new quiz by setting your criteria"
+      >
+        <i class="fa fa-plus me-2"></i>Start New Quiz
+      </button>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  @if (completedQuizzes.length === 0) {
+    <div class="alert alert-info text-center py-5">
+      <i class="fa fa-info-circle me-2"></i>
+      <strong>No quizzes completed yet.</strong> Click the button above to start your first quiz!
+    </div>
+  }
+
+  <!-- Completed Quizzes List -->
+  @if (completedQuizzes.length > 0) {
+    <div class="row">
+      <div class="col-12">
+        <div class="quiz-list">
+          @for (quiz of completedQuizzes; track $index; let i = $index) {
+            <div
+              class="card quiz-card mb-3 border-0 shadow-sm"
+              [class.quiz-expanded]="isQuizExpanded(i)"
+            >
+              <!-- Quiz Header / Summary -->
+              <div
+                class="card-header quiz-header d-flex justify-content-between align-items-center cursor-pointer"
+                (click)="toggleQuizExpansion(i)"
+                role="button"
+                tabindex="0"
+                [attr.aria-expanded]="isQuizExpanded(i)"
+              >
+                <div class="quiz-summary">
+                  <h5 class="mb-2">
+                    <i class="fa me-2" [ngClass]="isQuizExpanded(i) ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
+                    Quiz Attempt #{{ i + 1 }}
+                  </h5>
+                  <div class="quiz-meta">
+                    <span class="badge" [ngClass]="'badge-' + getDifficultyClass(quiz.difficulty)">
+                      <i class="fa fa-signal me-1"></i>{{ quiz.difficulty | uppercase }}
+                    </span>
+                    <span class="ms-2 text-muted small">
+                      <i class="fa fa-book me-1"></i>{{ quiz.questions?.length }} Questions
+                    </span>
+                  </div>
+                </div>
+
+                <div class="quiz-score text-end">
+                  <div class="score-display">
+                    <span class="score-value" [ngClass]="getScoreColor(quiz.percentageScore)">
+                      {{ quiz.percentageScore }}%
+                    </span>
+                    <div class="small text-muted">Score</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quiz Details - Expandable -->
+              @if (isQuizExpanded(i)) {
+                <div class="quiz-details">
+                  <!-- Questions Section -->
+                  <div class="card-body">
+                    <div class="questions-section">
+                      <h6 class="mb-3 text-uppercase fw-bold text-secondary">
+                        <i class="fa fa-list me-2"></i>Questions
+                      </h6>
+
+                      @if (!quiz.questions || quiz.questions.length === 0) {
+                        <div class="alert alert-warning">
+                          No questions available for this quiz.
+                        </div>
+                      }
+
+                      @for (question of quiz.questions; track $index; let qIndex = $index) {
+                        <div class="question-item mb-4 pb-4 border-bottom">
+                          <!-- Question -->
+                          <div class="mb-3">
+                            <div class="question-number text-muted small">Question {{ qIndex + 1 }}</div>
+                            <p class="question-text mb-2">
+                              <strong>{{ question.question }}</strong>
+                            </p>
+                            <div class="question-meta small">
+                              <span class="badge bg-light text-dark me-2">
+                                {{ question.type === 'multiple' ? 'Multiple Choice' : 'True/False' }}
+                              </span>
+                              <span class="badge bg-light text-dark">
+                                {{ question.difficulty | titlecase }}
+                              </span>
+                            </div>
+                          </div>
+
+                          <!-- Answer Options -->
+                          <div class="answer-options">
+                            <!-- Correct Answer -->
+                            <div class="option option-correct mb-2 p-2 rounded">
+                              <div class="d-flex align-items-start">
+                                <i class="fa fa-check-circle text-success me-2 mt-1"></i>
+                                <div>
+                                  <span class="badge bg-success me-2">Correct Answer</span>
+                                  <span>{{ question.correctAnswer }}</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Incorrect Answers -->
+                            @for (incorrectAnswer of question.incorrectAnswers; track $index) {
+                              <div class="option option-incorrect mb-2 p-2 rounded">
+                                <div class="d-flex align-items-start">
+                                  <i class="fa fa-times-circle text-secondary me-2 mt-1"></i>
+                                  <span>{{ incorrectAnswer }}</span>
+                                </div>
+                              </div>
+                            }
+                          </div>
+
+                          <!-- Question Category (if available) -->
+                          @if (question.category) {
+                            <div class="mt-2 text-muted small">
+                              <i class="fa fa-tag me-1"></i>Category: <em>{{ question.category }}</em>
+                            </div>
+                          }
+                        </div>
+                      }
+                    </div>
+
+                    <!-- Quiz Statistics -->
+                    <div class="quiz-stats mt-4 pt-3 border-top">
+                      <h6 class="mb-3 text-uppercase fw-bold text-secondary">
+                        <i class="fa fa-bar-chart me-2"></i>Statistics
+                      </h6>
+                      <div class="row">
+                        <div class="col-md-6 mb-3">
+                          <div class="stat-item">
+                            <span class="text-muted">Total Questions:</span>
+                            <strong class="d-block">{{ quiz.questions?.length }}</strong>
+                          </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                          <div class="stat-item">
+                            <span class="text-muted">Difficulty:</span>
+                            <strong class="d-block text-capitalize">{{ quiz.difficulty }}</strong>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="stat-item">
+                            <span class="text-muted">Your Score:</span>
+                            <strong class="d-block" [ngClass]="getScoreColor(quiz.percentageScore)">
+                              {{ quiz.percentageScore }}%
+                            </strong>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="stat-item">
+                            <span class="text-muted">Questions Correct:</span>
+                            <strong class="d-block">{{ (quiz.percentageScore / 100) * quiz.questions?.length | number: '1.0-0' }}</strong>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>
+

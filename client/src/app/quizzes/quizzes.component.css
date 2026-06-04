@@ -1,0 +1,273 @@
+/* Quiz Card Styles */
+.quiz-card {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.quiz-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.quiz-card.quiz-expanded {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+.quiz-header {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-bottom: 1px solid #dee2e6;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  padding: 1.5rem;
+}
+
+.quiz-header:hover {
+  background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+}
+
+.quiz-header h5 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #212529;
+}
+
+.quiz-summary {
+  flex-grow: 1;
+}
+
+.quiz-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.quiz-score {
+  min-width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.score-display {
+  text-align: center;
+}
+
+.score-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  display: block;
+  line-height: 1.2;
+}
+
+.text-success {
+  color: #28a745 !important;
+}
+
+.text-warning {
+  color: #ffc107 !important;
+}
+
+.text-danger {
+  color: #dc3545 !important;
+}
+
+/* Quiz Details Section */
+.quiz-details {
+  background: #fff;
+  border-top: 2px solid #e9ecef;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.questions-section {
+  margin-bottom: 2rem;
+}
+
+.questions-section h6 {
+  color: #495057;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+/* Question Item Styles */
+.question-item {
+  padding-bottom: 2rem;
+  border-bottom-color: #e9ecef;
+}
+
+.question-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.question-number {
+  color: #6c757d;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.question-text {
+  font-size: 1rem;
+  color: #212529;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.question-meta {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Answer Options */
+.answer-options {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 0.5rem;
+}
+
+.option {
+  background-color: white;
+  border-left: 4px solid #dee2e6;
+  display: flex;
+  align-items: flex-start;
+  transition: all 0.2s ease;
+}
+
+.option-correct {
+  border-left-color: #28a745;
+  background-color: #f0f9f5;
+}
+
+.option-correct:hover {
+  background-color: #e8f7f3;
+}
+
+.option-incorrect {
+  border-left-color: #6c757d;
+  background-color: #f8f9fa;
+}
+
+.option-incorrect:hover {
+  background-color: #f1f3f5;
+}
+
+.option i {
+  min-width: 20px;
+  margin-top: 0.25rem;
+}
+
+/* Quiz Statistics */
+.quiz-stats {
+  background-color: #f8f9fa;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+
+.quiz-stats h6 {
+  color: #495057;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+.stat-item {
+  padding: 0.75rem 0;
+}
+
+.stat-item strong {
+  color: #212529;
+  font-size: 1.1rem;
+  margin-top: 0.25rem;
+}
+
+/* Badges */
+.badge {
+  font-size: 0.8rem;
+  padding: 0.4rem 0.7rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.badge-success {
+  background-color: #28a745 !important;
+}
+
+.badge-warning {
+  background-color: #ffc107 !important;
+  color: #000 !important;
+}
+
+.badge-danger {
+  background-color: #dc3545 !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .quiz-header {
+    padding: 1rem;
+  }
+
+  .quiz-header h5 {
+    font-size: 1rem;
+  }
+
+  .quiz-score {
+    min-width: 60px;
+  }
+
+  .score-value {
+    font-size: 1.5rem;
+  }
+
+  .quiz-meta {
+    margin-top: 0.75rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .answer-options {
+    padding: 0.75rem;
+  }
+
+  .option {
+    padding: 1rem !important;
+    font-size: 0.9rem;
+  }
+
+  .quiz-stats {
+    padding: 1rem;
+  }
+
+  .stat-item {
+    padding: 0.5rem 0;
+  }
+}
+
+/* Utility Classes */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.text-muted {
+  color: #6c757d;
+}
