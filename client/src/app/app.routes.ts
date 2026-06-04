@@ -13,6 +13,7 @@ import { memberDetailedResolver } from './_resolvers/member-detailed.resolver';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { adminGuard } from './_guards/admin.guard';
 import { BlogsComponent } from './blogs/blogs.component';
+import { QuizzesComponent } from './quizzes/quizzes.component';
 
 export const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -29,6 +30,7 @@ export const routes: Routes = [
       {path: 'insights', component: InsightsComponent},
       {path: 'messages', component: MessagesComponent},
       {path: 'blogs', component: BlogsComponent},
+      {path: 'quizzes', component: QuizzesComponent},
       {path: 'admin', component: AdminPanelComponent, canActivate: [adminGuard]},
     ]
   },
