@@ -52,8 +52,14 @@ export class QuizzesComponent {
 
   submitQuizCriteria() {
     if (this.isQuizCriteriaValid()) {
-      // TODO: Call quiz service with this.quizCriteria to fetch questions from external API
-      console.log('Quiz criteria submitted:', this.quizCriteria);
+      this.quizService.getQuizQuestions
+      (this.quizCriteria.numberOfQuestions, this.quizCriteria.difficulty, this.quizCriteria.questionType).subscribe({
+        next: (response) => {
+          console.log(response);
+          console.log(response.items);
+        }
+      })
+
       this.closeQuizCriteriaModal();
     }
   }

@@ -160,13 +160,13 @@
                         <i class="fa fa-check-circle text-success me-2 mt-1"></i>
                         <div>
                           <span class="badge bg-success me-2">Correct Answer</span>
-                          <span>{{ question.correctAnswer }}</span>
+                          <span>{{ question.correct_answer }}</span>
                         </div>
                       </div>
                     </div>
 
                     <!-- Incorrect Answers -->
-                    @for (incorrectAnswer of question.incorrectAnswers; track $index) {
+                    @for (incorrectAnswer of question.incorrect_answers; track $index) {
                     <div class="option option-incorrect mb-2 p-2 rounded">
                       <div class="d-flex align-items-start">
                         <i class="fa fa-times-circle text-secondary me-2 mt-1"></i>
