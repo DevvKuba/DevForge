@@ -36,7 +36,6 @@ export class QuizzesComponent {
     this.quizService.getAllUserQuizzes(this.currentUserId, this.pageNumber, this.pageSize).subscribe({
       next: (response) => {
         this.completedQuizzes = response.body;
-        console.log(this.completedQuizzes);
       }
     })
   }
@@ -70,7 +69,7 @@ export class QuizzesComponent {
   }
 
   isInvalidNumberOfQuestions(): boolean {
-    // TODO: Implement validation for number of questions
+    
     return false;
   }
 
