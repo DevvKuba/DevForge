@@ -64,7 +64,12 @@ export class QuizzesComponent {
   }
 
   isQuizCriteriaValid(): boolean {
-    // TODO: Implement validation logic
+    if(this.quizCriteria.numberOfQuestions < 5 || this.quizCriteria.numberOfQuestions > 50) return false;
+
+    if(this.quizCriteria.difficulty != "easy" && this.quizCriteria.difficulty != "medium" && this.quizCriteria.difficulty != "hard" ) return false;
+
+    if(this.quizCriteria.questionType != "multiple" && this.quizCriteria.questionType != "boolean") return false;
+
     return true;
   }
 
