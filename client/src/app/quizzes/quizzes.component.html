@@ -29,15 +29,12 @@
           <div class="mb-3">
             <label for="numberOfQuestions" class="form-label">Number of Questions</label>
             <input type="number" class="form-control" id="numberOfQuestions"
-              [(ngModel)]="quizCriteria.numberOfQuestions" min="5" max="50"
-              [class.is-invalid]="isInvalidNumberOfQuestions()" />
-            @if (isInvalidNumberOfQuestions()) {
+              [(ngModel)]="quizCriteria.numberOfQuestions" min="5" max="50"/>
             <div class="invalid-feedback" style="display: block;">
               @if (quizCriteria.numberOfQuestions < 5 || quizCriteria.numberOfQuestions> 50) {
                 <small>Number of questions must be between 5 and 50</small>
                 }
             </div>
-            }
             <small class="form-text text-muted">Between 5 and 50 questions</small>
           </div>
 

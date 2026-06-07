@@ -73,11 +73,6 @@ export class QuizzesComponent {
     return true;
   }
 
-  isInvalidNumberOfQuestions(): boolean {
-    
-    return false;
-  }
-
   resetQuizCriteria() {
     this.quizCriteria = {
       numberOfQuestions: 10,
