@@ -6,6 +6,7 @@ import { PaginatedResult } from '../_models/pagination';
 import { setPaginationHeaders } from './paginationHelper';
 import { Observable } from 'rxjs';
 import { QuizQuestion } from '../_models/quizQuestion';
+import { ApiResponse } from '../_models/apiResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -31,5 +32,9 @@ export class QuizService {
     };
 
     return this.http.get<QuizQuestion[]>(this.baseUrl + 'quiz/GetComputerScienceQuestions', {params: info});
+  }
+
+  saveCompletedQuiz(quiz: Quiz) : Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(this.baseUrl + 'quiz/SaveCompletedQuiz', quiz);
   }
 }

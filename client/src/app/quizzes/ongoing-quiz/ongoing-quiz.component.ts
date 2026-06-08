@@ -2,6 +2,7 @@ import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular
 import { AccountService } from '../../_services/account.service';
 import { QuizService } from '../../_services/quiz.service';
 import { QuizQuestion } from '../../_models/quizQuestion';
+import { Quiz } from '../../_models/quiz';
 
 @Component({
   selector: 'app-ongoing-quiz',
@@ -18,7 +19,7 @@ export class OngoingQuizComponent implements OnInit {
   userAnswers: (string | null)[] = [];
   shuffledOptions: string[][] = [];
 
-  @Input() ongoingQuizQuestions: QuizQuestion[] | undefined;
+  @Input() ongoingQuizQuestions: QuizQuestion[] = [];
   @Input() quizDifficulty: string | undefined;
   @Output() quizCompleted = new EventEmitter<void>();
 
@@ -68,7 +69,7 @@ export class OngoingQuizComponent implements OnInit {
     return true;
     }
 
-  calculateScore(): number {
+  calculateFinalScore(): number {
     let score: number = 0;
 
     for (let index = 0; index < this.userAnswers.length; index++) {
@@ -85,7 +86,26 @@ export class OngoingQuizComponent implements OnInit {
     }
 
   submitQuiz(): void {
-    // service call 
+    if(this.quizDifficulty == undefined){
+      // error toast
+      return;
+    }
+
+    const quiz: Quiz =  {
+      difficulty: this.quizDifficulty ?? "",
+      questions: this.ongoingQuizQuestions,
+      percentageScore: this.calculateFinalScore(),
+      userId: this.currentUserId
+    }
+    this.quizService.saveCompletedQuiz(quiz).subscribe({
+      next: (response) => {
+        this.ongoingQuizQuestions = []; // resets questions and closes sub-component
+        this.accountService.updateUserXpProperties(response.xpDetails!);
+      },
+      error: (response) => {
+        // error toast
+      }
+    })
   }
 
   shuffle<T>(array: T[]): T[] {

@@ -42,7 +42,7 @@ namespace API.Controllers
             return Ok(quizQuestions);
         }
 
-        [HttpPost]
+        [HttpPost("SaveCompletedQuiz")]
         public async Task<ActionResult<ApiResponse<string>>> SaveCompletedQuizAsync(QuizDto quizDto)
         {
             if (quizDto == null) return NotFound(new ApiResponse<string> { Success = false, Message = "Quiz info not found" });
