@@ -227,4 +227,8 @@
     </div>
   </div>
   }
+
+  @if(this.currentQuizQuestions.length > 0){
+    <app-ongoing-quiz [ongoingQuizQuestions]="currentQuizQuestions" ></app-ongoing-quiz>
+  }
 </div>

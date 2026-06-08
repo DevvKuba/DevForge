@@ -5,11 +5,12 @@ import { Quiz } from '../_models/quiz';
 import { QuizQuestion } from '../_models/quizQuestion';
 import { AccountService } from '../_services/account.service';
 import { QuizService } from '../_services/quiz.service';
+import { OngoingQuizComponent } from "./ongoing-quiz/ongoing-quiz.component";
 
 @Component({
   selector: 'app-quizzes',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, OngoingQuizComponent],
   templateUrl: './quizzes.component.html',
   styleUrl: './quizzes.component.css'
 })
@@ -55,10 +56,9 @@ export class QuizzesComponent {
       (this.quizCriteria.numberOfQuestions, this.quizCriteria.difficulty, this.quizCriteria.questionType).subscribe({
         next: (response) => {
           console.log(response);
-          console.log(response.items);
+          this.currentQuizQuestions = response;
         }
       })
-
       this.closeQuizCriteriaModal();
     }
   }
@@ -88,6 +88,8 @@ export class QuizzesComponent {
   isQuizExpanded(quizId: number): boolean {
     return this.expandedQuizId === quizId;
   }
+
+  // for display of quizzes
 
   getDifficultyClass(difficulty: string): string {
     // TODO: Return badge CSS class based on difficulty level
