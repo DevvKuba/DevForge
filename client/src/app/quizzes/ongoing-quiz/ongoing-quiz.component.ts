@@ -24,15 +24,34 @@ export class OngoingQuizComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUserId = this.accountService.currentUser()?.id ?? 0;
+
+    if (this.ongoingQuizQuestions && this.ongoingQuizQuestions.length > 0) {
+      for (let index = 0; index < this.ongoingQuizQuestions.length; index++) {
+        const question = this.ongoingQuizQuestions[index];
+
+        this.shuffledOptions[index] = this.buildShuffledOptions(question);
+      }
+    }
   }
 
-  buildShuffledOptions(question: QuizQuestion): string[] { return []; }
+  buildShuffledOptions(question: QuizQuestion): string[] {
+    const possibleAnswers: string[] = question.incorrect_answers;
 
-  selectAnswer(answer: string): void {}
+    possibleAnswers.push(question.correct_answer);
+    return this.shuffle(possibleAnswers);
+  }
 
-  goNext(): void {}
+  selectAnswer(answer: string): void {
+    // sets the answer as part of userAnswers? check how it's done exactly in the template itself
+  }
 
-  goPrevious(): void {}
+  goNext(): void {
+    this.currentIndex++;
+  }
+
+  goPrevious(): void {
+    this.currentIndex--;
+  }
 
   isLastQuestion(): boolean { return false; }
 
@@ -40,5 +59,15 @@ export class OngoingQuizComponent implements OnInit {
 
   calculateScore(): number { return 0; }
 
-  submitQuiz(): void {}
+  submitQuiz(): void {
+    // service call 
+  }
+
+  shuffle<T>(array: T[]): T[] {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
 }
