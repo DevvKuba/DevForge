@@ -1,1 +1,66 @@
-<p>ongoing-quiz works!</p>
+<div class="modal-backdrop fade show"></div>
+<div class="modal fade show d-block" role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header flex-column gap-2">
+        <h5 class="modal-title w-100">
+          Question {{ currentIndex + 1 }} of {{ ongoingQuizQuestions?.length }}
+        </h5>
+        <div class="progress w-100" style="height: 6px;">
+          <div
+            class="progress-bar"
+            role="progressbar"
+            [style.width.%]="((currentIndex + 1) / (ongoingQuizQuestions?.length || 1)) * 100">
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        @if (ongoingQuizQuestions && ongoingQuizQuestions.length > 0) {
+          <div class="mb-3 d-flex gap-2">
+            <span class="badge bg-secondary">{{ ongoingQuizQuestions[currentIndex].category }}</span>
+            <span class="badge bg-info text-dark">{{ ongoingQuizQuestions[currentIndex].difficulty }}</span>
+          </div>
+
+          <p class="fw-bold fs-5 mb-4">{{ ongoingQuizQuestions[currentIndex].question }}</p>
+
+          <div class="d-flex flex-column gap-2">
+            @for (option of shuffledOptions[currentIndex]; track option) {
+              <button
+                class="btn w-100 text-start"
+                [class.btn-primary]="userAnswers[currentIndex] === option"
+                [class.btn-outline-secondary]="userAnswers[currentIndex] !== option"
+                (click)="selectAnswer(option)">
+                {{ option }}
+              </button>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="modal-footer justify-content-between">
+        <button
+          class="btn btn-outline-secondary"
+          [disabled]="currentIndex === 0"
+          (click)="goPrevious()">
+          Previous
+        </button>
+
+        @if (!isLastQuestion()) {
+          <button class="btn btn-primary" (click)="goNext()">
+            Next
+          </button>
+        } @else {
+          <button
+            class="btn btn-success"
+            [disabled]="!allAnswered()"
+            (click)="submitQuiz()">
+            Submit Quiz
+          </button>
+        }
+      </div>
+
+    </div>
+  </div>
+</div>
