@@ -92,12 +92,17 @@ export class QuizzesComponent {
   // for display of quizzes
 
   getDifficultyClass(difficulty: string): string {
-    // TODO: Return badge CSS class based on difficulty level
-    return '';
+    const map: Record<string, string> = {
+      easy: 'success',
+      medium: 'warning',
+      hard: 'danger'
+    };
+    return map[difficulty.toLowerCase()] ?? 'secondary';
   }
 
   getScoreColor(score: number): string {
-    // TODO: Return text color class based on score
-    return '';
+    if (score >= 70) return 'text-success';
+    if (score >= 50) return 'text-warning';
+    return 'text-danger';
   }
 }
