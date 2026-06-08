@@ -3,6 +3,7 @@ import { AccountService } from '../../_services/account.service';
 import { QuizService } from '../../_services/quiz.service';
 import { QuizQuestion } from '../../_models/quizQuestion';
 import { Quiz } from '../../_models/quiz';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-ongoing-quiz',
@@ -13,6 +14,7 @@ import { Quiz } from '../../_models/quiz';
 export class OngoingQuizComponent implements OnInit {
   accountService = inject(AccountService);
   quizService = inject(QuizService);
+  toastr = inject(ToastrService);
 
   currentUserId: number = 0;
   currentIndex: number = 0;
@@ -70,17 +72,17 @@ export class OngoingQuizComponent implements OnInit {
     }
 
   calculateFinalScore(): number {
-    let score: number = 0;
+    let correctCount: number = 0;
 
     for (let index = 0; index < this.userAnswers.length; index++) {
       const questionAnswer = this.userAnswers[index];
       const correspondingQuestion = this.ongoingQuizQuestions![index];
 
       if(questionAnswer == correspondingQuestion.correct_answer){
-        score++;
+        correctCount++;
       }
     }
-    const percentageScore = Math.round(score / this.ongoingQuizQuestions!.length  * 100);
+    const percentageScore = Math.round(correctCount / this.ongoingQuizQuestions!.length  * 100);
 
     return percentageScore;
     }

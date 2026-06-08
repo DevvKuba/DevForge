@@ -42,12 +42,12 @@ export class QuizzesComponent {
   }
 
   openQuizCriteriaModal() {
+    this.resetQuizCriteria();
     this.showQuizCriteriaDialog = true;
   }
 
   closeQuizCriteriaModal() {
     this.showQuizCriteriaDialog = false;
-    this.resetQuizCriteria();
   }
 
   submitQuizCriteria() {
@@ -59,8 +59,8 @@ export class QuizzesComponent {
           this.currentQuizQuestions = response;
         }
       })
-      this.closeQuizCriteriaModal();
     }
+    this.closeQuizCriteriaModal();
   }
 
   isQuizCriteriaValid(): boolean {
