@@ -42,7 +42,7 @@ export class OngoingQuizComponent implements OnInit {
   }
 
   selectAnswer(answer: string): void {
-    // sets the answer as part of userAnswers? check how it's done exactly in the template itself
+    this.userAnswers[this.currentIndex] = answer;
   }
 
   goNext(): void {
@@ -53,11 +53,36 @@ export class OngoingQuizComponent implements OnInit {
     this.currentIndex--;
   }
 
-  isLastQuestion(): boolean { return false; }
+  isLastQuestion(): boolean {
+    if(this.currentIndex + 1 == this.ongoingQuizQuestions?.length) return true;
+     return false; 
+    }
 
-  allAnswered(): boolean { return false; }
+  allAnswered(): boolean {
+    if(!this.ongoingQuizQuestions || this.userAnswers.length !== this.ongoingQuizQuestions.length) return false;
+    
+    for (let index = 0; index < this.userAnswers.length; index++) {
+      const questionAnswer = this.userAnswers[index];
+      if(questionAnswer == null) return false;
+    }
+    return true;
+    }
 
-  calculateScore(): number { return 0; }
+  calculateScore(): number {
+    let score: number = 0;
+
+    for (let index = 0; index < this.userAnswers.length; index++) {
+      const questionAnswer = this.userAnswers[index];
+      const correspondingQuestion = this.ongoingQuizQuestions![index];
+
+      if(questionAnswer == correspondingQuestion.correct_answer){
+        score++;
+      }
+    }
+    const percentageScore = Math.round(score / this.ongoingQuizQuestions!.length  * 100);
+
+    return percentageScore;
+    }
 
   submitQuiz(): void {
     // service call 
