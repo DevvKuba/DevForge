@@ -7,6 +7,7 @@ using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration.UserSecrets;
+using System.Runtime.CompilerServices;
 
 namespace API.Controllers
 {
@@ -70,6 +71,13 @@ namespace API.Controllers
                 Message = "User Quiz saved"
             });
         }
+
+        [HttpDelete("DeleteExistingQuiz")]
+        public async Task<ActionResult> DeleteQuizAsync(int quizId)
+        {
+
+        }
+
     }
 
 }

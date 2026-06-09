@@ -49,7 +49,7 @@ namespace API.Services
             return quizQuestions.Results;
         }
 
-        private string RemoveSpecialCharacters(string input)
+        public string RemoveSpecialCharacters(string input)
         {
             if (string.IsNullOrEmpty(input))
                 return input;

@@ -98,6 +98,7 @@ export class OngoingQuizComponent implements OnInit {
     }
 
     const quiz: Quiz =  {
+      id: null,
       difficulty: this.quizDifficulty ?? "",
       questions: this.ongoingQuizQuestions,
       percentageScore: this.calculateFinalScore(),
@@ -122,3 +123,4 @@ export class OngoingQuizComponent implements OnInit {
     return array;
   }
 }
+
