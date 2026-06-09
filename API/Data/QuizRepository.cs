@@ -4,11 +4,17 @@ using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
 {
     public class QuizRepository(DataContext context, IMapper mapper) : IQuizRepository
     {
+        public async Task<Quiz?> GetQuizByIdAsync(int id)
+        {
+            var quiz = await context.Quizzes.Where(q => q.Id == id).FirstOrDefaultAsync();
+            return quiz;
+        }
         public async Task<PagedList<QuizDto>> GetUserQuizzesAsync(QuizParams quizParams)
         {
             var query = context.Quizzes
@@ -26,6 +32,9 @@ namespace API.Data
             await context.Quizzes.AddAsync(quiz);
         }
 
-        // delete quiz - in case of not liking performance / accidental completion?
+        public void DeleteQuiz(Quiz quiz)
+        {
+            context.Quizzes.Remove(quiz);
+        }
     }
 }

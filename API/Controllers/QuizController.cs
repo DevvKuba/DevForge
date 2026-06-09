@@ -18,7 +18,7 @@ namespace API.Controllers
         // allows for checking of how many xp points were gained, completed questions etc.
 
         [HttpGet("GetAllCompletedQuizzes")]
-        public async Task<ActionResult<List<Quiz>>> GetAllUserCompletedQuizzesAsync([FromQuery] QuizParams quizParams)
+        public async Task<ActionResult<List<QuizDto>>> GetAllUserCompletedQuizzesAsync([FromQuery] QuizParams quizParams)
         {
             if (quizParams.UserId == null) return NotFound(new List<Quiz> { });
 
@@ -73,9 +73,17 @@ namespace API.Controllers
         }
 
         [HttpDelete("DeleteExistingQuiz")]
-        public async Task<ActionResult> DeleteQuizAsync(int quizId)
+        public async Task<ActionResult<ApiResponse<string>>> DeleteQuizAsync(int quizId)
         {
+            var quiz = await unitOfWork.QuizRepository.GetQuizByIdAsync(quizId);
 
+            if (quiz == null) return NotFound(false);
+
+            unitOfWork.QuizRepository.DeleteQuiz(quiz);
+
+            if (!await unitOfWork.Complete()) return BadRequest(new ApiResponse<string> { Success = false, Message = "Quiz not saved" });
+
+            return Ok(new ApiResponse<string> { Success = true, Message = "Quiz removed successfully" });
         }
 
     }
