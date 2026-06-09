@@ -17,5 +17,7 @@ namespace API.DTO_s
 
         [JsonPropertyName("incorrect_answers")]
         public required List<string> IncorrectAnswers { get; set; }
+
+        public string? SelectedAnswer { get; set; }
     }
 }
