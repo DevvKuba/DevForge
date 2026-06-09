@@ -229,6 +229,6 @@
   }
 
   @if(this.currentQuizQuestions.length > 0){
-    <app-ongoing-quiz [ongoingQuizQuestions]="currentQuizQuestions" [quizDifficulty]="quizCriteria.difficulty" ></app-ongoing-quiz>
+    <app-ongoing-quiz [ongoingQuizQuestions]="currentQuizQuestions" [quizDifficulty]="quizCriteria.difficulty" (quizCompleted)="currentQuizQuestions = []"></app-ongoing-quiz>
   }
 </div>

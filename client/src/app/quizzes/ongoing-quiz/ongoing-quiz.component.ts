@@ -87,9 +87,13 @@ export class OngoingQuizComponent implements OnInit {
     return percentageScore;
     }
 
+  closeQuiz(): void {
+    this.quizCompleted.emit();
+  }
+
   submitQuiz(): void {
     if(this.quizDifficulty == undefined){
-      // error toast
+      this.toastr.error("Valid difficulty must be selected");
       return;
     }
 
@@ -101,11 +105,11 @@ export class OngoingQuizComponent implements OnInit {
     }
     this.quizService.saveCompletedQuiz(quiz).subscribe({
       next: (response) => {
-        this.ongoingQuizQuestions = []; // resets questions and closes sub-component
         this.accountService.updateUserXpProperties(response.xpDetails!);
+        this.quizCompleted.emit();
       },
-      error: (response) => {
-        // error toast
+      error: () => {
+        this.toastr.error("Quiz has not been saved");
       }
     })
   }
