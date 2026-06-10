@@ -34,7 +34,12 @@ export class QuizzesComponent {
 
   ngOnInit() {
     this.currentUserId = this.accountService.currentUser()?.id ?? 0;
-    this.quizService.getAllUserQuizzes(this.currentUserId, this.pageNumber, this.pageSize).subscribe({
+    this.gatherUserQuizzes();
+   
+  }
+
+  gatherUserQuizzes(){
+     this.quizService.getAllUserQuizzes(this.currentUserId, this.pageNumber, this.pageSize).subscribe({
       next: (response) => {
         this.completedQuizzes = response.body;
       }
@@ -53,22 +58,22 @@ export class QuizzesComponent {
   submitQuizCriteria() {
     if (this.isQuizCriteriaValid()) {
       this.quizService.getQuizQuestions
-      (this.quizCriteria.numberOfQuestions, this.quizCriteria.difficulty, this.quizCriteria.questionType).subscribe({
-        next: (response) => {
-          console.log(response);
-          this.currentQuizQuestions = response;
-        }
-      })
+        (this.quizCriteria.numberOfQuestions, this.quizCriteria.difficulty, this.quizCriteria.questionType).subscribe({
+          next: (response) => {
+            console.log(response);
+            this.currentQuizQuestions = response;
+          }
+        })
     }
     this.closeQuizCriteriaModal();
   }
 
   isQuizCriteriaValid(): boolean {
-    if(this.quizCriteria.numberOfQuestions < 5 || this.quizCriteria.numberOfQuestions > 50) return false;
+    if (this.quizCriteria.numberOfQuestions < 5 || this.quizCriteria.numberOfQuestions > 50) return false;
 
-    if(this.quizCriteria.difficulty != "easy" && this.quizCriteria.difficulty != "medium" && this.quizCriteria.difficulty != "hard" ) return false;
+    if (this.quizCriteria.difficulty != "easy" && this.quizCriteria.difficulty != "medium" && this.quizCriteria.difficulty != "hard") return false;
 
-    if(this.quizCriteria.questionType != "multiple" && this.quizCriteria.questionType != "boolean") return false;
+    if (this.quizCriteria.questionType != "multiple" && this.quizCriteria.questionType != "boolean") return false;
 
     return true;
   }
@@ -89,8 +94,6 @@ export class QuizzesComponent {
     return this.expandedQuizId === quizId;
   }
 
-  // for display of quizzes
-
   getDifficultyClass(difficulty: string): string {
     const map: Record<string, string> = {
       easy: 'success',
@@ -104,5 +107,13 @@ export class QuizzesComponent {
     if (score >= 70) return 'text-success';
     if (score >= 50) return 'text-warning';
     return 'text-danger';
+  }
+
+  deleteQuiz(quizId: number): void {
+    this.quizService.deletePastQuiz(quizId).subscribe({
+      next: () => {
+        this.gatherUserQuizzes();
+      }
+    })
   }
 }

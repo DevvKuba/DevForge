@@ -179,6 +179,17 @@
   align-items: flex-end;
 }
 
+.delete-quiz-btn {
+  font-size: 1.1rem;
+  padding: 0.25rem 0.5rem;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.delete-quiz-btn:hover {
+  color: #a71d2a !important;
+}
+
 .score-display {
   text-align: center;
 }

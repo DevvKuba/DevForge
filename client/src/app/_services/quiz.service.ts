@@ -37,4 +37,8 @@ export class QuizService {
   saveCompletedQuiz(quiz: Quiz) : Observable<ApiResponse<any>> {
     return this.http.post<ApiResponse<any>>(this.baseUrl + 'quiz/SaveCompletedQuiz', quiz);
   }
+
+  deletePastQuiz(quizId: number) : Observable<any> {
+    return this.http.delete<any>(this.baseUrl + `quiz/DeleteExistingQuiz?quizId=${quizId}`);
+  }
 }
