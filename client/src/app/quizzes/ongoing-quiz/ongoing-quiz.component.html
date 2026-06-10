@@ -32,8 +32,8 @@
             @for (option of shuffledOptions[currentIndex]; track option) {
               <button
                 class="btn w-100 text-start"
-                [class.btn-primary]="userAnswers[currentIndex] === option"
-                [class.btn-outline-secondary]="userAnswers[currentIndex] !== option"
+                [class.btn-primary]="ongoingQuizQuestions[currentIndex].selectedAnswer === option"
+                [class.btn-outline-secondary]="ongoingQuizQuestions[currentIndex].selectedAnswer !== option"
                 (click)="selectAnswer(option)">
                 {{ option }}
               </button>

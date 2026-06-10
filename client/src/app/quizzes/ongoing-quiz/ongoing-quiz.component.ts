@@ -18,7 +18,6 @@ export class OngoingQuizComponent implements OnInit {
 
   currentUserId: number = 0;
   currentIndex: number = 0;
-  userAnswers: (string | null)[] = [];
   shuffledOptions: string[][] = [];
 
   @Input() ongoingQuizQuestions: QuizQuestion[] = [];
@@ -45,7 +44,8 @@ export class OngoingQuizComponent implements OnInit {
   }
 
   selectAnswer(answer: string): void {
-    this.userAnswers[this.currentIndex] = answer;
+    this.ongoingQuizQuestions[this.currentIndex].selectedAnswer = answer;
+
   }
 
   goNext(): void {
@@ -62,23 +62,21 @@ export class OngoingQuizComponent implements OnInit {
     }
 
   allAnswered(): boolean {
-    if(!this.ongoingQuizQuestions || this.userAnswers.length !== this.ongoingQuizQuestions.length) return false;
+    const areAllQuestionsAnswered = this.ongoingQuizQuestions.every(x => x.selectedAnswer != null);
+
+    if(!areAllQuestionsAnswered) return false;
     
-    for (let index = 0; index < this.userAnswers.length; index++) {
-      const questionAnswer = this.userAnswers[index];
-      if(questionAnswer == null) return false;
-    }
     return true;
     }
 
   calculateFinalScore(): number {
     let correctCount: number = 0;
 
-    for (let index = 0; index < this.userAnswers.length; index++) {
-      const questionAnswer = this.userAnswers[index];
-      const correspondingQuestion = this.ongoingQuizQuestions![index];
+    for (let index = 0; index < this.ongoingQuizQuestions.length; index++) {
+      const questionAnswer = this.ongoingQuizQuestions[index].selectedAnswer;
+      const correctQuestionAnswer = this.ongoingQuizQuestions[index].correct_answer;
 
-      if(questionAnswer == correspondingQuestion.correct_answer){
+      if(questionAnswer == correctQuestionAnswer){
         correctCount++;
       }
     }
