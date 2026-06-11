@@ -37,7 +37,9 @@ export class OngoingQuizComponent implements OnInit {
   }
 
   buildShuffledOptions(question: QuizQuestion): string[] {
-    const possibleAnswers: string[] = question.incorrect_answers;
+    const possibleAnswers: string[] = [];
+
+    question.incorrect_answers.forEach(a => possibleAnswers.push(a));
 
     possibleAnswers.push(question.correct_answer);
     return this.shuffle(possibleAnswers);

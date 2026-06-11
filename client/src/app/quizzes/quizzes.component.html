@@ -144,7 +144,11 @@
                 <div class="question-item mb-4 pb-4 border-bottom">
                   <!-- Question -->
                   <div class="mb-3">
-                    <div class="question-number text-muted small">Question {{ qIndex + 1 }}</div>
+                    <div class="question-number text-muted small d-flex align-items-center justify-content-between">
+                      <span>Question {{ qIndex + 1 }}</span>
+                      <i class="fa" [ngClass]="isQuestionCorrect(question) ? 'fa-check-circle text-success' : 'fa-times-circle text-danger'"
+                        [title]="isQuestionCorrect(question) ? 'Answered correctly' : 'Answered incorrectly'"></i>
+                    </div>
                     <p class="question-text mb-2">
                       <strong>{{ question.question }}</strong>
                     </p>
@@ -160,23 +164,23 @@
 
                   <!-- Answer Options -->
                   <div class="answer-options">
-                    <!-- Correct Answer -->
-                    <div class="option option-correct mb-2 p-2 rounded">
-                      <div class="d-flex align-items-start">
-                        <i class="fa fa-check-circle text-success me-2 mt-1"></i>
-                        <div>
-                          <span class="badge bg-success me-2">Correct Answer</span>
-                          <span>{{ question.correct_answer }}</span>
+                    @for (option of getAllAnswers(question); track option) {
+                    <div class="option mb-2 p-2 rounded"
+                      [class.option-correct]="option === question.correct_answer"
+                      [class.option-incorrect]="option === question.selectedAnswer && option !== question.correct_answer">
+                      <div class="d-flex align-items-start justify-content-between w-100">
+                        <div class="d-flex align-items-start">
+                          <i class="fa me-2 mt-1" [ngClass]="getOptionIconClass(question, option)"></i>
+                          <span>{{ option }}</span>
                         </div>
-                      </div>
-                    </div>
-
-                    <!-- Incorrect Answers -->
-                    @for (incorrectAnswer of question.incorrect_answers; track $index) {
-                    <div class="option option-incorrect mb-2 p-2 rounded">
-                      <div class="d-flex align-items-start">
-                        <i class="fa fa-times-circle text-secondary me-2 mt-1"></i>
-                        <span>{{ incorrectAnswer }}</span>
+                        <div class="ms-2 text-end">
+                          @if (option === question.correct_answer) {
+                          <span class="badge bg-success">Correct Answer</span>
+                          }
+                          @if (option === question.selectedAnswer) {
+                          <span class="badge ms-1" [ngClass]="isQuestionCorrect(question) ? 'bg-success' : 'bg-danger'">Your Answer</span>
+                          }
+                        </div>
                       </div>
                     </div>
                     }
@@ -238,6 +242,6 @@
   }
 
   @if(this.currentQuizQuestions.length > 0){
-    <app-ongoing-quiz [ongoingQuizQuestions]="currentQuizQuestions" [quizDifficulty]="quizCriteria.difficulty" (quizCompleted)="currentQuizQuestions = []; gatherUserQuizzes()"></app-ongoing-quiz>
+    <app-ongoing-quiz [ongoingQuizQuestions]="currentQuizQuestions" [quizDifficulty]="quizCriteria.difficulty" (quizCompleted)="onQuizCompleted()"></app-ongoing-quiz>
   }
 </div>

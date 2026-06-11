@@ -303,12 +303,12 @@
 }
 
 .option-incorrect {
-  border-left-color: #6c757d;
-  background-color: #f8f9fa;
+  border-left-color: #dc3545;
+  background-color: #fdf2f3;
 }
 
 .option-incorrect:hover {
-  background-color: #f1f3f5;
+  background-color: #fbe7e9;
 }
 
 .option i {

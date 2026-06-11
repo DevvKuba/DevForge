@@ -113,6 +113,24 @@ export class QuizzesComponent {
     return 'text-danger';
   }
 
+  getAllAnswers(question: QuizQuestion): string[] {
+    return [question.correct_answer, ...question.incorrect_answers];
+  }
+
+  isQuestionCorrect(question: QuizQuestion): boolean {
+    return question.selectedAnswer === question.correct_answer;
+  }
+
+  getOptionIconClass(question: QuizQuestion, option: string): string {
+    const isCorrectAnswer = option === question.correct_answer;
+    const isSelectedAnswer = option === question.selectedAnswer;
+
+    if (isSelectedAnswer && isCorrectAnswer) return 'fa-check-circle text-success';
+    if (isSelectedAnswer && !isCorrectAnswer) return 'fa-times-circle text-danger';
+    if (isCorrectAnswer) return 'fa-check-circle text-success opacity-50';
+    return 'fa-circle-o text-muted';
+  }
+
   deleteQuiz(quizId: number): void {
     this.quizService.deletePastQuiz(quizId).subscribe({
       next: () => {
