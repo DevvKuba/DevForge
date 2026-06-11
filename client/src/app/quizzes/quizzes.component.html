@@ -238,6 +238,6 @@
   }
 
   @if(this.currentQuizQuestions.length > 0){
-    <app-ongoing-quiz [ongoingQuizQuestions]="currentQuizQuestions" [quizDifficulty]="quizCriteria.difficulty" (quizCompleted)="currentQuizQuestions = []"></app-ongoing-quiz>
+    <app-ongoing-quiz [ongoingQuizQuestions]="currentQuizQuestions" [quizDifficulty]="quizCriteria.difficulty" (quizCompleted)="currentQuizQuestions = []; gatherUserQuizzes()"></app-ongoing-quiz>
   }
 </div>

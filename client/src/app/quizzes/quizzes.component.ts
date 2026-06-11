@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Quiz } from '../_models/quiz';
@@ -20,7 +20,7 @@ export class QuizzesComponent {
 
   currentUserId: number = 0;
   completedQuizzes: Quiz[] = [];
-  currentQuizQuestions: QuizQuestion[] = [];
+  currentQuizQuestions : QuizQuestion[] = [];
   expandedQuizId: number | null = null;
   showQuizCriteriaDialog = false;
   pageNumber = 1;
@@ -35,7 +35,11 @@ export class QuizzesComponent {
   ngOnInit() {
     this.currentUserId = this.accountService.currentUser()?.id ?? 0;
     this.gatherUserQuizzes();
-   
+  }
+
+  onQuizCompleted(){
+    this.gatherUserQuizzes();
+    this.currentQuizQuestions = [];
   }
 
   gatherUserQuizzes(){

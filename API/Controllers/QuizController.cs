@@ -68,7 +68,13 @@ namespace API.Controllers
             return Ok(new ApiResponse<string>
             {
                 Success = true,
-                Message = "User Quiz saved"
+                Message = "User Quiz saved",
+                XpDetails = new UserXpDetailDto
+                {
+                    Level = associatedUser.Level,
+                    LevelThreshold = xpService.GetXpThresholdForLevel(associatedUser.Level),
+                    AppExperiencePoints = associatedUser.AppExperiencePoints
+                }
             });
         }
 
