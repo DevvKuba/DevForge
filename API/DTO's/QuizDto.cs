@@ -12,6 +12,8 @@ namespace API.DTO_s
 
         public double PercentageScore { get; set; }
 
+        public bool IsComplete { get; set; }
+
         public int UserId { get; set; }
     }
 }

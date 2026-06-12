@@ -16,6 +16,8 @@ namespace API.Entities
 
         public DateTime CompletedAt { get; set; }
 
+        public bool IsComplete { get; set; } = false;
+
         public int UserId { get; set; }
 
         public AppUser User { get; set; } = null!;

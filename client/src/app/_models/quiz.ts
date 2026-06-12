@@ -5,5 +5,6 @@ export interface Quiz {
   difficulty: string,
   questions: QuizQuestion[],
   percentageScore: number,
+  isComplete: boolean,
   userId: number
 }
