@@ -19,6 +19,7 @@ export class OngoingQuizComponent implements OnInit {
   currentUserId: number = 0;
   currentIndex: number = 0;
   shuffledOptions: string[][] = [];
+  CurrentQuiz: Quiz | null = null;
 
   @Input() ongoingQuizQuestions: QuizQuestion[] = [];
   @Input() quizDifficulty: string | undefined;
@@ -91,6 +92,29 @@ export class OngoingQuizComponent implements OnInit {
     this.quizCompleted.emit();
   }
 
+  beginQuiz(): void {
+
+    if(this.quizDifficulty == undefined){
+      this.toastr.error("Valid difficulty must be selected");
+      return;
+    }
+    
+    const startedQuiz: Quiz =  {
+      id: null,
+      difficulty: this.quizDifficulty ?? "",
+      questions: this.ongoingQuizQuestions,
+      percentageScore: 0,
+      isComplete: true,
+      userId: this.currentUserId
+    }
+
+    this.quizService.saveStartedQuiz(startedQuiz).subscribe({
+      next: (response) => {
+        this.CurrentQuiz = response;
+      }
+    });
+  }
+
   submitQuiz(): void {
     if(this.quizDifficulty == undefined){
       this.toastr.error("Valid difficulty must be selected");
@@ -102,6 +126,7 @@ export class OngoingQuizComponent implements OnInit {
       difficulty: this.quizDifficulty ?? "",
       questions: this.ongoingQuizQuestions,
       percentageScore: this.calculateFinalScore(),
+      isComplete: true,
       userId: this.currentUserId
     }
     this.quizService.saveCompletedQuiz(quiz).subscribe({

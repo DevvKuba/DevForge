@@ -34,6 +34,10 @@ export class QuizService {
     return this.http.get<QuizQuestion[]>(this.baseUrl + 'quiz/GetComputerScienceQuestions', {params: info});
   }
 
+  saveStartedQuiz(quiz: Quiz) :Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'quiz/SaveStartedQuiz', quiz);
+  }
+
   saveCompletedQuiz(quiz: Quiz) : Observable<ApiResponse<any>> {
     return this.http.post<ApiResponse<any>>(this.baseUrl + 'quiz/SaveCompletedQuiz', quiz);
   }
