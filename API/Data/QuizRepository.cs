@@ -27,6 +27,15 @@ namespace API.Data
             return await PagedList<QuizDto>.CreateAsync(quizzes, quizParams.PageNumber, quizParams.PageSize);
         }
 
+        public async Task<bool> DoesUserHaveAnUnfinishedQuizAsync(AppUser user)
+        {
+            var pendingQuiz = await context.Quizzes.Where(q => q.UserId == user.Id && q.IsComplete == false).FirstOrDefaultAsync();
+
+            if (pendingQuiz == null) return false;
+
+            return true;
+        }
+
         public async Task SaveQuizAsync(Quiz quiz)
         {
             await context.Quizzes.AddAsync(quiz);

@@ -43,6 +43,29 @@ namespace API.Controllers
             return Ok(quizQuestions);
         }
 
+        [HttpPost("SaveStartedQuiz")]
+        public async Task<ActionResult<ApiResponse<QuizDto>>> SaveStartedQuizAsync(QuizDto startedQuiz)
+        {
+            if (startedQuiz == null) return NotFound(new ApiResponse<string> { Success = false, Message = "Quiz info not found" });
+
+            var associatedUser = await unitOfWork.UserRepository.GetUserByIdAsync(startedQuiz.UserId);
+
+            if (associatedUser == null) return NotFound(new ApiResponse<string> { Success = false, Message = "Associated user not found" });
+
+            var newQuiz = mapper.Map<Quiz>(startedQuiz);
+
+            var areOtherQuizzesActive = await unitOfWork.QuizRepository.DoesUserHaveAnUnfinishedQuizAsync(associatedUser);
+
+            if (areOtherQuizzesActive) return BadRequest(new ApiResponse<string> { Success = false, Message = "Ongoing quiz active, either complete this quiz or delete it to start a new one" });
+
+            await unitOfWork.QuizRepository.SaveQuizAsync(newQuiz);
+
+            if (!await unitOfWork.Complete()) return BadRequest(new ApiResponse<string> { Success = false, Message = "Quiz not saved" });
+
+            return Ok(new ApiResponse<QuizDto> { Data = startedQuiz, Success = true, Message = "Started quiz has been saved" });
+
+        }
+
         [HttpPost("SaveCompletedQuiz")]
         public async Task<ActionResult<ApiResponse<string>>> SaveCompletedQuizAsync(QuizDto quizDto)
         {

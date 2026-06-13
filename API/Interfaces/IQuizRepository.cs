@@ -7,7 +7,10 @@ namespace API.Interfaces
     public interface IQuizRepository
     {
         Task<Quiz?> GetQuizByIdAsync(int id);
+
         Task<PagedList<QuizDto>> GetUserQuizzesAsync(QuizParams quizParams);
+
+        Task<bool> DoesUserHaveAnUnfinishedQuizAsync(AppUser user);
 
         Task SaveQuizAsync(Quiz quiz);
 
