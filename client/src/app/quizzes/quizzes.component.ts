@@ -35,6 +35,11 @@ export class QuizzesComponent {
   ngOnInit() {
     this.currentUserId = this.accountService.currentUser()?.id ?? 0;
     this.gatherUserQuizzes();
+
+    // call if NO pending quizzes are active
+    // -> allow for the calling the start new quiz button  
+
+    // else load pending quiz within an open pop up of sorts
   }
 
   onQuizCompleted(){

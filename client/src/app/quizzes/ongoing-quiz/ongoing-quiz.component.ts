@@ -28,6 +28,8 @@ export class OngoingQuizComponent implements OnInit {
   ngOnInit(): void {
     this.currentUserId = this.accountService.currentUser()?.id ?? 0;
 
+    this.beginQuiz(); // still necessary to actually create a 'pending' quiz;
+
     if (this.ongoingQuizQuestions && this.ongoingQuizQuestions.length > 0) {
       for (let index = 0; index < this.ongoingQuizQuestions.length; index++) {
         const question = this.ongoingQuizQuestions[index];

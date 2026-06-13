@@ -62,7 +62,9 @@ namespace API.Controllers
 
             if (!await unitOfWork.Complete()) return BadRequest(new ApiResponse<string> { Success = false, Message = "Quiz not saved" });
 
-            return Ok(new ApiResponse<QuizDto> { Data = startedQuiz, Success = true, Message = "Started quiz has been saved" });
+            var persistedQuiz = mapper.Map<QuizDto>(await unitOfWork.QuizRepository.GetQuizByIdAsync(newQuiz.Id)); // so newly saved Id can be returned
+
+            return Ok(new ApiResponse<QuizDto> { Data = persistedQuiz, Success = true, Message = "Started quiz has been saved" });
 
         }
 
@@ -81,6 +83,7 @@ namespace API.Controllers
 
             pendingQuiz.CompletedAt = DateTime.UtcNow;
             pendingQuiz.PercentageScore = quizDto.PercentageScore;
+            pendingQuiz.IsComplete = true;
 
             var gainXp = xpService.CalculateXpGainsForQuizCompletion(pendingQuiz.Difficulty, pendingQuiz.Questions.Count, pendingQuiz.PercentageScore);
 
