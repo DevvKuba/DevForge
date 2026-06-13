@@ -23,26 +23,26 @@ export class QuizService {
     return this.http.get<Quiz[]>(this.baseUrl + 'quiz/GetAllCompletedQuizzes', { observe: 'response', params });
   }
 
-  getQuizQuestions(numberOfQuestions: number, difficulty: string, questionType: string) : Observable<any> {
-    const info = 
+  getQuizQuestions(numberOfQuestions: number, difficulty: string, questionType: string): Observable<any> {
+    const info =
     {
       numberOfQuestions: numberOfQuestions,
       difficulty: difficulty,
       questionType: questionType
     };
 
-    return this.http.get<QuizQuestion[]>(this.baseUrl + 'quiz/GetComputerScienceQuestions', {params: info});
+    return this.http.get<QuizQuestion[]>(this.baseUrl + 'quiz/GetComputerScienceQuestions', { params: info });
   }
 
-  saveStartedQuiz(quiz: Quiz) :Observable<any> {
-    return this.http.post<any>(this.baseUrl + 'quiz/SaveStartedQuiz', quiz);
+  saveStartedQuiz(quiz: Quiz): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(this.baseUrl + 'quiz/SaveStartedQuiz', quiz);
   }
 
-  saveCompletedQuiz(quiz: Quiz) : Observable<ApiResponse<any>> {
-    return this.http.post<ApiResponse<any>>(this.baseUrl + 'quiz/SaveCompletedQuiz', quiz);
+  saveCompletedQuiz(quiz: Quiz): Observable<ApiResponse<any>> {
+    return this.http.put<ApiResponse<any>>(this.baseUrl + 'quiz/SaveCompletedQuiz', quiz);
   }
 
-  deletePastQuiz(quizId: number) : Observable<any> {
+  deletePastQuiz(quizId: number): Observable<any> {
     return this.http.delete<any>(this.baseUrl + `quiz/DeleteExistingQuiz?quizId=${quizId}`);
   }
 }

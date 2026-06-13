@@ -110,7 +110,7 @@ export class OngoingQuizComponent implements OnInit {
 
     this.quizService.saveStartedQuiz(startedQuiz).subscribe({
       next: (response) => {
-        this.CurrentQuiz = response;
+        this.CurrentQuiz = response.data;
       }
     });
   }

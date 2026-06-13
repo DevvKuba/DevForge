@@ -66,24 +66,25 @@ namespace API.Controllers
 
         }
 
-        [HttpPost("SaveCompletedQuiz")]
+        [HttpPut("SaveCompletedQuiz")]
         public async Task<ActionResult<ApiResponse<string>>> SaveCompletedQuizAsync(QuizDto quizDto)
         {
-            if (quizDto == null) return NotFound(new ApiResponse<string> { Success = false, Message = "Quiz info not found" });
+            if (quizDto == null || quizDto.Id == null) return NotFound(new ApiResponse<string> { Success = false, Message = "Quiz info not found" });
 
             var associatedUser = await unitOfWork.UserRepository.GetUserByIdAsync(quizDto.UserId);
 
             if (associatedUser == null) return NotFound(new ApiResponse<string> { Success = false, Message = "Associated user not found" });
 
-            var completedQuiz = mapper.Map<Quiz>(quizDto);
+            var pendingQuiz = await unitOfWork.QuizRepository.GetQuizByIdAsync((int)quizDto.Id);
 
-            completedQuiz.CompletedAt = DateTime.UtcNow;
+            if (pendingQuiz == null) return NotFound(new ApiResponse<string> { Success = false, Message = "Pending Quiz not found" });
 
-            await unitOfWork.QuizRepository.SaveQuizAsync(completedQuiz);
+            pendingQuiz.CompletedAt = DateTime.UtcNow;
+            pendingQuiz.PercentageScore = quizDto.PercentageScore;
 
-            var gainXp = xpService.CalculateXpGainsForQuizCompletion(completedQuiz.Difficulty, completedQuiz.Questions.Count, completedQuiz.PercentageScore);
+            var gainXp = xpService.CalculateXpGainsForQuizCompletion(pendingQuiz.Difficulty, pendingQuiz.Questions.Count, pendingQuiz.PercentageScore);
 
-            completedQuiz.XpAwardedForCompletion = gainXp;
+            pendingQuiz.XpAwardedForCompletion = gainXp;
             xpService.AwardXp(associatedUser, gainXp);
 
             if (!await unitOfWork.Complete()) return BadRequest(new ApiResponse<string> { Success = false, Message = "Quiz not saved" });
