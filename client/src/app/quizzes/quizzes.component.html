@@ -274,6 +274,6 @@
 
   @if(this.currentQuizQuestions.length > 0){
   <app-ongoing-quiz [ongoingQuizQuestions]="currentQuizQuestions" [quizDifficulty]="quizCriteria.difficulty"
-    (quizCompleted)="onQuizCompleted()"></app-ongoing-quiz>
+    [currentQuiz]="incompleteQuiz" (quizCompleted)="onQuizCompleted()"></app-ongoing-quiz>
   }
 </div>

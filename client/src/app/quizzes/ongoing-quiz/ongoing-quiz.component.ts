@@ -19,7 +19,7 @@ export class OngoingQuizComponent implements OnInit {
   currentUserId: number = 0;
   currentIndex: number = 0;
   shuffledOptions: string[][] = [];
-  CurrentQuiz: Quiz | null = null;
+  @Input() currentQuiz: Quiz | null = null;
 
   @Input() ongoingQuizQuestions: QuizQuestion[] = [];
   @Input() quizDifficulty: string | undefined;
@@ -28,16 +28,15 @@ export class OngoingQuizComponent implements OnInit {
   ngOnInit(): void {
     this.currentUserId = this.accountService.currentUser()?.id ?? 0;
 
-    // since this component can be re-opened it shouldn't always reinitialize the quiz questions 
-    // can just pass in the quiz questions from the incomplete Quiz
+    if (this.currentQuiz?.isComplete == null) {
+      this.beginQuiz();
 
-    this.beginQuiz(); // still necessary to actually create a 'pending' quiz;
+      if (this.ongoingQuizQuestions && this.ongoingQuizQuestions.length > 0) {
+        for (let index = 0; index < this.ongoingQuizQuestions.length; index++) {
+          const question = this.ongoingQuizQuestions[index];
 
-    if (this.ongoingQuizQuestions && this.ongoingQuizQuestions.length > 0) {
-      for (let index = 0; index < this.ongoingQuizQuestions.length; index++) {
-        const question = this.ongoingQuizQuestions[index];
-
-        this.shuffledOptions[index] = this.buildShuffledOptions(question);
+          this.shuffledOptions[index] = this.buildShuffledOptions(question);
+        }
       }
     }
   }
@@ -65,17 +64,17 @@ export class OngoingQuizComponent implements OnInit {
   }
 
   isLastQuestion(): boolean {
-    if(this.currentIndex + 1 == this.ongoingQuizQuestions?.length) return true;
-     return false; 
-    }
+    if (this.currentIndex + 1 == this.ongoingQuizQuestions?.length) return true;
+    return false;
+  }
 
   allAnswered(): boolean {
     const areAllQuestionsAnswered = this.ongoingQuizQuestions.every(x => x.selectedAnswer != null);
 
-    if(!areAllQuestionsAnswered) return false;
-    
+    if (!areAllQuestionsAnswered) return false;
+
     return true;
-    }
+  }
 
   calculateFinalScore(): number {
     let correctCount: number = 0;
@@ -84,14 +83,14 @@ export class OngoingQuizComponent implements OnInit {
       const questionAnswer = this.ongoingQuizQuestions[index].selectedAnswer;
       const correctQuestionAnswer = this.ongoingQuizQuestions[index].correct_answer;
 
-      if(questionAnswer == correctQuestionAnswer){
+      if (questionAnswer == correctQuestionAnswer) {
         correctCount++;
       }
     }
-    const percentageScore = Math.round(correctCount / this.ongoingQuizQuestions!.length  * 100);
+    const percentageScore = Math.round(correctCount / this.ongoingQuizQuestions!.length * 100);
 
     return percentageScore;
-    }
+  }
 
   closeQuiz(): void {
     this.quizCompleted.emit();
@@ -99,34 +98,34 @@ export class OngoingQuizComponent implements OnInit {
 
   beginQuiz(): void {
 
-    if(this.quizDifficulty == undefined){
+    if (this.quizDifficulty == undefined) {
       this.toastr.error("Valid difficulty must be selected");
       return;
     }
-    
-    const startedQuiz: Quiz =  {
+
+    const startedQuiz: Quiz = {
       id: null,
       difficulty: this.quizDifficulty ?? "",
       questions: this.ongoingQuizQuestions,
       percentageScore: 0,
-      isComplete: true,
+      isComplete: false,
       userId: this.currentUserId
     }
 
     this.quizService.saveStartedQuiz(startedQuiz).subscribe({
       next: (response) => {
-        this.CurrentQuiz = response.data;
+        this.currentQuiz = response.data;
       }
     });
   }
 
   submitQuiz(): void {
-    if(this.quizDifficulty == undefined){
+    if (this.quizDifficulty == undefined) {
       this.toastr.error("Valid difficulty must be selected");
       return;
     }
 
-    const quiz: Quiz =  {
+    const quiz: Quiz = {
       id: null,
       difficulty: this.quizDifficulty ?? "",
       questions: this.ongoingQuizQuestions,
