@@ -33,6 +33,20 @@ namespace API.Controllers
             return Ok(quizzes);
         }
 
+        [HttpGet("GetInCompelteUserQuiz")]
+        public async Task<ActionResult<ApiResponse<QuizDto?>>> GetIncompleteUserQuizAsync(int userId)
+        {
+            var user = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
+
+            if (user == null) return NotFound(new ApiResponse<QuizDto?> { Success = false, Message = "user not found" });
+
+            var incompleteQuiz = await unitOfWork.QuizRepository.GetIncompleteUserQuizAsync(user);
+
+            if(incompleteQuiz == null) return Ok(new ApiResponse<QuizDto?> { Data = null, Success = false, Message = "No Incomplete quizzes found" });
+
+            return Ok(new ApiResponse<QuizDto?> { Data = mapper.Map<QuizDto>(incompleteQuiz), Success = false, Message = "Quiz info not found" });
+        }
+
         [HttpGet("GetComputerScienceQuestions")] // historically all questions answered
         public async Task<ActionResult<List<QuizQuestionDto>>> GetComputerScienceQuestionsAsync([FromQuery] QuizInfoDto quizInfo)
         {
