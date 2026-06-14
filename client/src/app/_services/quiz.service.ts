@@ -23,6 +23,10 @@ export class QuizService {
     return this.http.get<Quiz[]>(this.baseUrl + 'quiz/GetAllCompletedQuizzes', { observe: 'response', params });
   }
 
+  getIncompleteUserQuiz(userId: number) : Observable<ApiResponse<Quiz | null>> {
+    return this.http.get<any>(this.baseUrl + `quiz/GetInCompleteUserQuiz?userId=${userId}`);
+  }
+
   getQuizQuestions(numberOfQuestions: number, difficulty: string, questionType: string): Observable<any> {
     const info =
     {

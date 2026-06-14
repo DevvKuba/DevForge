@@ -6,6 +6,11 @@
       <p class="text-muted">View your completed quizzes and attempt new ones</p>
     </div>
     <div class="col-md-4 text-end">
+      @if(incompleteQuiz){
+      <button class="btn btn-primary" [disabled]="true" title="Start a new quiz by setting your criteria">
+        <i class="fa fa-plus me-2"></i>Start New Quiz
+      </button>
+      }
       <button class="btn btn-primary" (click)="openQuizCriteriaModal()"
         title="Start a new quiz by setting your criteria">
         <i class="fa fa-plus me-2"></i>Start New Quiz
@@ -29,7 +34,7 @@
           <div class="mb-3">
             <label for="numberOfQuestions" class="form-label">Number of Questions</label>
             <input type="number" class="form-control" id="numberOfQuestions"
-              [(ngModel)]="quizCriteria.numberOfQuestions" min="5" max="50"/>
+              [(ngModel)]="quizCriteria.numberOfQuestions" min="5" max="50" />
             <div class="invalid-feedback" style="display: block;">
               @if (quizCriteria.numberOfQuestions < 5 || quizCriteria.numberOfQuestions> 50) {
                 <small>Number of questions must be between 5 and 50</small>
@@ -146,7 +151,8 @@
                   <div class="mb-3">
                     <div class="question-number text-muted small d-flex align-items-center justify-content-between">
                       <span>Question {{ qIndex + 1 }}</span>
-                      <i class="fa" [ngClass]="isQuestionCorrect(question) ? 'fa-check-circle text-success' : 'fa-times-circle text-danger'"
+                      <i class="fa"
+                        [ngClass]="isQuestionCorrect(question) ? 'fa-check-circle text-success' : 'fa-times-circle text-danger'"
                         [title]="isQuestionCorrect(question) ? 'Answered correctly' : 'Answered incorrectly'"></i>
                     </div>
                     <p class="question-text mb-2">
@@ -165,8 +171,7 @@
                   <!-- Answer Options -->
                   <div class="answer-options">
                     @for (option of getAllAnswers(question); track option) {
-                    <div class="option mb-2 p-2 rounded"
-                      [class.option-correct]="option === question.correct_answer"
+                    <div class="option mb-2 p-2 rounded" [class.option-correct]="option === question.correct_answer"
                       [class.option-incorrect]="option === question.selectedAnswer && option !== question.correct_answer">
                       <div class="d-flex align-items-start justify-content-between w-100">
                         <div class="d-flex align-items-start">
@@ -178,7 +183,8 @@
                           <span class="badge bg-success">Correct Answer</span>
                           }
                           @if (option === question.selectedAnswer) {
-                          <span class="badge ms-1" [ngClass]="isQuestionCorrect(question) ? 'bg-success' : 'bg-danger'">Your Answer</span>
+                          <span class="badge ms-1"
+                            [ngClass]="isQuestionCorrect(question) ? 'bg-success' : 'bg-danger'">Your Answer</span>
                           }
                         </div>
                       </div>
@@ -242,6 +248,7 @@
   }
 
   @if(this.currentQuizQuestions.length > 0){
-    <app-ongoing-quiz [ongoingQuizQuestions]="currentQuizQuestions" [quizDifficulty]="quizCriteria.difficulty" (quizCompleted)="onQuizCompleted()"></app-ongoing-quiz>
+  <app-ongoing-quiz [ongoingQuizQuestions]="currentQuizQuestions" [quizDifficulty]="quizCriteria.difficulty"
+    (quizCompleted)="onQuizCompleted()"></app-ongoing-quiz>
   }
 </div>

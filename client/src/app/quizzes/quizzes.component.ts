@@ -19,6 +19,7 @@ export class QuizzesComponent {
   quizService = inject(QuizService);
 
   currentUserId: number = 0;
+  incompleteQuiz: Quiz | null = null;
   completedQuizzes: Quiz[] = [];
   currentQuizQuestions : QuizQuestion[] = [];
   expandedQuizId: number | null = null;
@@ -35,7 +36,7 @@ export class QuizzesComponent {
   ngOnInit() {
     this.currentUserId = this.accountService.currentUser()?.id ?? 0;
     this.gatherUserQuizzes();
-
+    this.gatherUserIncompleteQuiz();
     // call if NO pending quizzes are active
     // -> allow for the calling the start new quiz button  
 
@@ -51,6 +52,14 @@ export class QuizzesComponent {
      this.quizService.getAllUserQuizzes(this.currentUserId, this.pageNumber, this.pageSize).subscribe({
       next: (response) => {
         this.completedQuizzes = response.body;
+      }
+    })
+  }
+
+  gatherUserIncompleteQuiz(){
+    this.quizService.getIncompleteUserQuiz(this.currentUserId).subscribe({
+      next: (response) => {
+        this.incompleteQuiz = response.data;
       }
     })
   }

@@ -33,7 +33,7 @@ namespace API.Controllers
             return Ok(quizzes);
         }
 
-        [HttpGet("GetInCompelteUserQuiz")]
+        [HttpGet("GetInCompleteUserQuiz")]
         public async Task<ActionResult<ApiResponse<QuizDto?>>> GetIncompleteUserQuizAsync(int userId)
         {
             var user = await unitOfWork.UserRepository.GetUserByIdAsync(userId);
