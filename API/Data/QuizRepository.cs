@@ -15,11 +15,19 @@ namespace API.Data
             var quiz = await context.Quizzes.Where(q => q.Id == id).FirstOrDefaultAsync();
             return quiz;
         }
+
+        public async Task<Quiz?> GetIncompleteUserQuizAsync(AppUser user)
+        {
+            var incompleteQuiz = await context.Quizzes.Where(q => q.UserId == user.Id && q.IsComplete == false).FirstOrDefaultAsync();
+            return incompleteQuiz;
+        }
+
         public async Task<PagedList<QuizDto>> GetUserQuizzesAsync(QuizParams quizParams)
         {
             var query = context.Quizzes
                 .OrderByDescending(q => q.CompletedAt)
-                .Where(q => q.UserId == quizParams.UserId)
+                .Where(q => q.UserId == quizParams.UserId && q.IsComplete == true)
+                .Include(q => q.Questions)
                 .AsQueryable();
 
             var quizzes = query.ProjectTo<QuizDto>(mapper.ConfigurationProvider);

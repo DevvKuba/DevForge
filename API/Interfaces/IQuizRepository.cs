@@ -8,6 +8,8 @@ namespace API.Interfaces
     {
         Task<Quiz?> GetQuizByIdAsync(int id);
 
+        Task<Quiz?> GetIncompleteUserQuizAsync(AppUser user);
+
         Task<PagedList<QuizDto>> GetUserQuizzesAsync(QuizParams quizParams);
 
         Task<bool> DoesUserHaveAnUnfinishedQuizAsync(AppUser user);
