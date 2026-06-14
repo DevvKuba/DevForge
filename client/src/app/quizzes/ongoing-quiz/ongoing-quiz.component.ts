@@ -28,6 +28,9 @@ export class OngoingQuizComponent implements OnInit {
   ngOnInit(): void {
     this.currentUserId = this.accountService.currentUser()?.id ?? 0;
 
+    // since this component can be re-opened it shouldn't always reinitialize the quiz questions 
+    // can just pass in the quiz questions from the incomplete Quiz
+
     this.beginQuiz(); // still necessary to actually create a 'pending' quiz;
 
     if (this.ongoingQuizQuestions && this.ongoingQuizQuestions.length > 0) {

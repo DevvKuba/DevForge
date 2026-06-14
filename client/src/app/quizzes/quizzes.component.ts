@@ -37,10 +37,6 @@ export class QuizzesComponent {
     this.currentUserId = this.accountService.currentUser()?.id ?? 0;
     this.gatherUserQuizzes();
     this.gatherUserIncompleteQuiz();
-    // call if NO pending quizzes are active
-    // -> allow for the calling the start new quiz button  
-
-    // else load pending quiz within an open pop up of sorts
   }
 
   onQuizCompleted(){
@@ -62,6 +58,13 @@ export class QuizzesComponent {
         this.incompleteQuiz = response.data;
       }
     })
+  }
+
+  resumeIncompleteQuiz() {
+    if (!this.incompleteQuiz) return;
+
+    this.quizCriteria.difficulty = this.incompleteQuiz.difficulty;
+    this.currentQuizQuestions = this.incompleteQuiz.questions;
   }
 
   openQuizCriteriaModal() {
