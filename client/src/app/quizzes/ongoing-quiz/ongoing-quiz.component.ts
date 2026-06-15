@@ -125,8 +125,9 @@ export class OngoingQuizComponent implements OnInit {
       return;
     }
 
+    // id is provided for the current / incomplete Quiz
     const quiz: Quiz = {
-      id: null,
+      id: this.currentQuiz?.id ?? null,
       difficulty: this.quizDifficulty ?? "",
       questions: this.ongoingQuizQuestions,
       percentageScore: this.calculateFinalScore(),

@@ -41,6 +41,7 @@ export class QuizzesComponent {
 
   onQuizCompleted(){
     this.gatherUserQuizzes();
+    this.gatherUserIncompleteQuiz();
     this.currentQuizQuestions = [];
   }
 
