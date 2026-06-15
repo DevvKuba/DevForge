@@ -4,6 +4,10 @@
     {
         public int Id { get; set; }
 
+        public required string Type { get; set; }
+
+        public required string Category { get; set; }
+
         public required string Question { get; set; }
 
         public required string CorrectAnswer { get; set; }
