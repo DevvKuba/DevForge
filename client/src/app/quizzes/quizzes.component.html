@@ -37,9 +37,16 @@
         </div>
       </div>
     </div>
-    <span class="btn btn-warning">
-      Resume Quiz<i class="fa fa-arrow-right ms-2"></i>
-    </span>
+    <div class="d-flex align-items-center gap-2">
+      <span class="btn btn-warning">
+        Resume Quiz<i class="fa fa-arrow-right ms-2"></i>
+      </span>
+      <button type="button" class="btn btn-link text-danger delete-quiz-btn"
+        (click)="deleteIncompleteQuiz($event)" title="Delete this ongoing quiz and start fresh"
+        aria-label="Delete ongoing quiz">
+        <i class="fa fa-trash"></i>
+      </button>
+    </div>
   </div>
   }
 

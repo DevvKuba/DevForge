@@ -155,4 +155,17 @@ export class QuizzesComponent {
       }
     })
   }
+
+  deleteIncompleteQuiz(event: Event): void {
+    event.stopPropagation();
+
+    if (this.incompleteQuiz?.id == null) return;
+
+    this.quizService.deletePastQuiz(this.incompleteQuiz.id).subscribe({
+      next: () => {
+        this.incompleteQuiz = null;
+        this.currentQuizQuestions = [];
+      }
+    })
+  }
 }
