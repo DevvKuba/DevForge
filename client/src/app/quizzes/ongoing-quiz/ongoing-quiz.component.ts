@@ -30,15 +30,15 @@ export class OngoingQuizComponent implements OnInit {
 
     if (this.currentQuiz?.isComplete == null) {
       this.beginQuiz();
+    }
 
-      if (this.ongoingQuizQuestions && this.ongoingQuizQuestions.length > 0) {
+    if (this.ongoingQuizQuestions && this.ongoingQuizQuestions.length > 0) {
         for (let index = 0; index < this.ongoingQuizQuestions.length; index++) {
           const question = this.ongoingQuizQuestions[index];
 
           this.shuffledOptions[index] = this.buildShuffledOptions(question);
         }
       }
-    }
   }
 
   buildShuffledOptions(question: QuizQuestion): string[] {

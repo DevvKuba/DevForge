@@ -12,13 +12,19 @@ namespace API.Data
     {
         public async Task<Quiz?> GetQuizByIdAsync(int id)
         {
-            var quiz = await context.Quizzes.Where(q => q.Id == id).FirstOrDefaultAsync();
+            var quiz = await context.Quizzes
+                .Where(q => q.Id == id)
+                .Include(q => q.Questions)
+                .FirstOrDefaultAsync();
             return quiz;
         }
 
         public async Task<Quiz?> GetIncompleteUserQuizAsync(AppUser user)
         {
-            var incompleteQuiz = await context.Quizzes.Where(q => q.UserId == user.Id && q.IsComplete == false).FirstOrDefaultAsync();
+            var incompleteQuiz = await context.Quizzes
+                .Where(q => q.UserId == user.Id && q.IsComplete == false)
+                .Include(q => q.Questions)
+                .FirstOrDefaultAsync();
             return incompleteQuiz;
         }
 
