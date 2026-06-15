@@ -10,7 +10,7 @@
 
         public required List<string> IncorrectAnswers { get; set; }
 
-        public required string SelectedAnswer { get; set; }
+        public string? SelectedAnswer { get; set; }
 
         public required string Difficulty { get; set; }
 
